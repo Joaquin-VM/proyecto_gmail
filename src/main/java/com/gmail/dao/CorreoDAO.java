@@ -10,6 +10,10 @@ import java.util.List;
 
 public class CorreoDAO {
 
+    public static String addCorreo2(){
+        return "Hola";
+    }
+
     public static Correo addCorreo(Correo correo) {
 
         String INSERT_CORREO_SQL = "INSERT INTO correo" +
