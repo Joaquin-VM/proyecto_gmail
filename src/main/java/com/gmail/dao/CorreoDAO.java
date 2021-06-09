@@ -221,4 +221,48 @@ public class CorreoDAO {
         return true;
 
     }
+
+    public static boolean enviarCorreo(int id_correo,int id_emisor, int id_receptor) {
+
+        String INSERT_CORREO_SQL = "INSERT INTO enviar" +
+                "(id_usuario_1, id_usuario_2, id_correo, fecha_hora)" +
+                "VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+                JDBCUtil.getUsuario(), JDBCUtil.getClave());
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CORREO_SQL,
+                     Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setInt(1, id_emisor);
+            preparedStatement.setInt(2, id_receptor);
+            preparedStatement.setInt(3, id_correo);
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
+
+            System.out.println(preparedStatement);
+
+            preparedStatement.executeUpdate();
+
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+
+        return true;
+    }
+    public static int enviarCorreo(int id_correo,int id_emisor, int[] id_receptor) {
+        int cantE=0;
+            for (int i:id_receptor) {
+
+                if (!(enviarCorreo(id_correo,id_emisor,i)))
+                    return cantE;
+
+                cantE++;
+
+            }
+
+        return cantE;
+    }
+
 }
