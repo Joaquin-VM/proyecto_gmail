@@ -1,12 +1,9 @@
 package com.gmail;
 
-import com.gmail.conf.JDBCUtil;
-import com.gmail.dao.CorreoDAO;
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.model.Usuario;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Main {
 
