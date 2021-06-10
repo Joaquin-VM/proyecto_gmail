@@ -1,6 +1,6 @@
 package com.gmail.model;
 
-public class Filtro extends AbsFiltro {
+class Filtro extends AbsFiltro {
 
   @Override
   public int getIdFiltro() {

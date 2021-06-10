@@ -2,8 +2,7 @@ package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
 import com.gmail.model.AbsEtiqueta;
-import com.gmail.model.Correo;
-import com.gmail.model.Etiqueta;
+import com.gmail.model.EtiquetaFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -49,7 +48,7 @@ public class EtiquetaDAO {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
 
-    Etiqueta etiqueta = null;
+    AbsEtiqueta etiqueta = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -63,7 +62,7 @@ public class EtiquetaDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        etiqueta = new Etiqueta();
+        etiqueta = EtiquetaFactory.buildEtiqueta();
         etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
         etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));
         etiqueta.setIdEtiqueta(rs.getInt("id_usuario"));
@@ -83,7 +82,7 @@ public class EtiquetaDAO {
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta "
         + "WHERE nombre_etiqueta LIKE '% ? %' AND id_usuario = ?";
 
-    Etiqueta etiqueta = null;
+    AbsEtiqueta etiqueta = null;
     List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -99,7 +98,7 @@ public class EtiquetaDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        etiqueta = new Etiqueta();
+        etiqueta = EtiquetaFactory.buildEtiqueta();
         etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
         etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));
         etiqueta.setIdEtiqueta(rs.getInt("id_usuario"));
@@ -118,7 +117,7 @@ public class EtiquetaDAO {
   public static List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario) {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
-    Etiqueta etiqueta = null;
+    AbsEtiqueta etiqueta = null;
     List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -130,7 +129,7 @@ public class EtiquetaDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        etiqueta = new Etiqueta();
+        etiqueta = EtiquetaFactory.buildEtiqueta();
         etiqueta = etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"))
             .setNombreEtiqueta(rs.getString("nombre_etiqueta"))
             .setIdUsuario(rs.getInt("id_usuario"));

@@ -2,7 +2,7 @@ package com.gmail.model;
 
 import java.time.LocalDate;
 
-public class Usuario extends AbsUsuario {
+class Usuario extends AbsUsuario {
 
     @Override
     public int getIdUsuario() {

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FiltroDAO {
 
-  public static AbsFiltro addFiltro(Filtro filtro) {
+  public static AbsFiltro addFiltro(AbsFiltro filtro) {
 
     String INSERT_FILTRO_SQL =
         "INSERT INTO filtro (id_usuario, emisor, receptor, asunto, contiene, leido, "
@@ -53,8 +53,9 @@ public class FiltroDAO {
 
   public static AbsFiltro getFiltro(int idFiltro) {
 
-    String QUERY = "SELECT *" +
-        " FROM filtro WHERE id_filtro = ?";
+    String QUERY = "SELECT id_filtro, id_usuario, emisor, receptor, asunto, "
+        + "contiene, leido, destacar, importante, eliminar, spam,"
+        + " id_etiqueta, id_usuario_reenviar FROM filtro WHERE id_filtro = ?";
 
     AbsFiltro filtro = null;
 
@@ -70,7 +71,7 @@ public class FiltroDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       if (rs.next()) {
-        filtro = new Filtro();
+        filtro = FiltroFactory.buildFiltro();
         filtro.setIdFiltro(rs.getInt("id_filtro"))
             .setIdUsuario(rs.getInt("id_usuario"))
             .setEmisor(rs.getString("emisor"))
@@ -107,7 +108,7 @@ public class FiltroDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        filtro = new Filtro();
+        filtro = FiltroFactory.buildFiltro();
         filtro.setIdFiltro(rs.getInt("id_filtro"))
             .setIdUsuario(rs.getInt("id_usuario"))
             .setEmisor(rs.getString("emisor"))

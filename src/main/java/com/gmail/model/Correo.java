@@ -2,7 +2,7 @@ package com.gmail.model;
 
 import java.time.LocalDateTime;
 
-public class Correo extends AbsCorreo {
+class Correo extends AbsCorreo {
 
     @Override
     public int getIdCorreo() {

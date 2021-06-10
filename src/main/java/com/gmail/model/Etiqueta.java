@@ -1,6 +1,6 @@
 package com.gmail.model;
 
-public class Etiqueta extends AbsEtiqueta {
+class Etiqueta extends AbsEtiqueta {
 
     @Override
     public int getIdEtiqueta() {

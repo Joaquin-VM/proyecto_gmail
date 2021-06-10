@@ -2,8 +2,8 @@ package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
 import com.gmail.model.AbsCorreo;
-import com.gmail.model.Correo;
 
+import com.gmail.model.CorreoFactory;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class CorreoDAO {
             +
             " FROM correo WHERE id_correo = ?";
 
-    Correo correo = null;
+    AbsCorreo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -71,7 +71,7 @@ public class CorreoDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        correo = new Correo();
+        correo = CorreoFactory.buildCorreo();
         correo.setIdCorreo(rs.getInt("id_correo"))
             .setIdUsuario(rs.getInt("id_usuario"))
             .setAsunto(rs.getString("asunto"))
@@ -98,7 +98,7 @@ public class CorreoDAO {
             "WHERE r.borrado = ? AND r.id_usuario_2 =  ? ";
 
     List<AbsCorreo> correos = new ArrayList<>();
-    Correo correo = null;
+    AbsCorreo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -113,7 +113,7 @@ public class CorreoDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        correo = new Correo();
+        correo = CorreoFactory.buildCorreo();
         correo.setIdCorreo(rs.getInt("id_correo"))
             .setIdUsuario(rs.getInt("id_usuario"))
             .setAsunto(rs.getString("asunto"))
@@ -141,7 +141,7 @@ public class CorreoDAO {
             + " FROM correo c WHERE c.borrado = ? AND c.id_usuario =  ? ";
 
     List<AbsCorreo> correos = new ArrayList<>();
-    Correo correo = null;
+    AbsCorreo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -156,7 +156,7 @@ public class CorreoDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        correo = new Correo();
+        correo = CorreoFactory.buildCorreo();
         correo.setIdCorreo(rs.getInt("id_correo"))
             .setIdUsuario(rs.getInt("id_usuario"))
             .setAsunto(rs.getString("asunto"))

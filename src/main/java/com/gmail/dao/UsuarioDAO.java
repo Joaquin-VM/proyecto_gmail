@@ -9,14 +9,14 @@ package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
 import com.gmail.model.AbsUsuario;
-import com.gmail.model.Usuario;
 
+import com.gmail.model.UsuarioFactory;
 import java.sql.*;
 import java.time.LocalDate;
 
 public class UsuarioDAO {
 
-  public static AbsUsuario addUsuario(Usuario usuario) {
+  public static AbsUsuario addUsuario(AbsUsuario usuario) {
 
     String INSERT_USUARIO_SQL = "INSERT INTO usuario" +
         "(nombre_usuario, apellido, correo, contrasenia, telefono, fecha_nacimiento, sexo)" +
@@ -58,7 +58,7 @@ public class UsuarioDAO {
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
         "fecha_nacimiento, sexo FROM usuario WHERE id_usuario = ?";
 
-    Usuario usuario = null;
+    AbsUsuario usuario = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -72,7 +72,7 @@ public class UsuarioDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        usuario = new Usuario();
+        usuario = UsuarioFactory.buildUsuario();
         usuario.setIdUsuario(rs.getInt("id_usuario")).setNombre(rs.getString("nombre_usuario"))
             .setApellido(rs.getString("apellido")).setCorreo(rs.getString("correo"))
             .setContrasenia(rs.getString("contrasenia")).setTelefono(rs.getString("telefono"))
@@ -94,7 +94,7 @@ public class UsuarioDAO {
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
         "fecha_nacimiento, sexo FROM usuario WHERE correo = ?";
 
-    Usuario usuario = null;
+    AbsUsuario usuario = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -108,7 +108,7 @@ public class UsuarioDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        usuario = new Usuario();
+        usuario = UsuarioFactory.buildUsuario();
         usuario.setIdUsuario(rs.getInt("id_usuario")).setNombre(rs.getString("nombre_usuario"))
             .setApellido(rs.getString("apellido")).setCorreo(rs.getString("correo"))
             .setContrasenia(rs.getString("contrasenia")).setTelefono(rs.getString("telefono"))
@@ -125,7 +125,7 @@ public class UsuarioDAO {
 
   }
 
-  public static boolean updateUsuario(Usuario usuario) {
+  public static boolean updateUsuario(AbsUsuario usuario) {
     String UPDATE_USUARIO_SQL = "UPDATE usuario" +
         "SET nombre_usuario = ?" +
         "apellido = ?" +

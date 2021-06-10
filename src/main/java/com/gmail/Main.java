@@ -1,8 +1,8 @@
 package com.gmail;
 
 import com.gmail.dao.UsuarioDAO;
-import com.gmail.model.Usuario;
 
+import com.gmail.model.UsuarioFactory;
 import java.time.LocalDate;
 
 public class Main {
@@ -16,7 +16,8 @@ public class Main {
 //    System.out.println(localDate2);
 
     UsuarioDAO.addUsuario(
-        new Usuario().setNombre("Pedro2").setApellido("Jejox2").setCorreo("correo22@gmail.com")
+        UsuarioFactory.buildUsuario().setNombre("Pedro2").setApellido("Jejox2")
+            .setCorreo("correo22@gmail.com")
             .setContrasenia("contrasenia22").setTelefono("+54 9 32412331232")
             .setFechaNacimiento(LocalDate.of(2020, 5, 7)).setSexo("Masculino"));
     System.out.println("Hola");
