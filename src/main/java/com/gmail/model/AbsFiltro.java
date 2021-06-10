@@ -75,8 +75,8 @@ public abstract class AbsFiltro implements Cloneable {
     return "AbsFiltro{" +
         "idFiltro=" + idFiltro +
         ", idUsuario=" + idUsuario +
-        ", emisor='" + idEmisor + '\'' +
-        ", receptor='" + idReceptor + '\'' +
+        ", idEmisor=" + idEmisor +
+        ", idReceptor=" + idReceptor +
         ", asunto='" + asunto + '\'' +
         ", contiene='" + contiene + '\'' +
         ", leido=" + leido +
@@ -98,16 +98,21 @@ public abstract class AbsFiltro implements Cloneable {
       return false;
     }
     AbsFiltro absFiltro = (AbsFiltro) o;
-    return idFiltro == absFiltro.idFiltro &&
-        Objects.equals(idEmisor, absFiltro.idEmisor) &&
-        Objects.equals(idReceptor, absFiltro.idReceptor) &&
-        Objects.equals(asunto, absFiltro.asunto) &&
-        Objects.equals(contiene, absFiltro.contiene);
+    return idFiltro == absFiltro.idFiltro && idUsuario == absFiltro.idUsuario
+        && idEmisor == absFiltro.idEmisor && idReceptor == absFiltro.idReceptor
+        && idEtiqueta == absFiltro.idEtiqueta && idUsuarioReenviar == absFiltro.idUsuarioReenviar
+        && Objects.equals(asunto, absFiltro.asunto) && Objects
+        .equals(contiene, absFiltro.contiene) && Objects.equals(leido, absFiltro.leido)
+        && Objects.equals(destacar, absFiltro.destacar) && Objects
+        .equals(importante, absFiltro.importante) && Objects
+        .equals(eliminar, absFiltro.eliminar) && Objects.equals(spam, absFiltro.spam);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(idFiltro, idEmisor, idReceptor, asunto, contiene);
+    return Objects
+        .hash(idFiltro, idUsuario, idEmisor, idReceptor, asunto, contiene, leido, destacar,
+            importante, eliminar, spam, idEtiqueta, idUsuarioReenviar);
   }
 
   @Override
