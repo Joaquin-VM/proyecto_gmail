@@ -14,19 +14,18 @@ public class CorreoDAO {
   public static Correo addCorreo(Correo correo) {
 
     String INSERT_CORREO_SQL = "INSERT INTO correo" +
-        "(id_usuario, asunto, cuerpo, fecha_hora, confirmado)" +
-        "VALUES (?, ?, ?, ?, ?)";
+        "(asunto, cuerpo, fecha_hora, confirmado)" +
+        "VALUES (?, ?, ?, ?)";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CORREO_SQL,
             Statement.RETURN_GENERATED_KEYS)) {
 
-      preparedStatement.setInt(1, correo.getIdUsuario());
-      preparedStatement.setString(2, correo.getAsunto());
-      preparedStatement.setString(3, correo.getCuerpo());
-      preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
-      preparedStatement.setInt(5, correo.getConfirmado() ? 1 : 0);
+      preparedStatement.setString(1, correo.getAsunto());
+      preparedStatement.setString(2, correo.getCuerpo());
+      preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+      preparedStatement.setInt(4, correo.getConfirmado() ? 1 : 0);
 
       System.out.println(preparedStatement);
 
@@ -47,7 +46,7 @@ public class CorreoDAO {
 
   public static Correo getCorreo(int idCorreo) {
 
-    String QUERY = "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado" +
+    String QUERY = "SELECT id_correo, asunto, cuerpo, fecha_hora, confirmado" +
         " FROM correo WHERE id_correo = ?";
 
     Correo correo = null;
@@ -65,12 +64,10 @@ public class CorreoDAO {
 
       while (rs.next()) {
         correo = new Correo();
-        correo.setIdCorreo(rs.getInt("id_correo"))
-                .setIdUsuario(rs.getInt("id_usuario"))
-                .setAsunto(rs.getString("asunto"))
-                .setCuerpo(rs.getString("cuerpo"))
-                .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
-                .setConfirmado(rs.getInt("confirmado") == 1);
+        correo.setIdCorreo(rs.getInt("id_correo")).setAsunto(rs.getString("asunto"))
+            .setCuerpo(rs.getString("cuerpo"))
+            .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
+            .setConfirmado(rs.getInt("confirmado") == 1);
       }
 
     } catch (SQLException e) {
@@ -84,9 +81,9 @@ public class CorreoDAO {
   public static List<Correo> getCorreosRecibidos(int idUsuario, boolean borrado) {
 
     String QUERY = "SELECT * FROM correo c " +
-        "INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
+        "INNER JOIN enviar e ON c.id_correo = e.id_correo" +
         "INNER JOIN borrar b ON b.id_correo = c.id_correo" +
-        "WHERE c.confirmado = 1 AND b.borrado = ? AND r.id_usuario_2 =  ? ";
+        "WHERE c.confirmado = 1 AND b.borrado = ? AND e.id_usuario_2 =  ? ";
 
     List<Correo> correos = null;
     Correo correo = null;
@@ -107,11 +104,9 @@ public class CorreoDAO {
       while (rs.next()) {
         correos = new ArrayList<>();
         correo = new Correo();
-        correo.setIdCorreo(rs.getInt("id_correo"))
-                .setIdUsuario(rs.getInt("id_usuario"))
-                .setAsunto(rs.getString("asunto"))
-                .setCuerpo(rs.getString("cuerpo"))
-                .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime()).setConfirmado(true);
+        correo.setIdCorreo(rs.getInt("id_correo")).setAsunto(rs.getString("asunto"))
+            .setCuerpo(rs.getString("cuerpo"))
+            .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime()).setConfirmado(true);
         correos.add(correo);
       }
 
@@ -159,7 +154,7 @@ public class CorreoDAO {
 
   public static boolean deleteCorreo(int idCorreo, int idUsuario) {
 
-    String BORRAR_CORREO_SQL = "UPDATE recibidos " +
+    String BORRAR_CORREO_SQL = "UPDATE borrar " +
         "SET borrado = ? " +
         "WHERE id_usuario = ? AND id_correo = ?";
 
@@ -188,16 +183,13 @@ public class CorreoDAO {
 
   public static boolean deleteCorreo(int idCorreo) {
 
-    String UPDATE_CORREO_SQL = "UPDATE correo" +
-            "borrado = ?" +
-            "WHERE id_correo = ?;";
+    String DELETE_CORREO_SQL = "DELETE FROM correo WHERE id_correo = ?";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CORREO_SQL)) {
 
-      preparedStatement.setInt(1, 1);
-      preparedStatement.setInt(2, idCorreo);
+      preparedStatement.setInt(1, idCorreo);
 
       System.out.println(preparedStatement);
 
@@ -214,12 +206,37 @@ public class CorreoDAO {
 
   }
 
+  public static boolean borrado$Correo(int id_correo,int id_usuario) {
+    String INSERT_BORRAR_SQL = "INSERT INTO borrar" +
+            "(id_usuario, id_correo)" +
+            "VALUES (?, ?)";
+    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+            JDBCUtil.getUsuario(), JDBCUtil.getClave());
+         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BORRAR_SQL,
+                 Statement.RETURN_GENERATED_KEYS)){
 
-  public static boolean enviarCorreo(int id_correo, int id_receptor) {
+      preparedStatement.setInt(1, id_usuario);
+      preparedStatement.setInt(2, id_correo);
 
-    String INSERT_ENVIAR_SQL = "INSERT INTO recibido" +
-            "(id_usuario_2, id_correo, fecha_hora)" +
-            "VALUES (?, ?, ?)";
+      System.out.println(preparedStatement);
+
+      preparedStatement.executeUpdate();
+
+
+    } catch (SQLException e) {
+      System.out.println(e);
+      return false;
+    }
+
+    return true;
+  }
+
+
+  public static boolean enviarCorreo(int id_correo,int id_emisor, int id_receptor) {
+
+    String INSERT_ENVIAR_SQL = "INSERT INTO enviar" +
+            "(id_usuario_1, id_usuario_2, id_correo, fecha_hora)" +
+            "VALUES (?, ?, ?, ?)";
 
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -227,27 +244,32 @@ public class CorreoDAO {
          PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ENVIAR_SQL,
                  Statement.RETURN_GENERATED_KEYS)){
 
-      preparedStatement.setInt(1, id_receptor);
-      preparedStatement.setInt(2, id_correo);
-      preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+      preparedStatement.setInt(1, id_emisor);
+      preparedStatement.setInt(2, id_receptor);
+      preparedStatement.setInt(3, id_correo);
+      preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
 
       System.out.println(preparedStatement);
 
       preparedStatement.executeUpdate();
+
+      ResultSet rs1 = preparedStatement.getGeneratedKeys();
 
     } catch (SQLException e) {
       System.out.println(e);
       return false;
     }
 
+    borrado$Correo(id_correo,id_receptor);
+    borrado$Correo(id_correo,id_emisor);
 
     return true;
   }
-  public static int enviarCorreo(int id_correo, int[] id_receptores) {
+  public static int enviarCorreo(int id_correo,int id_emisor, int[] id_receptor) {
     int cantE=0;
-    for (int i:id_receptores) {
+    for (int i:id_receptor) {
 
-      if (!(enviarCorreo(id_correo, i))){
+      if (!(enviarCorreo(id_correo,id_emisor,i))){
         System.out.println("Fallo el envio, receptor:"+i);
         continue;
       }

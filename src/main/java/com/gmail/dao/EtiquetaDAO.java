@@ -1,6 +1,7 @@
 package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
+import com.gmail.model.AbsEtiqueta;
 import com.gmail.model.Etiqueta;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class EtiquetaDAO {
 
-  public static Etiqueta addEtiqueta(Etiqueta etiqueta) {
+  public static AbsEtiqueta addEtiqueta(AbsEtiqueta etiqueta) {
 
     String INSERT_ETIQUETA_SQL = "INSERT INTO etiqueta" +
         "(nombre_etiqueta, id_usuario) VALUES (?, ?)";
@@ -43,7 +44,7 @@ public class EtiquetaDAO {
     return etiqueta;
   }
 
-  public static Etiqueta getEtiqueta(int idEtiqueta) {
+  public static AbsEtiqueta getEtiqueta(int idEtiqueta) {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
 
@@ -76,7 +77,7 @@ public class EtiquetaDAO {
 
   }
 
-  public static Etiqueta getEtiqueta(String nombreEtiqueta, int idUsuario) {
+  public static AbsEtiqueta getEtiqueta(String nombreEtiqueta, int idUsuario) {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta "
         + "WHERE nombre_etiqueta = ? AND id_usuario = ?";
@@ -111,11 +112,11 @@ public class EtiquetaDAO {
 
   }
 
-  public static List<Etiqueta> listarEtiquetasUsuario(int idUsuario) {
+  public static List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario) {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
     Etiqueta etiqueta = null;
-    List<Etiqueta> listaEtiquetas = null;
+    List<AbsEtiqueta> listaEtiquetas = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -141,7 +142,7 @@ public class EtiquetaDAO {
     return listaEtiquetas;
   }
 
-  public static boolean updateEtiqueta(Etiqueta etiqueta) {
+  public static boolean updateEtiqueta(AbsEtiqueta etiqueta) {
     String UPDATE_ETIQUETA_SQL = "UPDATE etiqueta SET nombre_etiqueta = ? WHERE id_etiqueta = ?";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),

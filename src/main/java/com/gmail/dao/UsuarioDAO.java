@@ -8,6 +8,7 @@ package com.gmail.dao;
 * */
 
 import com.gmail.conf.JDBCUtil;
+import com.gmail.model.AbsUsuario;
 import com.gmail.model.Usuario;
 
 import java.sql.*;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 
 public class UsuarioDAO {
 
-  public static Usuario addUsuario(Usuario usuario) {
+  public static AbsUsuario addUsuario(Usuario usuario) {
 
     String INSERT_USUARIO_SQL = "INSERT INTO usuario" +
         "(nombre_usuario, apellido, correo, contrasenia, telefono, fecha_nacimiento, sexo)" +
@@ -52,7 +53,7 @@ public class UsuarioDAO {
     return usuario;
   }
 
-  public static Usuario getUsuario(int idUsuario) {
+  public static AbsUsuario getUsuario(int idUsuario) {
 
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
         "fecha_nacimiento, sexo FROM usuario WHERE id_usuario = ?";
@@ -88,7 +89,7 @@ public class UsuarioDAO {
 
   }
 
-  public static Usuario getUsuario(String correo) {
+  public static AbsUsuario getUsuario(String correo) {
 
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
         "fecha_nacimiento, sexo FROM usuario WHERE correo = ?";
