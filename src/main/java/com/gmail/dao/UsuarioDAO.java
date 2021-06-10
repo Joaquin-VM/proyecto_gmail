@@ -11,6 +11,7 @@ import com.gmail.conf.JDBCUtil;
 import com.gmail.model.Usuario;
 
 import java.sql.*;
+import java.time.LocalDate;
 
 public class UsuarioDAO {
 
@@ -39,9 +40,9 @@ public class UsuarioDAO {
 
       ResultSet rs = preparedStatement.getGeneratedKeys();
 
-        if (rs.next()) {
-            usuario.setIdUsuario(rs.getInt(1));
-        }
+      if (rs.next()) {
+        usuario.setIdUsuario(rs.getInt(1));
+      }
 
 
     } catch (SQLException e) {
@@ -71,14 +72,11 @@ public class UsuarioDAO {
 
       while (rs.next()) {
         usuario = new Usuario();
-        usuario.setIdUsuario(rs.getInt("id_usuario"));
-        usuario.setNombre(rs.getString("nombre_usuario"));
-        usuario.setApellido(rs.getString("apellido"));
-        usuario.setCorreo(rs.getString("correo"));
-        usuario.setContrasenia(rs.getString("contrasenia"));
-        usuario.setTelefono(rs.getString("telefono"));
-        usuario.setFechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate());
-        usuario.setSexo(rs.getString("sexo"));
+        usuario.setIdUsuario(rs.getInt("id_usuario")).setNombre(rs.getString("nombre_usuario"))
+            .setApellido(rs.getString("apellido")).setCorreo(rs.getString("correo"))
+            .setContrasenia(rs.getString("contrasenia")).setTelefono(rs.getString("telefono"))
+            .setFechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate())
+            .setSexo(rs.getString("sexo"));
       }
 
 
@@ -110,14 +108,11 @@ public class UsuarioDAO {
 
       while (rs.next()) {
         usuario = new Usuario();
-        usuario.setIdUsuario(rs.getInt("id_usuario"));
-        usuario.setNombre(rs.getString("nombre_usuario"));
-        usuario.setApellido(rs.getString("apellido"));
-        usuario.setCorreo(rs.getString("correo"));
-        usuario.setContrasenia(rs.getString("contrasenia"));
-        usuario.setTelefono(rs.getString("telefono"));
-        usuario.setFechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate());
-        usuario.setSexo(rs.getString("sexo"));
+        usuario.setIdUsuario(rs.getInt("id_usuario")).setNombre(rs.getString("nombre_usuario"))
+            .setApellido(rs.getString("apellido")).setCorreo(rs.getString("correo"))
+            .setContrasenia(rs.getString("contrasenia")).setTelefono(rs.getString("telefono"))
+            .setFechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate())
+            .setSexo(rs.getString("sexo"));
       }
 
 
@@ -151,8 +146,9 @@ public class UsuarioDAO {
 
       System.out.println(preparedStatement);
 
-      ResultSet rs = preparedStatement.executeQuery();
+      int filasAfectadas = preparedStatement.executeUpdate();
 
+      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       System.out.println(e);
@@ -175,12 +171,9 @@ public class UsuarioDAO {
 
       System.out.println(preparedStatement);
 
-      int result = preparedStatement.executeUpdate();
+      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de registros afectados: " + result);
-
-      ResultSet rs = preparedStatement.executeQuery();
-
+      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       System.out.println(e);
@@ -190,6 +183,5 @@ public class UsuarioDAO {
     return true;
 
   }
-
 
 }

@@ -1,5 +1,11 @@
 package com.gmail.conf;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class JDBCUtil {
 
   private static final String usuario = "jvega420";
