@@ -25,11 +25,7 @@ public class CorreoDAO {
       preparedStatement.setString(1, correo.getAsunto());
       preparedStatement.setString(2, correo.getCuerpo());
       preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-      if (correo.getConfirmado()) {
-        preparedStatement.setInt(4, 1);
-      } else {
-        preparedStatement.setInt(4, 0);
-      }
+      preparedStatement.setInt(4, correo.getConfirmado() ? 1 : 0);
 
       System.out.println(preparedStatement);
 
@@ -82,12 +78,12 @@ public class CorreoDAO {
 
   }
 
-  public static List<Correo> getCorreosRecibidos(int idUsuario) {
+  public static List<Correo> getCorreosRecibidos(int idUsuario, boolean borrado) {
 
     String QUERY = "SELECT * FROM correo c " +
         "INNER JOIN enviar e ON c.id_correo = e.id_correo" +
         "INNER JOIN borrar b ON b.id_correo = c.id_correo" +
-        "WHERE c.confirmado = 1 AND b.borrado = 0 AND e.id_usuario_2 =  ? ";
+        "WHERE c.confirmado = 1 AND b.borrado = ? AND e.id_usuario_2 =  ? ";
 
     List<Correo> correos = null;
     Correo correo = null;
@@ -97,11 +93,13 @@ public class CorreoDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
             Statement.RETURN_GENERATED_KEYS)) {
 
-      preparedStatement.setInt(1, idUsuario);
+      preparedStatement.setInt(1, borrado  ? 1 : 0);
+      preparedStatement.setInt(2, idUsuario);
 
       System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
+
 
       while (rs.next()) {
         correos = new ArrayList<>();
@@ -208,16 +206,43 @@ public class CorreoDAO {
 
   }
 
-  public static boolean enviarCorreo_1_1(int id_correo, int id_emisor, int id_receptor) {
+  public static boolean borrado$Correo(int id_correo,int id_usuario) {
+    String INSERT_BORRAR_SQL = "INSERT INTO borrar" +
+            "(id_usuario, id_correo)" +
+            "VALUES (?, ?)";
+    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+            JDBCUtil.getUsuario(), JDBCUtil.getClave());
+         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BORRAR_SQL,
+                 Statement.RETURN_GENERATED_KEYS)){
 
-    String INSERT_CORREO_SQL = "INSERT INTO enviar" +
-        "(id_usuario_1, id_usuario_2, id_correo, fecha_hora)" +
-        "VALUES (?, ?, ?, ?)";
+      preparedStatement.setInt(1, id_usuario);
+      preparedStatement.setInt(2, id_correo);
+
+      System.out.println(preparedStatement);
+
+      preparedStatement.executeUpdate();
+
+
+    } catch (SQLException e) {
+      System.out.println(e);
+      return false;
+    }
+
+    return true;
+  }
+
+
+  public static boolean enviarCorreo(int id_correo,int id_emisor, int id_receptor) {
+
+    String INSERT_ENVIAR_SQL = "INSERT INTO enviar" +
+            "(id_usuario_1, id_usuario_2, id_correo, fecha_hora)" +
+            "VALUES (?, ?, ?, ?)";
+
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CORREO_SQL,
-            Statement.RETURN_GENERATED_KEYS)) {
+            JDBCUtil.getUsuario(), JDBCUtil.getClave());
+         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ENVIAR_SQL,
+                 Statement.RETURN_GENERATED_KEYS)){
 
       preparedStatement.setInt(1, id_emisor);
       preparedStatement.setInt(2, id_receptor);
@@ -228,22 +253,27 @@ public class CorreoDAO {
 
       preparedStatement.executeUpdate();
 
+      ResultSet rs1 = preparedStatement.getGeneratedKeys();
+
     } catch (SQLException e) {
       System.out.println(e);
       return false;
     }
 
+    borrado$Correo(id_correo,id_receptor);
+    borrado$Correo(id_correo,id_emisor);
+
     return true;
   }
+  public static int enviarCorreo(int id_correo,int id_emisor, int[] id_receptor) {
+    int cantE=0;
+    for (int i:id_receptor) {
 
-  public static int enviarCorreo_1_N(int id_correo, int id_emisor, int[] id_receptor) {
-    int cantE = 0;
-    for (int i : id_receptor) {
-
-      if (!enviarCorreo_1_1(id_correo, id_emisor, i)) {
-        return cantE; //No seria un continue?. Salvo que si no se envia a alguno, a los otros que tampoco se envie.
-        //Conviene hacerlo un booleano. Mirar resolución propuesta abajo.
+      if (!(enviarCorreo(id_correo,id_emisor,i))){
+        System.out.println("Fallo el envio, receptor:"+i);
+        continue;
       }
+
 
       cantE++;
 
@@ -251,19 +281,5 @@ public class CorreoDAO {
 
     return cantE;
   }
-
-//  public static boolean enviarCorreo_1_N(int id_correo, int id_emisor, int[] id_receptores) {
-//
-//    for (int i : id_receptores) {
-//
-//      if (!enviarCorreo_1_1(id_correo, id_emisor, i)) {
-//        return false;
-//      }
-//
-//    }
-//
-//    return true;
-//
-//  }
 
 }
