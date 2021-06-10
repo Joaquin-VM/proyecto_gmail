@@ -2,6 +2,7 @@ package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
 import com.gmail.model.AbsEtiqueta;
+import com.gmail.model.Correo;
 import com.gmail.model.Etiqueta;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -77,12 +78,13 @@ public class EtiquetaDAO {
 
   }
 
-  public static AbsEtiqueta getEtiqueta(String nombreEtiqueta, int idUsuario) {
+  public static List<AbsEtiqueta> getEtiqueta(String nombreEtiqueta, int idUsuario) {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta "
-        + "WHERE nombre_etiqueta = ? AND id_usuario = ?";
+        + "WHERE nombre_etiqueta LIKE '% ? %' AND id_usuario = ?";
 
     Etiqueta etiqueta = null;
+    List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -101,6 +103,7 @@ public class EtiquetaDAO {
         etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
         etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));
         etiqueta.setIdEtiqueta(rs.getInt("id_usuario"));
+        listaEtiquetas.add(etiqueta);
       }
 
 
@@ -108,7 +111,7 @@ public class EtiquetaDAO {
       System.out.println(e);
     }
 
-    return etiqueta;
+    return listaEtiquetas;
 
   }
 
@@ -116,7 +119,7 @@ public class EtiquetaDAO {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
     Etiqueta etiqueta = null;
-    List<AbsEtiqueta> listaEtiquetas = null;
+    List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -127,7 +130,6 @@ public class EtiquetaDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        listaEtiquetas = new ArrayList<>();
         etiqueta = new Etiqueta();
         etiqueta = etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"))
             .setNombreEtiqueta(rs.getString("nombre_etiqueta"))
@@ -192,6 +194,56 @@ public class EtiquetaDAO {
 
   }
 
+  public static boolean agregarCorreoEtiqueta(int idCorreo, int idEtiqueta) {
+
+    String INSERT_CLASIFICAR_SQL = "INSERT INTO clasificar" +
+            "(id_correo, id_etiqueta) VALUES (?, ?)";
+
+    try (Connection connection = DriverManager
+            .getConnection(JDBCUtil.getURL(), JDBCUtil.getUsuario(), JDBCUtil.getClave());
+         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CLASIFICAR_SQL,
+                 Statement.RETURN_GENERATED_KEYS)) {
+
+      preparedStatement.setInt(1, idCorreo);
+      preparedStatement.setInt(2, idEtiqueta);
+
+      System.out.println(preparedStatement);
+
+      preparedStatement.executeUpdate();
+
+    } catch (SQLException e) {
+      System.out.println(e);
+      return false;
+    }
+
+    return true;
+  }
+
+  public static boolean quitarEtiqueta(int idCorreo, int idEtiqueta) {
+
+    String DELETE_ETIQUETA_SQL = "DELETE FROM clasificar WHERE id_etiqueta = ? AND id_correo = ?";
+
+    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+            JDBCUtil.getUsuario(), JDBCUtil.getClave());
+         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ETIQUETA_SQL)) {
+
+      preparedStatement.setInt(1, idEtiqueta);
+      preparedStatement.setInt(2, idCorreo);
+
+      System.out.println(preparedStatement);
+
+      int filasAfectadas = preparedStatement.executeUpdate();
+
+      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+
+    } catch (SQLException e) {
+      System.out.println(e);
+      return false;
+    }
+
+    return true;
+
+  }
 
 }
 

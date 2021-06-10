@@ -87,7 +87,7 @@ public class CorreoDAO {
         "INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
         "WHERE r.borrado = ? AND r.id_usuario_2 =  ? ";
 
-    List<Correo> correos = null;
+    List<Correo> correos = new ArrayList<>();
     Correo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -103,7 +103,6 @@ public class CorreoDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        correos = new ArrayList<>();
         correo = new Correo();
         correo.setIdCorreo(rs.getInt("id_correo"))
             .setIdUsuario(rs.getInt("id_usuario"))
@@ -128,7 +127,7 @@ public class CorreoDAO {
     String QUERY = "SELECT * FROM correo c " +
             "WHERE c.borrado = ? AND c.id_usuario =  ? ";
 
-    List<Correo> correos = null;
+    List<Correo> correos = new ArrayList<>();
     Correo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -144,7 +143,6 @@ public class CorreoDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        correos = new ArrayList<>();
         correo = new Correo();
         correo.setIdCorreo(rs.getInt("id_correo"))
                 .setIdUsuario(rs.getInt("id_usuario"))
