@@ -70,5 +70,47 @@ public class Correo extends AbsCorreo {
         return this;
     }
 
+    @Override
+    public Boolean getBorrado() {
+        return this.borrado;
+    }
 
+    @Override
+    public AbsCorreo setBorrado(Boolean borrado) {
+        this.borrado = borrado;
+        return this;
+    }
+
+    @Override
+    public Boolean getLeido() {
+        return this.leido;
+    }
+
+    @Override
+    public AbsCorreo setLeido(Boolean leido) {
+        this.leido = leido;
+        return this;
+    }
+
+    @Override
+    public Boolean getDestacado() {
+        return this.destacado;
+    }
+
+    @Override
+    public AbsCorreo setDestacado(Boolean destacado) {
+        this.destacado = destacado;
+        return this;
+    }
+
+    @Override
+    public Boolean getImportante() {
+        return this.importante;
+    }
+
+    @Override
+    public AbsCorreo setImportante(Boolean importante) {
+        this.importante = importante;
+        return this;
+    }
 }
