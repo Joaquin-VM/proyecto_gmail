@@ -6,6 +6,7 @@ import java.util.Objects;
 public abstract class AbsCorreo implements Cloneable {
 
     int idCorreo;
+    int idUsuario;
     String asunto;
     String cuerpo;
     LocalDateTime fechaHora;
@@ -14,6 +15,10 @@ public abstract class AbsCorreo implements Cloneable {
     public abstract int getIdCorreo();
 
     public abstract AbsCorreo setIdCorreo(int idCorreo);
+
+    public abstract int getIdUsuario();
+
+    public abstract AbsCorreo setIdUsuario(int idUsuario);
 
     public abstract String getAsunto();
 

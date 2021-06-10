@@ -16,6 +16,17 @@ public class Correo extends AbsCorreo {
     }
 
     @Override
+    public int getIdUsuario() {
+        return this.idUsuario;
+    }
+
+    @Override
+    public Correo setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+        return this;
+    }
+
+    @Override
     public String getAsunto() {
         return this.asunto;
     }
