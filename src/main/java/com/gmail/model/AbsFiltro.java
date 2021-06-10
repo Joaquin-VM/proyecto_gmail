@@ -6,8 +6,8 @@ public abstract class AbsFiltro implements Cloneable {
 
   int idFiltro;
   int idUsuario;
-  String emisor;
-  String receptor;
+  int idEmisor;
+  int idReceptor;
   String asunto;
   String contiene;
   Boolean leido;
@@ -75,8 +75,8 @@ public abstract class AbsFiltro implements Cloneable {
     return "AbsFiltro{" +
         "idFiltro=" + idFiltro +
         ", idUsuario=" + idUsuario +
-        ", emisor='" + emisor + '\'' +
-        ", receptor='" + receptor + '\'' +
+        ", emisor='" + idEmisor + '\'' +
+        ", receptor='" + idReceptor + '\'' +
         ", asunto='" + asunto + '\'' +
         ", contiene='" + contiene + '\'' +
         ", leido=" + leido +
@@ -99,15 +99,15 @@ public abstract class AbsFiltro implements Cloneable {
     }
     AbsFiltro absFiltro = (AbsFiltro) o;
     return idFiltro == absFiltro.idFiltro &&
-        Objects.equals(emisor, absFiltro.emisor) &&
-        Objects.equals(receptor, absFiltro.receptor) &&
+        Objects.equals(idEmisor, absFiltro.idEmisor) &&
+        Objects.equals(idReceptor, absFiltro.idReceptor) &&
         Objects.equals(asunto, absFiltro.asunto) &&
         Objects.equals(contiene, absFiltro.contiene);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(idFiltro, emisor, receptor, asunto, contiene);
+    return Objects.hash(idFiltro, idEmisor, idReceptor, asunto, contiene);
   }
 
   @Override
