@@ -16,7 +16,7 @@ public class CorreoDAO {
     String INSERT_CORREO_SQL = "INSERT INTO correo" +
         "(id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante)"
         +
-        "VALUES (?, ?, ?, ?, ?)";
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?)";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -265,12 +265,11 @@ public class CorreoDAO {
 
   }
 
-
   public static boolean enviarCorreo(int id_correo, int id_receptor) {
 
     String INSERT_ENVIAR_SQL = "INSERT INTO recibidos" +
-        "(id_usuario_2, id_correo, fecha_hora)" +
-        "VALUES (?, ?, ?)";
+        "(id_usuario_2, id_correo)" +
+        "VALUES (?, ?)";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -279,7 +278,6 @@ public class CorreoDAO {
 
       preparedStatement.setInt(1, id_receptor);
       preparedStatement.setInt(2, id_correo);
-      preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
 
       System.out.println(preparedStatement);
 

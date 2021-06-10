@@ -46,7 +46,7 @@ public class EtiquetaDAO {
 
   public static AbsEtiqueta getEtiqueta(int idEtiqueta) {
 
-    String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
+    String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_etiqueta = ?";
 
     AbsEtiqueta etiqueta = null;
 
@@ -61,7 +61,7 @@ public class EtiquetaDAO {
 
       ResultSet rs = preparedStatement.executeQuery();
 
-      while (rs.next()) {
+      if (rs.next()) {
         etiqueta = EtiquetaFactory.buildEtiqueta();
         etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
         etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));

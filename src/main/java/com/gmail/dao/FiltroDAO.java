@@ -134,11 +134,10 @@ public class FiltroDAO {
 
     String UPDATE_FILTRO_SQL = "UPDATE filtro " +
         "SET id_usuario = ?," +
-        " emisor = ?," +
-        " receptor = ?," +
-        " asunto = ?," +
-        " contiene = ?" +
-        " WHERE id_etiqueta = ?";
+        " emisor = ?,   receptor = ?, asunto = ?," +
+        " contiene = ?, leido = ?, destacar = ?, importante = ?, eliminar = ?,"
+        + " spam = ?, id_etiqueta = ?, id_usuario_reenviar = ? " +
+        " WHERE id_filtro = ?";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -156,6 +155,7 @@ public class FiltroDAO {
       preparedStatement.setShort(10, (short) (filtro.getSpam() ? 1 : 0));
       preparedStatement.setInt(11, filtro.getIdEtiqueta());
       preparedStatement.setInt(12, filtro.getIdUsuarioReenviar());
+      preparedStatement.setInt(13, filtro.getIdFiltro());
 
       System.out.println(preparedStatement);
 

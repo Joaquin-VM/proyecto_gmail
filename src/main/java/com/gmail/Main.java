@@ -1,40 +1,86 @@
 package com.gmail;
 
+import com.gmail.dao.CorreoDAO;
+import com.gmail.dao.EtiquetaDAO;
+import com.gmail.dao.FiltroDAO;
 import com.gmail.dao.UsuarioDAO;
-
+import com.gmail.model.AbsCorreo;
+import com.gmail.model.AbsEtiqueta;
+import com.gmail.model.AbsFiltro;
 import com.gmail.model.AbsUsuario;
+import com.gmail.model.CorreoFactory;
+import com.gmail.model.EtiquetaFactory;
+import com.gmail.model.FiltroFactory;
 import com.gmail.model.UsuarioFactory;
 import java.time.LocalDate;
 
 public class Main {
 
   public static void main(String[] args) {
-//    LocalDateTime ld = LocalDateTime.now();
-//    System.out.println(ld.getHour() + " " + ld.getMinute() + " " + ld.getSecond());
-//    LocalDate localDate = LocalDate.of(2021, 8, 3);
-//    LocalDate localDate2 = LocalDate
-//        .of(localDate.getYear(), localDate.getMonth(), localDate.getDayOfMonth());
-//    System.out.println(localDate2);
 
-    AbsUsuario usuario = UsuarioFactory.buildUsuario();
-    usuario.setNombre("Sebastian").setApellido("Martinez").setCorreo("1234567@gmail.com")
-        .setContrasenia("1234").setTelefono("54 9 323124213").setFechaNacimiento(LocalDate.now())
-        .setSexo("Masculino");
+    //FILTRO.
 
-    AbsUsuario usuario2 = UsuarioFactory.buildUsuario();
-    usuario2.setIdUsuario(1).setNombre("Update").setApellido("Martinez").setCorreo("correo22@gmail.com")
-        .setContrasenia("12345").setTelefono("54 9 3231242131").setFechaNacimiento(LocalDate.now())
-        .setSexo("Masculino");
+//    AbsFiltro filtro = FiltroFactory.buildFiltro();
+//    filtro = FiltroDAO.getFiltro(1);
+//    filtro.setDestacar(false);
+//    FiltroDAO.addFiltro(filtro);
 
-    AbsUsuario usuario3 = UsuarioFactory.buildUsuario();
-    usuario3.setIdUsuario(1).setNombre("Pablo").setApellido("Martinez").setCorreo("errorfactory")
-        .setContrasenia("12345").setTelefono("54 9 3231242131").setFechaNacimiento(LocalDate.now())
-        .setSexo("Masculino");
+//    filtro = FiltroDAO.getFiltro(1);
+//    filtro.setLeido(false).setIdEtiqueta(1);
 
-    System.out.println(UsuarioDAO.getUsuario(usuario2.getIdUsuario()));
-    System.out.println();
-    System.out.println(UsuarioDAO.getUsuario("correo22@gmail.com"));
+//    System.out.println(FiltroDAO.getFiltro(1));
+//    FiltroDAO.deleteFiltro(1);
+//    System.out.println(FiltroDAO.listarFiltrosUsuario(1));
 
+    //FiltroDAO.updateFiltro(filtro);
+
+    //CORREO.
+    //AbsCorreo correo = CorreoFactory.buildCorreo();
+    //AbsCorreo correo2 = CorreoFactory.buildCorreo();
+
+    //correo.setIdUsuario(1).setBorrado(true).setLeido(false).setImportante(false).setDestacado(false).setConfirmado(true);
+
+    //correo2.setIdCorreo(4).setIdUsuario(1).setBorrado(true).setLeido(true).setImportante(true).setDestacado(true).setConfirmado(true);
+
+    //CorreoDAO.updateCorreo(correo2);
+
+    //System.out.println(CorreoDAO.getCorreo(1));
+
+    //System.out.println(CorreoDAO.getCorreosEnviados(1, CorreoDAO.getCorreo(1).getBorrado()));
+
+    //System.out.println(CorreoDAO.getCorreo(1));
+
+    //CorreoDAO.deleteCorreo(2);
+
+    //CorreoDAO.enviarCorreo(1, 4);
+
+    //CorreoDAO.enviarCorreo(1, new int[] {2,3});
+
+    //ETIQUETA.
+//    AbsEtiqueta etiqueta1 = EtiquetaFactory.buildEtiqueta();
+//    etiqueta1.setNombreEtiqueta("Personal").setIdUsuario(1);
+//
+//    AbsEtiqueta etiqueta2 = EtiquetaFactory.buildEtiqueta();
+//    etiqueta2.setNombreEtiqueta("Club").setIdUsuario(1);
+//
+//    AbsEtiqueta etiqueta3 = EtiquetaFactory.buildEtiqueta();
+//    etiqueta3.setNombreEtiqueta("Universidad").setIdUsuario(2);
+//
+//    AbsEtiqueta etiqueta4 = EtiquetaFactory.buildEtiqueta();
+//    etiqueta1.setIdEtiqueta(1).setNombreEtiqueta("Hogar").setIdUsuario(1);
+
+//    EtiquetaDAO.addEtiqueta(etiqueta1);
+//    EtiquetaDAO.addEtiqueta(etiqueta2);
+//    EtiquetaDAO.addEtiqueta(etiqueta3);
+//    System.out.println();
+//    System.out.println(EtiquetaDAO.listarEtiquetasUsuario(etiqueta1.getIdUsuario()));
+//    System.out.println();
+//    EtiquetaDAO.updateEtiqueta(etiqueta4);
+//    System.out.println(EtiquetaDAO.getEtiqueta(6));
+//    System.out.println();
+//    EtiquetaDAO.deleteEtiqueta(5);
+
+    //USUARIO YA SE PROBO.
 
   }
 }
