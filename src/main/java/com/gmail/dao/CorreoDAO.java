@@ -253,8 +253,6 @@ public class CorreoDAO {
 
       preparedStatement.executeUpdate();
 
-      ResultSet rs1 = preparedStatement.getGeneratedKeys();
-
     } catch (SQLException e) {
       System.out.println(e);
       return false;
@@ -265,9 +263,9 @@ public class CorreoDAO {
 
     return true;
   }
-  public static int enviarCorreo(int id_correo,int id_emisor, int[] id_receptor) {
+  public static int enviarCorreo(int id_correo,int id_emisor, int[] id_receptores) {
     int cantE=0;
-    for (int i:id_receptor) {
+    for (int i:id_receptores) {
 
       if (!(enviarCorreo(id_correo,id_emisor,i))){
         System.out.println("Fallo el envio, receptor:"+i);
