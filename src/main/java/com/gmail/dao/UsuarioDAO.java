@@ -9,10 +9,8 @@ package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
 import com.gmail.model.AbsUsuario;
-
 import com.gmail.model.UsuarioFactory;
 import java.sql.*;
-import java.time.LocalDate;
 
 public class UsuarioDAO {
 
@@ -126,13 +124,9 @@ public class UsuarioDAO {
   }
 
   public static boolean updateUsuario(AbsUsuario usuario) {
-    String UPDATE_USUARIO_SQL = "UPDATE usuario" +
-        "SET nombre_usuario = ?" +
-        "apellido = ?" +
-        "contrasenia = ?" +
-        "telefono = ?" +
-        "sexo = ?" +
-        "WHERE id_usuario = ?;";
+    String UPDATE_USUARIO_SQL = "UPDATE usuario " +
+        "SET nombre_usuario = ?, apellido = ?, contrasenia = ?, " +
+        "telefono = ?, sexo = ? WHERE id_usuario = ?;";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());

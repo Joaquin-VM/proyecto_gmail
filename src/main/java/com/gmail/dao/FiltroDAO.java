@@ -133,10 +133,10 @@ public class FiltroDAO {
   public static boolean updateFiltro(AbsFiltro filtro) {
 
     String UPDATE_FILTRO_SQL = "UPDATE filtro " +
-        "SET id_usuario = ?" +
-        " emisor = ?" +
-        " receptor = ?" +
-        " asunto = ?" +
+        "SET id_usuario = ?," +
+        " emisor = ?," +
+        " receptor = ?," +
+        " asunto = ?," +
         " contiene = ?" +
         " WHERE id_etiqueta = ?";
 

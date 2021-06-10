@@ -179,8 +179,8 @@ public class CorreoDAO {
 
   public static boolean updateCorreo(AbsCorreo correo) {
     String UPDATE_CORREO_SQL = "UPDATE correo " +
-        "SET id_usuario = ? asunto = ?  cuerpo = ?  fecha_hora = ?  confirmado = ?  borrado = ?"
-        + "leido = ?  destacado = ?  importante  = ?  WHERE id_correo = ?;";
+        "SET id_usuario = ?, asunto = ?,  cuerpo = ?,  fecha_hora = ?,  confirmado = ?,  borrado = ?,"
+        + " leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ?;";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
