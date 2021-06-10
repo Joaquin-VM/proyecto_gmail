@@ -5,6 +5,7 @@ import java.util.Objects;
 public abstract class AbsFiltro implements Cloneable {
 
     int idFiltro;
+    int idUsuario;
     String emisor;
     String receptor;
     String asunto;
@@ -12,7 +13,11 @@ public abstract class AbsFiltro implements Cloneable {
 
     public abstract int getIdFiltro();
 
-    public abstract AbsFiltro setIdFiltro(int idFiltro);
+    public abstract AbsFiltro setIdFiltro(int idUsuario);
+
+    public abstract int getIdUsuario();
+
+    public abstract AbsFiltro setIdUsuario(int idUsuario);
 
     public abstract String getEmisor();
 

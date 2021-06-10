@@ -196,7 +196,6 @@ public class CorreoDAO {
 
   }
 
-
   public static boolean deleteCorreo(int idCorreo, int idUsuario) {
 
     String BORRAR_CORREO_SQL = "UPDATE recibidos " +
@@ -253,7 +252,6 @@ public class CorreoDAO {
     return true;
 
   }
-
 
   public static boolean enviarCorreo(int id_correo, int id_receptor) {
 

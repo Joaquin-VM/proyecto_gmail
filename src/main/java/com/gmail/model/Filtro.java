@@ -14,6 +14,18 @@ public class Filtro extends AbsFiltro{
     }
 
     @Override
+    public int getIdUsuario() {
+        return this.idUsuario;
+    }
+
+    @Override
+    public Filtro setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+        return this;
+    }
+
+
+    @Override
     public String getEmisor() {
         return this.emisor;
     }
