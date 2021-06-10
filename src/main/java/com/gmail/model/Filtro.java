@@ -26,24 +26,24 @@ class Filtro extends AbsFiltro {
 
 
   @Override
-  public String getEmisor() {
-    return this.emisor;
+  public int getIdEmisor() {
+    return this.idEmisor;
   }
 
   @Override
-  public Filtro setEmisor(String emisor) {
-    this.emisor = emisor;
+  public Filtro setIdEmisor(int idEmisor) {
+    this.idEmisor = idEmisor;
     return this;
   }
 
   @Override
-  public String getReceptor() {
-    return this.receptor;
+  public int getIdReceptor() {
+    return this.idReceptor;
   }
 
   @Override
-  public Filtro setReceptor(String receptor) {
-    this.receptor = receptor;
+  public Filtro setIdReceptor(int idReceptor) {
+    this.idReceptor = idReceptor;
     return this;
   }
 

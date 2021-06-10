@@ -26,13 +26,13 @@ public abstract class AbsFiltro implements Cloneable {
 
   public abstract AbsFiltro setIdUsuario(int idUsuario);
 
-  public abstract String getEmisor();
+  public abstract int getIdEmisor();
 
-  public abstract AbsFiltro setEmisor(String emisor);
+  public abstract AbsFiltro setIdEmisor(int idEmisor);
 
-  public abstract String getReceptor();
+  public abstract int getIdReceptor();
 
-  public abstract AbsFiltro setReceptor(String receptor);
+  public abstract AbsFiltro setIdReceptor(int idReceptor);
 
   public abstract String getAsunto();
 

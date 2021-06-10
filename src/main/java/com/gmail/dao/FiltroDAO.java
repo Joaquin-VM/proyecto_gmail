@@ -22,8 +22,8 @@ public class FiltroDAO {
             Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, filtro.getIdUsuario());
-      preparedStatement.setString(2, filtro.getEmisor());
-      preparedStatement.setString(3, filtro.getReceptor());
+      preparedStatement.setInt(2, filtro.getIdEmisor());
+      preparedStatement.setInt(3, filtro.getIdReceptor());
       preparedStatement.setString(4, filtro.getAsunto());
       preparedStatement.setString(5, filtro.getContiene());
       preparedStatement.setShort(6, (short) (filtro.getLeido() ? 1 : 0));
@@ -74,8 +74,8 @@ public class FiltroDAO {
         filtro = FiltroFactory.buildFiltro();
         filtro.setIdFiltro(rs.getInt("id_filtro"))
             .setIdUsuario(rs.getInt("id_usuario"))
-            .setEmisor(rs.getString("emisor"))
-            .setReceptor(rs.getString("receptor"))
+            .setIdEmisor(rs.getInt("emisor"))
+            .setIdReceptor(rs.getInt("receptor"))
             .setAsunto(rs.getString("asunto"))
             .setContiene(rs.getString("contiene")).setLeido(rs.getShort("leido") == 1)
             .setDestacar(rs.getShort("destacar") == 1)
@@ -111,8 +111,8 @@ public class FiltroDAO {
         filtro = FiltroFactory.buildFiltro();
         filtro.setIdFiltro(rs.getInt("id_filtro"))
             .setIdUsuario(rs.getInt("id_usuario"))
-            .setEmisor(rs.getString("emisor"))
-            .setReceptor(rs.getString("receptor"))
+            .setIdEmisor(rs.getInt("emisor"))
+            .setIdReceptor(rs.getInt("receptor"))
             .setAsunto(rs.getString("asunto"))
             .setContiene(rs.getString("contiene")).setLeido(rs.getShort("leido") == 1)
             .setDestacar(rs.getShort("destacar") == 1)
@@ -145,8 +145,8 @@ public class FiltroDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_FILTRO_SQL)) {
 
       preparedStatement.setInt(1, filtro.getIdUsuario());
-      preparedStatement.setString(2, filtro.getEmisor());
-      preparedStatement.setString(3, filtro.getReceptor());
+      preparedStatement.setInt(2, filtro.getIdEmisor());
+      preparedStatement.setInt(3, filtro.getIdReceptor());
       preparedStatement.setString(4, filtro.getAsunto());
       preparedStatement.setString(5, filtro.getContiene());
       preparedStatement.setShort(6, (short) (filtro.getLeido() ? 1 : 0));
