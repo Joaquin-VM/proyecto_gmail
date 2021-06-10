@@ -85,8 +85,7 @@ public class CorreoDAO {
 
     String QUERY = "SELECT * FROM correo c " +
         "INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
-        "INNER JOIN borrar b ON b.id_correo = c.id_correo" +
-        "WHERE c.confirmado = 1 AND b.borrado = ? AND r.id_usuario_2 =  ? ";
+        "WHERE r.borrado = ? AND r.id_usuario_2 =  ? ";
 
     List<Correo> correos = null;
     Correo correo = null;
@@ -110,7 +109,49 @@ public class CorreoDAO {
             .setIdUsuario(rs.getInt("id_usuario"))
             .setAsunto(rs.getString("asunto"))
             .setCuerpo(rs.getString("cuerpo"))
-            .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime()).setConfirmado(true);
+            .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
+            .setConfirmado(true);
+        correos.add(correo);
+      }
+
+
+    } catch (SQLException e) {
+      System.out.println(e);
+    }
+
+    return correos;
+
+  }
+
+  public static List<Correo> getCorreosEnviados(int idUsuario, boolean borrado) {
+
+    String QUERY = "SELECT * FROM correo c " +
+            "WHERE c.borrado = ? AND c.id_usuario =  ? ";
+
+    List<Correo> correos = null;
+    Correo correo = null;
+
+    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+            JDBCUtil.getUsuario(), JDBCUtil.getClave());
+         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
+                 Statement.RETURN_GENERATED_KEYS)) {
+
+      preparedStatement.setInt(1, borrado ? 1 : 0);
+      preparedStatement.setInt(2, idUsuario);
+
+      System.out.println(preparedStatement);
+
+      ResultSet rs = preparedStatement.executeQuery();
+
+      while (rs.next()) {
+        correos = new ArrayList<>();
+        correo = new Correo();
+        correo.setIdCorreo(rs.getInt("id_correo"))
+                .setIdUsuario(rs.getInt("id_usuario"))
+                .setAsunto(rs.getString("asunto"))
+                .setCuerpo(rs.getString("cuerpo"))
+                .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
+                .setConfirmado(true);
         correos.add(correo);
       }
 
@@ -137,7 +178,7 @@ public class CorreoDAO {
 
       preparedStatement.setString(1, correo.getAsunto());
       preparedStatement.setString(2, correo.getCuerpo());
-      preparedStatement.setTimestamp(3, Timestamp.valueOf(correo.getFechaHora()));
+      preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
       preparedStatement.setInt(4, correo.getConfirmado() ? 1 : 0);
       preparedStatement.setInt(5, correo.getIdCorreo());
 
@@ -155,6 +196,7 @@ public class CorreoDAO {
     return true;
 
   }
+
 
   public static boolean deleteCorreo(int idCorreo, int idUsuario) {
 
