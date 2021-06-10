@@ -35,6 +35,7 @@ public class Main {
     //FiltroDAO.updateFiltro(filtro);
 
     //CORREO.
+
     //AbsCorreo correo = CorreoFactory.buildCorreo();
     //AbsCorreo correo2 = CorreoFactory.buildCorreo();
 
@@ -57,6 +58,7 @@ public class Main {
     //CorreoDAO.enviarCorreo(1, new int[] {2,3});
 
     //ETIQUETA.
+
 //    AbsEtiqueta etiqueta1 = EtiquetaFactory.buildEtiqueta();
 //    etiqueta1.setNombreEtiqueta("Personal").setIdUsuario(1);
 //
