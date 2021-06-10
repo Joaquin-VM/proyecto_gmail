@@ -14,13 +14,13 @@ public class CorreoDAO {
   public static Correo addCorreo(Correo correo) {
 
     String INSERT_CORREO_SQL = "INSERT INTO correo" +
-            "(id_usuario, asunto, cuerpo, fecha_hora, confirmado)" +
-            "VALUES (?, ?, ?, ?, ?)";
+        "(id_usuario, asunto, cuerpo, fecha_hora, confirmado)" +
+        "VALUES (?, ?, ?, ?, ?)";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CORREO_SQL,
-                 Statement.RETURN_GENERATED_KEYS)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CORREO_SQL,
+            Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, correo.getIdUsuario());
       preparedStatement.setString(2, correo.getAsunto());
@@ -48,14 +48,14 @@ public class CorreoDAO {
   public static Correo getCorreo(int idCorreo) {
 
     String QUERY = "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado" +
-            " FROM correo WHERE id_correo = ?";
+        " FROM correo WHERE id_correo = ?";
 
     Correo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-                 Statement.RETURN_GENERATED_KEYS)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
+            Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, idCorreo);
 
@@ -66,11 +66,11 @@ public class CorreoDAO {
       while (rs.next()) {
         correo = new Correo();
         correo.setIdCorreo(rs.getInt("id_correo"))
-                .setIdUsuario(rs.getInt("id_usuario"))
-                .setAsunto(rs.getString("asunto"))
-                .setCuerpo(rs.getString("cuerpo"))
-                .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
-                .setConfirmado(rs.getInt("confirmado") == 1);
+            .setIdUsuario(rs.getInt("id_usuario"))
+            .setAsunto(rs.getString("asunto"))
+            .setCuerpo(rs.getString("cuerpo"))
+            .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
+            .setConfirmado(rs.getInt("confirmado") == 1);
       }
 
     } catch (SQLException e) {
@@ -84,34 +84,33 @@ public class CorreoDAO {
   public static List<Correo> getCorreosRecibidos(int idUsuario, boolean borrado) {
 
     String QUERY = "SELECT * FROM correo c " +
-            "INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
-            "INNER JOIN borrar b ON b.id_correo = c.id_correo" +
-            "WHERE c.confirmado = 1 AND b.borrado = ? AND r.id_usuario_2 =  ? ";
+        "INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
+        "INNER JOIN borrar b ON b.id_correo = c.id_correo" +
+        "WHERE c.confirmado = 1 AND b.borrado = ? AND r.id_usuario_2 =  ? ";
 
     List<Correo> correos = null;
     Correo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-                 Statement.RETURN_GENERATED_KEYS)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
+            Statement.RETURN_GENERATED_KEYS)) {
 
-      preparedStatement.setInt(1, borrado  ? 1 : 0);
+      preparedStatement.setInt(1, borrado ? 1 : 0);
       preparedStatement.setInt(2, idUsuario);
 
       System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
-
       while (rs.next()) {
         correos = new ArrayList<>();
         correo = new Correo();
         correo.setIdCorreo(rs.getInt("id_correo"))
-                .setIdUsuario(rs.getInt("id_usuario"))
-                .setAsunto(rs.getString("asunto"))
-                .setCuerpo(rs.getString("cuerpo"))
-                .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime()).setConfirmado(true);
+            .setIdUsuario(rs.getInt("id_usuario"))
+            .setAsunto(rs.getString("asunto"))
+            .setCuerpo(rs.getString("cuerpo"))
+            .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime()).setConfirmado(true);
         correos.add(correo);
       }
 
@@ -126,15 +125,15 @@ public class CorreoDAO {
 
   public static boolean updateCorreo(Correo correo) {
     String UPDATE_CORREO_SQL = "UPDATE correo" +
-            "SET asunto = ?" +
-            "cuerpo = ?" +
-            "fecha_hora = ?" +
-            "confirmado = ?" +
-            "WHERE id_correo = ?;";
+        "SET asunto = ?" +
+        "cuerpo = ?" +
+        "fecha_hora = ?" +
+        "confirmado = ?" +
+        "WHERE id_correo = ?;";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
 
       preparedStatement.setString(1, correo.getAsunto());
       preparedStatement.setString(2, correo.getCuerpo());
@@ -160,12 +159,12 @@ public class CorreoDAO {
   public static boolean deleteCorreo(int idCorreo, int idUsuario) {
 
     String BORRAR_CORREO_SQL = "UPDATE recibidos " +
-            "SET borrado = ? " +
-            "WHERE id_usuario = ? AND id_correo = ?";
+        "SET borrado = ? " +
+        "WHERE id_usuario = ? AND id_correo = ?";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(BORRAR_CORREO_SQL)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(BORRAR_CORREO_SQL)) {
 
       preparedStatement.setInt(1, 1);
       preparedStatement.setInt(2, idUsuario);
@@ -189,12 +188,12 @@ public class CorreoDAO {
   public static boolean deleteCorreo(int idCorreo) {
 
     String UPDATE_CORREO_SQL = "UPDATE correo" +
-            "borrado = ?" +
-            "WHERE id_correo = ?;";
+        "borrado = ?" +
+        "WHERE id_correo = ?;";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
 
       preparedStatement.setInt(1, 1);
       preparedStatement.setInt(2, idCorreo);
@@ -218,14 +217,13 @@ public class CorreoDAO {
   public static boolean enviarCorreo(int id_correo, int id_receptor) {
 
     String INSERT_ENVIAR_SQL = "INSERT INTO recibido" +
-            "(id_usuario_2, id_correo, fecha_hora)" +
-            "VALUES (?, ?, ?)";
-
+        "(id_usuario_2, id_correo, fecha_hora)" +
+        "VALUES (?, ?, ?)";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ENVIAR_SQL,
-                 Statement.RETURN_GENERATED_KEYS)){
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ENVIAR_SQL,
+            Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, id_receptor);
       preparedStatement.setInt(2, id_correo);
@@ -240,18 +238,17 @@ public class CorreoDAO {
       return false;
     }
 
-
     return true;
   }
-  public static int enviarCorreo(int id_correo, int[] id_receptores) {
-    int cantE=0;
-    for (int i:id_receptores) {
 
-      if (!(enviarCorreo(id_correo, i))){
-        System.out.println("Fallo el envio, receptor:"+i);
+  public static int enviarCorreo(int id_correo, int[] id_receptores) {
+    int cantE = 0;
+    for (int i : id_receptores) {
+
+      if (!(enviarCorreo(id_correo, i))) {
+        System.out.println("Fallo el envio, receptor:" + i);
         continue;
       }
-
 
       cantE++;
 
