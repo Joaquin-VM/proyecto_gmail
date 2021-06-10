@@ -1,6 +1,7 @@
 package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
+import com.gmail.model.AbsCorreo;
 import com.gmail.model.Correo;
 
 import java.sql.*;
@@ -11,7 +12,7 @@ import java.util.List;
 public class CorreoDAO {
 
 
-  public static Correo addCorreo(Correo correo) {
+  public static AbsCorreo addCorreo(AbsCorreo correo) {
 
     String INSERT_CORREO_SQL = "INSERT INTO correo" +
         "(id_usuario, asunto, cuerpo, fecha_hora, confirmado)" +
@@ -45,7 +46,7 @@ public class CorreoDAO {
     return correo;
   }
 
-  public static Correo getCorreo(int idCorreo) {
+  public static AbsCorreo getCorreo(int idCorreo) {
 
     String QUERY = "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado" +
         " FROM correo WHERE id_correo = ?";
@@ -81,13 +82,13 @@ public class CorreoDAO {
 
   }
 
-  public static List<Correo> getCorreosRecibidos(int idUsuario, boolean borrado) {
+  public static List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) {
 
     String QUERY = "SELECT * FROM correo c " +
         "INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
         "WHERE r.borrado = ? AND r.id_usuario_2 =  ? ";
 
-    List<Correo> correos = new ArrayList<>();
+    List<AbsCorreo> correos = new ArrayList<>();
     Correo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -122,12 +123,12 @@ public class CorreoDAO {
 
   }
 
-  public static List<Correo> getCorreosEnviados(int idUsuario, boolean borrado) {
+  public static List<AbsCorreo> getCorreosEnviados(int idUsuario, boolean borrado) {
 
     String QUERY = "SELECT * FROM correo c " +
             "WHERE c.borrado = ? AND c.id_usuario =  ? ";
 
-    List<Correo> correos = new ArrayList<>();
+    List<AbsCorreo> correos = new ArrayList<>();
     Correo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -162,7 +163,7 @@ public class CorreoDAO {
 
   }
 
-  public static boolean updateCorreo(Correo correo) {
+  public static boolean updateCorreo(AbsCorreo correo) {
     String UPDATE_CORREO_SQL = "UPDATE correo" +
         "SET asunto = ?" +
         "cuerpo = ?" +
