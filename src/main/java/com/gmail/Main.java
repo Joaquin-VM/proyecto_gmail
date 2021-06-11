@@ -84,9 +84,7 @@ public class Main {
 //    System.out.println();
 //    EtiquetaDAO.deleteEtiqueta(5);
 
-    //USUARIO YA SE PROBO.AAAAA
-
-    //MODIFICACION YO.HolaHola
+    //USUARIO YA SE PROBO.
 
   }
 }
