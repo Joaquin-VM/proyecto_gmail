@@ -90,6 +90,48 @@ public class CorreoDAO {
 
   }
 
+  public static AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) {
+
+    String QUERY =
+            "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, r.confirmado, r.borrado, r.leido, r.destacado, r.importante"
+                    + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
+                    "WHERE c.id_correo = ? AND r.id_usuario_2 =  ? ";
+
+    AbsCorreo correo = null;
+
+    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+            JDBCUtil.getUsuario(), JDBCUtil.getClave());
+         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
+                 Statement.RETURN_GENERATED_KEYS)) {
+
+      preparedStatement.setInt(1, idCorreo);
+      preparedStatement.setInt(2, idUsuario);
+
+      System.out.println(preparedStatement);
+
+      ResultSet rs = preparedStatement.executeQuery();
+
+      while (rs.next()) {
+        correo = CorreoFactory.buildCorreo();
+        correo.setIdCorreo(rs.getInt("id_correo"))
+                .setIdUsuario(rs.getInt("id_usuario"))
+                .setAsunto(rs.getString("asunto"))
+                .setCuerpo(rs.getString("cuerpo"))
+                .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
+                .setConfirmado(rs.getShort("confirmado") == 1).setBorrado(rs.getShort("borrado") == 1)
+                .setLeido(rs.getShort("leido") == 1).setDestacado(rs.getShort("destacado") == 1)
+                .setImportante(rs.getShort("importante") == 1);
+      }
+
+
+    } catch (SQLException e) {
+      System.out.println(e);
+    }
+
+    return correo;
+
+  }
+
   public static List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) {
 
     String QUERY =

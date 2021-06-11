@@ -53,20 +53,20 @@ public class CorreoService {
         return CorreoDAO.getCorreo(correo.getIdCorreo());
     }
 
-    AbsCorreo eliminar(int idCorreo) throws Exception{
+    AbsCorreo eliminar(int idCorreo) throws CorreoExcepcion{
 
         AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
 
         if(correoGuardado == null){
-            throw new Exception("Error: No existe correo con id = " + idCorreo);
+            throw new CorreoExcepcion(1 , idCorreo);
         }
 
         if (correoGuardado.getBorrado()){
-            throw new Exception("Error: El correo esta en papelera");
+            throw new CorreoExcepcion(2);
         }
 
         if(!CorreoDAO.deleteCorreo(idCorreo)){
-            throw new Exception("Error: No pudo eliminarse");
+            throw new CorreoExcepcion(5);
         }
 
 
@@ -74,9 +74,24 @@ public class CorreoService {
 
     }
 
-    void eliminar(int idCorreo, int idUsuario){
+    AbsCorreo eliminar(int idCorreo, int idUsuario) throws CorreoExcepcion{
+
+        AbsCorreo correoGuardado = CorreoDAO.getCorreoRecibido(idCorreo, idUsuario);
+
+        if(correoGuardado == null){
+            throw new CorreoExcepcion(1 , idCorreo);
+        }
+
+        if (correoGuardado.getBorrado()){
+            throw new CorreoExcepcion(2);
+        }
+
+        if(!CorreoDAO.deleteCorreo(idCorreo, idUsuario)){
+            throw new CorreoExcepcion(5);
+        }
 
 
+        return correoGuardado;
 
     }
 

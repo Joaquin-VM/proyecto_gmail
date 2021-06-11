@@ -26,18 +26,20 @@ public class CorreoExcepcion extends Exception{
 
         switch(error){
             case 1:
-                mensaje="Correo_Error 1: No existe correo con id = " + id;
+                mensaje="Correo_Error 01: No existe correo con id = " + id;
                 break;
             case 2:
-                mensaje="Correo_Error 2: El correo esta en papelera";
+                mensaje="Correo_Error 02: El correo esta en papelera";
                 break;
             case 3:
-                mensaje="Correo_Error 3: El correo esta enviado";
+                mensaje="Correo_Error 03: El correo esta enviado";
                 break;
             case 4:
-                mensaje="Correo_Error 4: No pudo modificarse";
+                mensaje="Correo_Error 04: No pudo modificarse";
+            case 5:
+                mensaje="Correo_Error 05: No pudo eliminarse";
             default:
-                mensaje="Correo_Error 0: No identificado";
+                mensaje="Correo_Error 00: No identificado";
                 break;
         }
 
