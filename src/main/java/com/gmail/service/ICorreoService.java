@@ -15,8 +15,8 @@ public interface ICorreoService {
 
     void eliminar(int idCorreo, int idUsuario);
 
-    AbsCorreo obtenerUno(int id);
+    AbsCorreo obtenerUno(int idCorreo);
 
-    List<AbsCorreo> obtenerLista(int id);
+    List<AbsCorreo> obtenerLista(int idUsuario);
 
 }
