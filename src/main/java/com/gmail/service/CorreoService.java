@@ -95,10 +95,19 @@ public class CorreoService {
 
     }
 
-    AbsCorreo obtenerUno(int idCorreo){
+    AbsCorreo obtenerEnviado(int idCorreo) throws CorreoExcepcion{
 
+        AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
 
-    return CorreoDAO.getCorreo(idCorreo);
+        if(correoGuardado == null){
+            throw new CorreoExcepcion(1,idCorreo);
+        }
+
+        if (correoGuardado.getBorrado()){
+            throw new CorreoExcepcion(2);
+        }
+
+        return CorreoDAO.getCorreo(idCorreo);
     }
 
     List<AbsCorreo> obtenerRecibidos(int idUsuario, boolean borrado){
