@@ -93,7 +93,7 @@ public class CorreoDAO {
   public static AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) {
 
     String QUERY =
-            "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, r.confirmado, r.borrado, r.leido, r.destacado, r.importante"
+            "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, r.borrado, r.leido, r.destacado, r.importante"
                     + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
                     "WHERE c.id_correo = ? AND r.id_usuario_2 =  ? ";
 
@@ -118,7 +118,7 @@ public class CorreoDAO {
                 .setAsunto(rs.getString("asunto"))
                 .setCuerpo(rs.getString("cuerpo"))
                 .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
-                .setConfirmado(rs.getShort("confirmado") == 1).setBorrado(rs.getShort("borrado") == 1)
+                .setBorrado(rs.getShort("borrado") == 1)
                 .setLeido(rs.getShort("leido") == 1).setDestacado(rs.getShort("destacado") == 1)
                 .setImportante(rs.getShort("importante") == 1);
       }
