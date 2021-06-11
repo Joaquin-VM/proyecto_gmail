@@ -2,6 +2,7 @@ package com.gmail.service;
 
 import com.gmail.dao.CorreoDAO;
 import com.gmail.dao.UsuarioDAO;
+import com.gmail.dto.CorreoDTO;
 import com.gmail.excepciones.CorreoExcepcion;
 import com.gmail.model.AbsCorreo;
 import com.gmail.model.AbsUsuario;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class CorreoService {
 
-    AbsCorreo crear(AbsCorreo correo) throws Exception {
+    AbsCorreo crear(CorreoDTO correo) throws Exception {
 
         correo = cargarNulls(correo);
 
@@ -25,26 +26,26 @@ public class CorreoService {
         return CorreoDAO.addCorreo(correo);
     }
 
-    AbsCorreo modificar(AbsCorreo correo) throws Exception {
+    AbsCorreo modificar(CorreoDTO correo) throws CorreoExcepcion {
 
         correo = cargarNulls(correo);
 
         AbsCorreo correoGuardado = CorreoDAO.getCorreo(correo.getIdCorreo());
 
         if(correoGuardado == null){
-            throw new Exception("Error: No existe correo con id = " + correo.getIdCorreo());
-        }
-
-        if (correoGuardado.getBorrado()){
-            throw new Exception("Error: El correo esta en papelera");
+            throw new CorreoExcepcion(1,correo.getIdCorreo());
         }
 
         if(correoGuardado.getConfirmado()) {
-            throw new Exception("Error: El correo esta enviado");
+            throw new CorreoExcepcion(3);
+        }
+
+        if (correoGuardado.getBorrado()){
+            throw new CorreoExcepcion(2);
         }
 
         if(!CorreoDAO.updateCorreo(correo)){
-            throw new Exception("Error: No pudo modificarse");
+            throw new CorreoExcepcion(4);
         }
 
         correo.setFechaHora(LocalDateTime.now());
@@ -97,7 +98,7 @@ public class CorreoService {
         return CorreoDAO.getCorreosEnviados(idUsuario,borrado);
     }
 
-    private AbsCorreo cargarNulls(AbsCorreo correo) {
+    private CorreoDTO cargarNulls(CorreoDTO correo) {
 
         if (correo.getBorrado()==null)
             correo.setBorrado(false);
