@@ -1,6 +1,5 @@
 package com.gmail.service;
 
-import com.gmail.dto.UsuarioDTO;
 import com.gmail.model.AbsUsuario;
 import java.util.List;
 
