@@ -18,6 +18,8 @@ public class Main {
 
   public static void main(String[] args) {
 
+    //FALTA PROBAR QUITARETIQUETA Y CLASFICAR.
+
     //FILTRO.
 
 //    AbsFiltro filtro = FiltroFactory.buildFiltro();
