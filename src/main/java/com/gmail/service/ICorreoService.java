@@ -9,7 +9,7 @@ public interface ICorreoService {
 
     AbsCorreo crear(AbsCorreo correo);
 
-    AbsCorreo modificar(int id, AbsCorreo correo);
+    AbsCorreo modificar(AbsCorreo correo);
 
     void eliminar(int idCorreo);
 
@@ -17,6 +17,8 @@ public interface ICorreoService {
 
     AbsCorreo obtenerUno(int idCorreo);
 
-    List<AbsCorreo> obtenerLista(int idUsuario);
+    List<AbsCorreo> obtenerRecibidos(int idUsuario, boolean borrado);
+
+    List<AbsCorreo> obtenerEnviados(int idUsuario, boolean borrado);
 
 }
