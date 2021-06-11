@@ -1,5 +1,4 @@
 package com.gmail.service;
-
 import com.gmail.model.AbsUsuario;
 import java.util.List;
 
@@ -14,6 +13,5 @@ public interface IUsuarioService {
   AbsUsuario obtenerUno(int id);
 
   List<AbsUsuario> obtenerLista(int id);
-
 
 }
