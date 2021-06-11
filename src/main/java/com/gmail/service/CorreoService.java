@@ -23,7 +23,7 @@ public class CorreoService {
 
         correo.setFechaHora(LocalDateTime.now());
 
-        return CorreoDAO.addCorreo(correo);
+        return CorreoDAO.addCorreo(CorreoFactory.buildCorreo(correo));
     }
 
     AbsCorreo modificar(CorreoDTO correo) throws CorreoExcepcion {
@@ -44,13 +44,13 @@ public class CorreoService {
             throw new CorreoExcepcion(2);
         }
 
-        if(!CorreoDAO.updateCorreo(correo)){
+        if(!CorreoDAO.updateCorreo(CorreoFactory.buildCorreo(correo))){
             throw new CorreoExcepcion(4);
         }
 
         correo.setFechaHora(LocalDateTime.now());
 
-        return CorreoDAO.getCorreo(correo.getIdCorreo());
+        return correoGuardado;
     }
 
     AbsCorreo eliminar(int idCorreo) throws CorreoExcepcion{
