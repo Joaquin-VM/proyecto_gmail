@@ -4,11 +4,11 @@ import com.gmail.dto.CorreoDTO;
 
 public class CorreoFactory {
 
-  public static AbsCorreo buildCorreo(){
+  public static AbsCorreo buildCorreo() {
     return new Correo();
   }
 
-  public static AbsCorreo buildCorreo(CorreoDTO correo){
+  public static AbsCorreo buildCorreo(CorreoDTO correo) {
     return new Correo(correo);
   }
 
