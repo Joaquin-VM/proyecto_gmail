@@ -6,12 +6,12 @@ public interface IUsuarioService {
 
   AbsUsuario crear(AbsUsuario usuario);
 
-  AbsUsuario modificar(int id, AbsUsuario usuario);
+  AbsUsuario modificar(int idUsuario, AbsUsuario usuario);
 
-  void eliminar(int id);
+  void eliminar(int idUsuario);
 
-  AbsUsuario obtenerUno(int id);
+  AbsUsuario obtenerUno(int idUsuario);
 
-  List<AbsUsuario> obtenerLista(int id);
+  List<AbsUsuario> obtenerLista(int idUsuario);
 
 }
