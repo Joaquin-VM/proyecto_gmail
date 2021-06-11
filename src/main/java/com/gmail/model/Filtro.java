@@ -1,6 +1,16 @@
 package com.gmail.model;
 
+import com.gmail.dto.FiltroDTO;
+
 class Filtro extends AbsFiltro {
+
+  public Filtro(){
+    super();
+  }
+
+  public Filtro(FiltroDTO dto) {
+    super(dto);
+  }
 
   @Override
   public int getIdFiltro() {

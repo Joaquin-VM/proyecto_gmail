@@ -1,5 +1,6 @@
 package com.gmail.model;
 
+import com.gmail.dto.EtiquetaDTO;
 import java.util.Objects;
 
 public abstract class AbsEtiqueta implements Cloneable {
@@ -7,6 +8,14 @@ public abstract class AbsEtiqueta implements Cloneable {
   int idEtiqueta;
   String nombreEtiqueta;
   int idUsuario;
+
+  public AbsEtiqueta(){}
+
+  public AbsEtiqueta(EtiquetaDTO dto){
+    this.idEtiqueta = dto.getIdEtiqueta();
+    this.nombreEtiqueta = dto.getNombreEtiqueta();
+    this.idUsuario = dto.getIdUsuario();
+  }
 
   public abstract int getIdEtiqueta();
 

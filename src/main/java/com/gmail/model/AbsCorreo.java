@@ -1,5 +1,6 @@
 package com.gmail.model;
 
+import com.gmail.dto.CorreoDTO;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -15,6 +16,21 @@ public abstract class AbsCorreo implements Cloneable {
   Boolean leido;
   Boolean destacado;
   Boolean importante;
+
+  public AbsCorreo() {}
+
+  public AbsCorreo(CorreoDTO dto) {
+    this.idCorreo = dto.getIdCorreo();
+    this.idUsuario = dto.getIdUsuario();
+    this.asunto = dto.getAsunto();
+    this.cuerpo = dto.getCuerpo();
+    this.fechaHora = dto.getFechaHora();
+    this.confirmado = dto.getConfirmado();
+    this.borrado = dto.getBorrado();
+    this.leido = dto.getLeido();
+    this.destacado = dto.getDestacado();
+    this.importante = dto.getImportante();
+  }
 
   public abstract int getIdCorreo();
 

@@ -1,6 +1,16 @@
 package com.gmail.model;
 
+import com.gmail.dto.EtiquetaDTO;
+
 class Etiqueta extends AbsEtiqueta {
+
+    public Etiqueta(){
+        super();
+    }
+
+    public Etiqueta(EtiquetaDTO dto) {
+        super(dto);
+    }
 
     @Override
     public int getIdEtiqueta() {

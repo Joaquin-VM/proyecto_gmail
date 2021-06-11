@@ -1,5 +1,6 @@
 package com.gmail.model;
 
+import com.gmail.dto.UsuarioDTO;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -13,6 +14,18 @@ public abstract class AbsUsuario implements Cloneable {
   String telefono;
   String sexo;
   LocalDate fechaNacimiento;
+
+  public AbsUsuario(){}
+
+  public AbsUsuario(UsuarioDTO dto){
+    this.idUsuario = dto.getIdUsuario();
+    this.nombre = dto.getNombre();
+    this.apellido = dto.getApellido();
+    this.correo = dto.getCorreo();
+    this.contrasenia = dto.getContrasenia();
+    this.sexo = dto.getSexo();
+    this.fechaNacimiento = dto.getFechaNacimiento();
+  }
 
   public abstract int getIdUsuario();
 

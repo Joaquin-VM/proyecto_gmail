@@ -1,8 +1,17 @@
 package com.gmail.model;
 
+import com.gmail.dto.CorreoDTO;
 import java.time.LocalDateTime;
 
 class Correo extends AbsCorreo {
+
+    public Correo(){
+        super();
+    }
+
+    public Correo(CorreoDTO dto) {
+        super(dto);
+    }
 
     @Override
     public int getIdCorreo() {

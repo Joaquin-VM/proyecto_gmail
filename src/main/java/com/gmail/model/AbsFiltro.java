@@ -1,5 +1,6 @@
 package com.gmail.model;
 
+import com.gmail.dto.FiltroDTO;
 import java.util.Objects;
 
 public abstract class AbsFiltro implements Cloneable {
@@ -17,6 +18,24 @@ public abstract class AbsFiltro implements Cloneable {
   Boolean spam;
   int idEtiqueta;
   int idUsuarioReenviar;
+
+  public AbsFiltro(){}
+
+  public AbsFiltro(FiltroDTO dto){
+    this.idFiltro = dto.getIdFiltro();
+    this.idUsuario = dto.getIdUsuario();
+    this.idEmisor = dto.getIdEmisor();
+    this.idReceptor = dto.getIdReceptor();
+    this.asunto = dto.getAsunto();
+    this.contiene = dto.getContiene();
+    this.leido = dto.getLeido();
+    this.destacar = dto.getDestacar();
+    this.importante = dto.getImportante();
+    this.eliminar = dto.getEliminar();
+    this.spam = dto.getSpam();
+    this.idEtiqueta = dto.getIdEtiqueta();
+    this.idUsuarioReenviar = dto.getIdUsuarioReenviar();
+  }
 
   public abstract int getIdFiltro();
 

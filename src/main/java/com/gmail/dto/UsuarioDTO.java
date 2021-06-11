@@ -1,27 +1,18 @@
 package com.gmail.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UsuarioDTO {
 
-  int idCorreo;
   int idUsuario;
-  String asunto;
-  String cuerpo;
-  LocalDateTime fechaHora;
-  Boolean confirmado;
-  Boolean borrado;
-  Boolean leido;
-  Boolean destacado;
-  Boolean importante;
-
-  public int getIdCorreo() {
-    return idCorreo;
-  }
-
-  public void setIdCorreo(int idCorreo) {
-    this.idCorreo = idCorreo;
-  }
+  String nombre;
+  String apellido;
+  String correo;
+  String contrasenia;
+  String telefono;
+  String sexo;
+  LocalDate fechaNacimiento;
 
   public int getIdUsuario() {
     return idUsuario;
@@ -31,68 +22,60 @@ public class UsuarioDTO {
     this.idUsuario = idUsuario;
   }
 
-  public String getAsunto() {
-    return asunto;
+  public String getNombre() {
+    return nombre;
   }
 
-  public void setAsunto(String asunto) {
-    this.asunto = asunto;
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
   }
 
-  public String getCuerpo() {
-    return cuerpo;
+  public String getApellido() {
+    return apellido;
   }
 
-  public void setCuerpo(String cuerpo) {
-    this.cuerpo = cuerpo;
+  public void setApellido(String apellido) {
+    this.apellido = apellido;
   }
 
-  public LocalDateTime getFechaHora() {
-    return fechaHora;
+  public String getCorreo() {
+    return correo;
   }
 
-  public void setFechaHora(LocalDateTime fechaHora) {
-    this.fechaHora = fechaHora;
+  public void setCorreo(String correo) {
+    this.correo = correo;
   }
 
-  public Boolean getConfirmado() {
-    return confirmado;
+  public String getContrasenia() {
+    return contrasenia;
   }
 
-  public void setConfirmado(Boolean confirmado) {
-    this.confirmado = confirmado;
+  public void setContrasenia(String contrasenia) {
+    this.contrasenia = contrasenia;
   }
 
-  public Boolean getBorrado() {
-    return borrado;
+  public String getTelefono() {
+    return telefono;
   }
 
-  public void setBorrado(Boolean borrado) {
-    this.borrado = borrado;
+  public void setTelefono(String telefono) {
+    this.telefono = telefono;
   }
 
-  public Boolean getLeido() {
-    return leido;
+  public String getSexo() {
+    return sexo;
   }
 
-  public void setLeido(Boolean leido) {
-    this.leido = leido;
+  public void setSexo(String sexo) {
+    this.sexo = sexo;
   }
 
-  public Boolean getDestacado() {
-    return destacado;
+  public LocalDate getFechaNacimiento() {
+    return fechaNacimiento;
   }
 
-  public void setDestacado(Boolean destacado) {
-    this.destacado = destacado;
-  }
-
-  public Boolean getImportante() {
-    return importante;
-  }
-
-  public void setImportante(Boolean importante) {
-    this.importante = importante;
+  public void setFechaNacimiento(LocalDate fechaNacimiento) {
+    this.fechaNacimiento = fechaNacimiento;
   }
 
 }
