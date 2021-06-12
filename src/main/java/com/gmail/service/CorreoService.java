@@ -12,7 +12,6 @@ import java.util.List;
 
 public class CorreoService implements ICorreoService {
 
-
   @Override
   public AbsCorreo crear(CorreoDTO correo) throws CorreoError, SQLError {
 
@@ -177,9 +176,9 @@ public class CorreoService implements ICorreoService {
     correoGuardado.setConfirmado(true);
 
     if (CorreoDAO.enviarCorreo(idCorreo, idUsuario)) {
-        if (!CorreoDAO.updateCorreo(correoGuardado)) {
-            throw new CorreoError(4);
-        }
+      if (!CorreoDAO.updateCorreo(correoGuardado)) {
+        throw new CorreoError(4);
+      }
     } else {
       throw new CorreoError(6, idUsuario);
     }
@@ -208,9 +207,9 @@ public class CorreoService implements ICorreoService {
 
     int x = CorreoDAO.enviarCorreo(idCorreo, idUsuario);
     if (x == 0) {
-        if (!CorreoDAO.updateCorreo(correoGuardado)) {
-            throw new CorreoError(4);
-        }
+      if (!CorreoDAO.updateCorreo(correoGuardado)) {
+        throw new CorreoError(4);
+      }
     } else {
       throw new CorreoError(7, x);
     }
@@ -220,25 +219,25 @@ public class CorreoService implements ICorreoService {
 
   private CorreoDTO cargarNulls(CorreoDTO correo) {
 
-      if (correo.getBorrado() == null) {
-          correo.setBorrado(false);
-      }
+    if (correo.getBorrado() == null) {
+      correo.setBorrado(false);
+    }
 
-      if (correo.getConfirmado() == null) {
-          correo.setConfirmado(false);
-      }
+    if (correo.getConfirmado() == null) {
+      correo.setConfirmado(false);
+    }
 
-      if (correo.getLeido() == null) {
-          correo.setLeido(false);
-      }
+    if (correo.getLeido() == null) {
+      correo.setLeido(false);
+    }
 
-      if (correo.getDestacado() == null) {
-          correo.setDestacado(false);
-      }
+    if (correo.getDestacado() == null) {
+      correo.setDestacado(false);
+    }
 
-      if (correo.getImportante() == null) {
-          correo.setImportante(false);
-      }
+    if (correo.getImportante() == null) {
+      correo.setImportante(false);
+    }
 
     return correo;
 
