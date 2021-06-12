@@ -2,9 +2,11 @@ package com.gmail.service;
 
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.UsuarioDTO;
+import com.gmail.exception.SQLError;
 import com.gmail.exception.ValidationError;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.UsuarioFactory;
+import java.sql.SQLException;
 
 public class UsuarioService implements IUsuarioService {
 
@@ -22,7 +24,8 @@ public class UsuarioService implements IUsuarioService {
   }
 
   @Override
-  public AbsUsuario modificar(int idUsuario, UsuarioDTO usuarioModificado) throws ValidationError {
+  public AbsUsuario modificar(int idUsuario, UsuarioDTO usuarioModificado)
+      throws ValidationError, SQLError {
 
     if (!validarDatos(usuarioModificado)) {
       throw new ValidationError("Los datos ingresados son invalidos");
@@ -35,7 +38,7 @@ public class UsuarioService implements IUsuarioService {
   }
 
   @Override
-  public boolean eliminar(int idUsuario) {
+  public boolean eliminar(int idUsuario) throws SQLError {
     return dao.deleteUsuario(idUsuario);
   }
 

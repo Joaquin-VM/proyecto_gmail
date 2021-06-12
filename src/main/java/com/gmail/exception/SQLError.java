@@ -1,10 +1,12 @@
 package com.gmail.exception;
 
-public class ValidationError extends Exception {
+import java.sql.SQLException;
+
+public class SQLError extends SQLException {
 
   String mensaje;
 
-  public ValidationError(String mensaje) {
+  public SQLError(String mensaje) {
     this.mensaje = mensaje;
   }
 

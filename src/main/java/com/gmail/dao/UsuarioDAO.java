@@ -9,6 +9,7 @@ package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
 import com.gmail.dto.UsuarioDTO;
+import com.gmail.exception.SQLError;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.UsuarioFactory;
 import java.sql.*;
@@ -52,7 +53,7 @@ public class UsuarioDAO {
     return usuario;
   }
 
-  public static AbsUsuario getUsuario(int idUsuario) {
+  public static AbsUsuario getUsuario(int idUsuario) throws SQLError {
 
     if (!existeUsuario(idUsuario)) {
       return null;
@@ -132,7 +133,7 @@ public class UsuarioDAO {
 
   }
 
-  public static boolean updateUsuario(UsuarioDTO usuario) {
+  public static boolean updateUsuario(UsuarioDTO usuario) throws SQLError{
 
     if (!existeUsuario(usuario.getIdUsuario())) {
       return false;
@@ -160,7 +161,7 @@ public class UsuarioDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
+      e.getStackTrace();
       return false;
     }
 
@@ -168,7 +169,7 @@ public class UsuarioDAO {
 
   }
 
-  public static boolean deleteUsuario(int idUsuario) {
+  public static boolean deleteUsuario(int idUsuario) throws SQLError {
 
     if(!existeUsuario(idUsuario)){
       return false;
@@ -189,7 +190,7 @@ public class UsuarioDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
+      e.getStackTrace();
       return false;
     }
 
@@ -197,7 +198,7 @@ public class UsuarioDAO {
 
   }
 
-  public static boolean existeUsuario(int idUsuario) {
+  public static boolean existeUsuario(int idUsuario) throws SQLError {
 
     String QUERY = "SELECT id_usuario FROM usuario WHERE id_usuario = ?";
 
@@ -215,7 +216,7 @@ public class UsuarioDAO {
 
 
     } catch (SQLException e) {
-      System.out.println(e);
+      e.getStackTrace();
     }
 
     return false;
