@@ -45,11 +45,11 @@ public class CorreoService implements ICorreoService {
       throw new CorreoError(2);
     }
 
+    correo.setFechaHora(LocalDateTime.now());
+
     if (!CorreoDAO.updateCorreo(CorreoFactory.buildCorreo(correo))) {
       throw new CorreoError(4);
     }
-
-    correo.setFechaHora(LocalDateTime.now());
 
     return correoGuardado;
   }
