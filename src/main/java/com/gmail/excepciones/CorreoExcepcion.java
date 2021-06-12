@@ -38,6 +38,10 @@ public class CorreoExcepcion extends Exception{
                 mensaje="Correo_Error 04: No pudo modificarse";
             case 5:
                 mensaje="Correo_Error 05: No pudo eliminarse";
+            case 6:
+                mensaje="Correo_Error 06: No pudo enviar el correo al usuario id = " + id;
+            case 7:
+                mensaje="Correo_Error 07: No pudo enviar el correo a " + id + " usuarios";
             default:
                 mensaje="Correo_Error 00: No identificado";
                 break;

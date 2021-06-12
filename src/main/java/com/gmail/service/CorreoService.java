@@ -11,14 +11,16 @@ import com.gmail.model.CorreoFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class CorreoService {
+public class CorreoService implements ICorreoService{
 
-    AbsCorreo crear(CorreoDTO correo) throws Exception {
+
+    @Override
+    public AbsCorreo crear(CorreoDTO correo) throws CorreoExcepcion {
 
         correo = cargarNulls(correo);
 
         if(UsuarioDAO.getUsuario(correo.getIdUsuario()) == null){
-            throw new Exception("Error: No existe Usuario con id = "+correo.getIdUsuario());
+            throw new CorreoExcepcion("Error: No existe Usuario con id = "+correo.getIdUsuario());
         }
 
         correo.setFechaHora(LocalDateTime.now());
@@ -26,7 +28,8 @@ public class CorreoService {
         return CorreoDAO.addCorreo(CorreoFactory.buildCorreo(correo));
     }
 
-    AbsCorreo modificar(CorreoDTO correo) throws CorreoExcepcion {
+    @Override
+    public AbsCorreo modificar(CorreoDTO correo) throws CorreoExcepcion {
 
         correo = cargarNulls(correo);
 
@@ -53,7 +56,8 @@ public class CorreoService {
         return correoGuardado;
     }
 
-    AbsCorreo eliminar(int idCorreo) throws CorreoExcepcion{
+    @Override
+    public AbsCorreo eliminarEnviado(int idCorreo) throws CorreoExcepcion{
 
         AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
 
@@ -74,7 +78,8 @@ public class CorreoService {
 
     }
 
-    AbsCorreo eliminar(int idCorreo, int idUsuario) throws CorreoExcepcion{
+    @Override
+    public AbsCorreo eliminarRecibido(int idCorreo, int idUsuario) throws CorreoExcepcion{
 
         AbsCorreo correoGuardado = CorreoDAO.getCorreoRecibido(idCorreo, idUsuario);
 
@@ -95,7 +100,8 @@ public class CorreoService {
 
     }
 
-    AbsCorreo obtenerEnviado(int idCorreo) throws CorreoExcepcion{
+    @Override
+    public AbsCorreo obtenerEnviado(int idCorreo) throws CorreoExcepcion{
 
         AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
 
@@ -103,23 +109,114 @@ public class CorreoService {
             throw new CorreoExcepcion(1,idCorreo);
         }
 
+        return correoGuardado;
+    }
+
+    @Override
+    public AbsCorreo obtenerRecibido(int idCorreo, int idUsuario) throws CorreoExcepcion{
+
+        AbsCorreo correoGuardado = CorreoDAO.getCorreoRecibido(idCorreo, idUsuario);
+
+        if(UsuarioDAO.getUsuario(idUsuario) == null){
+            throw new CorreoExcepcion("Error: No existe Usuario con id = "+idUsuario);
+        }
+
+        if(correoGuardado == null){
+            throw new CorreoExcepcion(1,idCorreo);
+        }
+
+        return correoGuardado;
+    }
+
+    @Override
+    public List<AbsCorreo> obtenerRecibidos(int idUsuario, boolean borrado) throws CorreoExcepcion{
+
+        if(UsuarioDAO.getUsuario(idUsuario) == null){
+            throw new CorreoExcepcion("Error: No existe Usuario con id = "+idUsuario);
+        }
+
+        List<AbsCorreo> correosGuardados = CorreoDAO.getCorreosRecibidos(idUsuario, borrado);
+
+        return correosGuardados;
+
+    }
+
+    @Override
+    public List<AbsCorreo> obtenerEnviados(int idUsuario, boolean borrado) throws CorreoExcepcion{
+
+        if(UsuarioDAO.getUsuario(idUsuario) == null){
+            throw new CorreoExcepcion("Error: No existe Usuario con id = "+idUsuario);
+        }
+
+        List<AbsCorreo> correosGuardados = CorreoDAO.getCorreosRecibidos(idUsuario, borrado);
+
+        return correosGuardados;
+    }
+
+    @Override
+    public AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoExcepcion {
+
+        AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
+
+        if(correoGuardado == null){
+            throw new CorreoExcepcion(1, idCorreo);
+        }
+
+        if(correoGuardado.getConfirmado()) {
+            throw new CorreoExcepcion(3);
+        }
+
         if (correoGuardado.getBorrado()){
             throw new CorreoExcepcion(2);
         }
 
-        return CorreoDAO.getCorreo(idCorreo);
+        if(UsuarioDAO.getUsuario(idUsuario) == null){
+            throw new CorreoExcepcion("Error: No existe Usuario con id = " + idUsuario);
+        }
+
+        correoGuardado.setFechaHora(LocalDateTime.now());
+        correoGuardado.setConfirmado(true);
+
+        if(CorreoDAO.enviarCorreo(idCorreo, idUsuario)){
+            if(!CorreoDAO.updateCorreo(correoGuardado))
+                throw new CorreoExcepcion(4);
+        }else{
+            throw new CorreoExcepcion(6, idUsuario);
+        }
+
+
+        return correoGuardado;
     }
 
-    List<AbsCorreo> obtenerRecibidos(int idUsuario, boolean borrado){
+    public AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoExcepcion {
+
+        AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
+
+        if(correoGuardado == null){
+            throw new CorreoExcepcion(1, idCorreo);
+        }
+
+        if(correoGuardado.getConfirmado()) {
+            throw new CorreoExcepcion(3);
+        }
+
+        if (correoGuardado.getBorrado()){
+            throw new CorreoExcepcion(2);
+        }
+
+        correoGuardado.setFechaHora(LocalDateTime.now());
+        correoGuardado.setConfirmado(true);
+
+        int x=CorreoDAO.enviarCorreo(idCorreo, idUsuario);
+        if(x==0){
+            if(!CorreoDAO.updateCorreo(correoGuardado))
+                throw new CorreoExcepcion(4);
+        }else{
+            throw new CorreoExcepcion(7, x);
+        }
 
 
-        return CorreoDAO.getCorreosRecibidos(idUsuario,borrado);
-    }
-
-    List<AbsCorreo> obtenerEnviados(int idUsuario, boolean borrado){
-
-
-        return CorreoDAO.getCorreosEnviados(idUsuario,borrado);
+        return correoGuardado;
     }
 
     private CorreoDTO cargarNulls(CorreoDTO correo) {
