@@ -1,5 +1,6 @@
 package com.gmail.service;
 import com.gmail.dto.UsuarioDTO;
+import com.gmail.exception.SQLError;
 import com.gmail.exception.ValidationError;
 import com.gmail.model.AbsUsuario;
 import java.sql.SQLException;
@@ -12,6 +13,6 @@ public interface IUsuarioService {
 
   boolean eliminar(int idUsuario) throws SQLException, SQLError;
 
-  AbsUsuario obtenerUno(int idUsuario);
+  AbsUsuario obtenerUno(int idUsuario) throws SQLError;
 
 }

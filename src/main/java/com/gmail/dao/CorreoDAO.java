@@ -2,9 +2,14 @@ package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
 import com.gmail.model.AbsCorreo;
-
 import com.gmail.model.CorreoFactory;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,16 +98,16 @@ public class CorreoDAO {
   public static AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) {
 
     String QUERY =
-            "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, r.borrado, r.leido, r.destacado, r.importante"
-                    + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
-                    "WHERE c.id_correo = ? AND r.id_usuario_2 =  ? ";
+        "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, r.borrado, r.leido, r.destacado, r.importante"
+            + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
+            "WHERE c.id_correo = ? AND r.id_usuario_2 =  ? ";
 
     AbsCorreo correo = null;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-                 Statement.RETURN_GENERATED_KEYS)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
+            Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, idCorreo);
       preparedStatement.setInt(2, idUsuario);
@@ -114,13 +119,13 @@ public class CorreoDAO {
       while (rs.next()) {
         correo = CorreoFactory.buildCorreo();
         correo.setIdCorreo(rs.getInt("id_correo"))
-                .setIdUsuario(rs.getInt("id_usuario"))
-                .setAsunto(rs.getString("asunto"))
-                .setCuerpo(rs.getString("cuerpo"))
-                .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
-                .setBorrado(rs.getShort("borrado") == 1)
-                .setLeido(rs.getShort("leido") == 1).setDestacado(rs.getShort("destacado") == 1)
-                .setImportante(rs.getShort("importante") == 1);
+            .setIdUsuario(rs.getInt("id_usuario"))
+            .setAsunto(rs.getString("asunto"))
+            .setCuerpo(rs.getString("cuerpo"))
+            .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
+            .setBorrado(rs.getShort("borrado") == 1)
+            .setLeido(rs.getShort("leido") == 1).setDestacado(rs.getShort("destacado") == 1)
+            .setImportante(rs.getShort("importante") == 1);
       }
 
 

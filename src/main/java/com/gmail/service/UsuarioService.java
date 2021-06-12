@@ -6,7 +6,6 @@ import com.gmail.exception.SQLError;
 import com.gmail.exception.ValidationError;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.UsuarioFactory;
-import java.sql.SQLException;
 
 public class UsuarioService implements IUsuarioService {
 
@@ -43,7 +42,7 @@ public class UsuarioService implements IUsuarioService {
   }
 
   @Override
-  public AbsUsuario obtenerUno(int idUsuario) {
+  public AbsUsuario obtenerUno(int idUsuario) throws SQLError {
     return dao.getUsuario(idUsuario);
   }
 

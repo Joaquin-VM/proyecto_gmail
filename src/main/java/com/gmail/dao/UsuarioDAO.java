@@ -12,7 +12,13 @@ import com.gmail.dto.UsuarioDTO;
 import com.gmail.exception.SQLError;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.UsuarioFactory;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class UsuarioDAO {
 
@@ -133,7 +139,7 @@ public class UsuarioDAO {
 
   }
 
-  public static boolean updateUsuario(UsuarioDTO usuario) throws SQLError{
+  public static boolean updateUsuario(UsuarioDTO usuario) throws SQLError {
 
     if (!existeUsuario(usuario.getIdUsuario())) {
       return false;
@@ -171,7 +177,7 @@ public class UsuarioDAO {
 
   public static boolean deleteUsuario(int idUsuario) throws SQLError {
 
-    if(!existeUsuario(idUsuario)){
+    if (!existeUsuario(idUsuario)) {
       return false;
     }
 

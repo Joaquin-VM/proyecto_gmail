@@ -83,7 +83,8 @@ public class EtiquetaDAO {
         + "WHERE nombre_etiqueta LIKE '% ? %' AND id_usuario = ?";
 
     AbsEtiqueta etiqueta = null;
-    List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();;
+    List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();
+    ;
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -196,12 +197,12 @@ public class EtiquetaDAO {
   public static boolean agregarCorreoEtiqueta(int idCorreo, int idEtiqueta) {
 
     String INSERT_CLASIFICAR_SQL = "INSERT INTO clasificar" +
-            "(id_correo, id_etiqueta) VALUES (?, ?)";
+        "(id_correo, id_etiqueta) VALUES (?, ?)";
 
     try (Connection connection = DriverManager
-            .getConnection(JDBCUtil.getURL(), JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CLASIFICAR_SQL,
-                 Statement.RETURN_GENERATED_KEYS)) {
+        .getConnection(JDBCUtil.getURL(), JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CLASIFICAR_SQL,
+            Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, idCorreo);
       preparedStatement.setInt(2, idEtiqueta);
@@ -223,8 +224,8 @@ public class EtiquetaDAO {
     String DELETE_ETIQUETA_SQL = "DELETE FROM clasificar WHERE id_etiqueta = ? AND id_correo = ?";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ETIQUETA_SQL)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ETIQUETA_SQL)) {
 
       preparedStatement.setInt(1, idEtiqueta);
       preparedStatement.setInt(2, idCorreo);

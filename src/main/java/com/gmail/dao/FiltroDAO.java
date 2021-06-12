@@ -1,9 +1,14 @@
 package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
-import com.gmail.model.*;
-
-import java.sql.*;
+import com.gmail.model.AbsFiltro;
+import com.gmail.model.FiltroFactory;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
