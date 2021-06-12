@@ -1,18 +1,16 @@
 package com.gmail.service;
 import com.gmail.dto.UsuarioDTO;
+import com.gmail.exception.ValidationError;
 import com.gmail.model.AbsUsuario;
-import java.util.List;
 
 public interface IUsuarioService {
 
-  AbsUsuario crear(UsuarioDTO usuario);
+  AbsUsuario crear(UsuarioDTO usuario) throws ValidationError;
 
-  AbsUsuario modificar(int idUsuario, UsuarioDTO usuario);
+  AbsUsuario modificar(int idUsuario, UsuarioDTO usuario) throws ValidationError;
 
-  void eliminar(int idUsuario);
+  boolean eliminar(int idUsuario);
 
   AbsUsuario obtenerUno(int idUsuario);
-
-  List<AbsUsuario> obtenerLista(int idUsuario);
 
 }

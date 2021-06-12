@@ -1,81 +1,85 @@
-//package com.gmail.service;
-//
-//import com.gmail.dao.UsuarioDAO;
-//import com.gmail.model.AbsUsuario;
-//import java.util.List;
-//
-//public class UsuarioService implements IUsuarioService {
-//
-//  @Override
-//  public AbsUsuario crear(AbsUsuario usuario) {
-//    if(!validarDatos(usuario)){
-//      return null;
-//    }
-//    return UsuarioDAO.addUsuario(usuario);
-//  }
-//
-//  @Override
-//  public AbsUsuario modificar(int id, AbsUsuario usuarioModificado) {
-//
-//    if(!validarDatos(usuarioModificado)){
-//      return null;
-//    }
-//
-//    if(!UsuarioDAO.updateUsuario(usuarioModificado)){
-//      return null;
-//    }
-//
-//    return UsuarioDAO.getUsuario(usuarioModificado.getIdUsuario());
-//
-//  }
-//
-//  @Override
-//  public void eliminar(int id) {
-//
-//  }
-//
-//  @Override
-//  public AbsUsuario obtenerUno(int id) {
-//    return null;
-//  }
-//
-//  @Override
-//  public List<AbsUsuario> obtenerLista(int id) {
-//    return null;
-//  }
-//
-//  private boolean validarDatos(AbsUsuario usuario) {
-//
-//    if (usuario == null) {
-//      return false;
-//    }
-//
-//    if (usuario.getNombre().isBlank()) {
-//      return false;
-//    }
-//
-//    if (usuario.getApellido().isBlank()) {
-//      return false;
-//    }
-//
-//    if (usuario.getCorreo().isBlank()) {
-//      return false;
-//    }
-//
-//    if (usuario.getContrasenia().isBlank()) {
-//      return false;
-//    }
-//
-//    if (usuario.getTelefono().isBlank()) {
-//      return false;
-//    }
-//
-//    if (usuario.getSexo().isBlank()) {
-//      return false;
-//    }
-//
-//    return true;
-//
-//  }
-//
-//}
+package com.gmail.service;
+
+import com.gmail.dao.UsuarioDAO;
+import com.gmail.dto.UsuarioDTO;
+import com.gmail.exception.ValidationError;
+import com.gmail.model.AbsUsuario;
+import com.gmail.model.UsuarioFactory;
+
+public class UsuarioService implements IUsuarioService {
+
+  private UsuarioDAO dao = new UsuarioDAO();
+
+  @Override
+  public AbsUsuario crear(UsuarioDTO dto) throws ValidationError {
+
+    if (!validarDatos(dto)) {
+      throw new ValidationError("Los datos ingresados son invalidos");
+    }
+
+    return dao.addUsuario(UsuarioFactory.buildUsuario(dto));
+
+  }
+
+  @Override
+  public AbsUsuario modificar(int idUsuario, UsuarioDTO usuarioModificado) throws ValidationError {
+
+    if (!validarDatos(usuarioModificado)) {
+      throw new ValidationError("Los datos ingresados son invalidos");
+    }
+
+    UsuarioDAO.updateUsuario(usuarioModificado);
+
+    return dao.getUsuario(idUsuario);
+
+  }
+
+  @Override
+  public boolean eliminar(int idUsuario) {
+    return dao.deleteUsuario(idUsuario);
+  }
+
+  @Override
+  public AbsUsuario obtenerUno(int idUsuario) {
+    return dao.getUsuario(idUsuario);
+  }
+
+  private boolean validarDatos(UsuarioDTO dto) {
+
+    if (dto == null) {
+      return false;
+    }
+
+    if (dto.getIdUsuario() < 1) {
+      return false;
+    }
+
+    if (dto.getNombre().isBlank()) {
+      return false;
+    }
+
+    if (dto.getApellido().isBlank()) {
+      return false;
+    }
+
+    if (dto.getCorreo().isBlank()) {
+      return false;
+    }
+
+    if (dto.getContrasenia().isBlank()) {
+      return false;
+    }
+
+    if (dto.getTelefono().isBlank()) {
+      return false;
+    }
+
+    if (dto.getSexo().isBlank()) {
+      return false;
+    }
+
+    return true;
+
+  }
+
+}

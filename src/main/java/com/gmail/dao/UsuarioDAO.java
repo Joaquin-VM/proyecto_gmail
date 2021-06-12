@@ -8,6 +8,7 @@ package com.gmail.dao;
 * */
 
 import com.gmail.conf.JDBCUtil;
+import com.gmail.dto.UsuarioDTO;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.UsuarioFactory;
 import java.sql.*;
@@ -53,6 +54,10 @@ public class UsuarioDAO {
 
   public static AbsUsuario getUsuario(int idUsuario) {
 
+    if (!existeUsuario(idUsuario)) {
+      return null;
+    }
+
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
         "fecha_nacimiento, sexo FROM usuario WHERE id_usuario = ?";
 
@@ -89,6 +94,10 @@ public class UsuarioDAO {
 
   public static AbsUsuario getUsuario(String correo) {
 
+    if (!existeUsuario(correo)) {
+      return null;
+    }
+
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
         "fecha_nacimiento, sexo FROM usuario WHERE correo = ?";
 
@@ -123,7 +132,12 @@ public class UsuarioDAO {
 
   }
 
-  public static boolean updateUsuario(AbsUsuario usuario) {
+  public static boolean updateUsuario(UsuarioDTO usuario) {
+
+    if (!existeUsuario(usuario.getIdUsuario())) {
+      return false;
+    }
+
     String UPDATE_USUARIO_SQL = "UPDATE usuario " +
         "SET nombre_usuario = ?, apellido = ?, contrasenia = ?, " +
         "telefono = ?, sexo = ? WHERE id_usuario = ?;";
@@ -156,6 +170,10 @@ public class UsuarioDAO {
 
   public static boolean deleteUsuario(int idUsuario) {
 
+    if(!existeUsuario(idUsuario)){
+      return false;
+    }
+
     String DELETE_USUARIO_SQL = "DELETE FROM usuario WHERE id_usuario = ?";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -176,6 +194,56 @@ public class UsuarioDAO {
     }
 
     return true;
+
+  }
+
+  public static boolean existeUsuario(int idUsuario) {
+
+    String QUERY = "SELECT id_usuario FROM usuario WHERE id_usuario = ?";
+
+    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
+
+      preparedStatement.setInt(1, idUsuario);
+
+      ResultSet rs = preparedStatement.executeQuery();
+
+      if (rs.next()) {
+        return idUsuario == rs.getInt("id_usuario");
+      }
+
+
+    } catch (SQLException e) {
+      System.out.println(e);
+    }
+
+    return false;
+
+  }
+
+  public static boolean existeUsuario(String correoUsuario) {
+
+    String QUERY = "SELECT correo FROM usuario WHERE correo = ?";
+
+    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
+
+      preparedStatement.setString(1, correoUsuario);
+
+      ResultSet rs = preparedStatement.executeQuery();
+
+      if (rs.next()) {
+        return correoUsuario.equals("correo");
+      }
+
+
+    } catch (SQLException e) {
+      System.out.println(e);
+    }
+
+    return false;
 
   }
 

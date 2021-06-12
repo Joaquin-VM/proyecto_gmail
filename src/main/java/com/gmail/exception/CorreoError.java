@@ -1,21 +1,21 @@
-package com.gmail.excepciones;
+package com.gmail.exception;
 
-public class CorreoExcepcion extends Exception{
+public class CorreoError extends Exception{
 
     private int error;
     private int id;
 
-    public CorreoExcepcion(int error, int id){
+    public CorreoError(int error, int id){
         super();
         this.error=error;
         this.id=id;
     }
-    public CorreoExcepcion(int error){
+    public CorreoError(int error){
         super();
         this.error=error;
         this.id=id;
     }
-    public CorreoExcepcion(String msg){
+    public CorreoError(String msg){
         super(msg);
     }
 

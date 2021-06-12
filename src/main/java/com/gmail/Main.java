@@ -1,20 +1,7 @@
 package com.gmail;
 
-import com.gmail.dao.CorreoDAO;
-import com.gmail.dao.EtiquetaDAO;
-import com.gmail.dao.FiltroDAO;
-import com.gmail.dao.UsuarioDAO;
-import com.gmail.model.AbsCorreo;
-import com.gmail.model.AbsEtiqueta;
-import com.gmail.model.AbsFiltro;
-import com.gmail.model.AbsUsuario;
-import com.gmail.model.CorreoFactory;
-import com.gmail.model.EtiquetaFactory;
-import com.gmail.model.FiltroFactory;
-import com.gmail.model.UsuarioFactory;
-import java.time.LocalDate;
-
 public class Main {
+
 
   public static void main(String[] args) {
 
