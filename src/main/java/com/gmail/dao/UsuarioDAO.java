@@ -1,12 +1,5 @@
 package com.gmail.dao;
 
-/*
--Leer usuario.
--Crear usuario.
--Modificar usuario.
--Borrar usuario.
-* */
-
 import com.gmail.conf.JDBCUtil;
 import com.gmail.dto.UsuarioDTO;
 import com.gmail.exception.SQLError;
