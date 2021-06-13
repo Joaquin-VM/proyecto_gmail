@@ -185,7 +185,6 @@ public class CorreoDAO {
             + " FROM correo c WHERE c.borrado = ? AND c.id_usuario =  ? ";
 
     List<AbsCorreo> correos = new ArrayList<>();
-    AbsCorreo correo = null;
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
@@ -199,7 +198,7 @@ public class CorreoDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        correo = CorreoFactory.buildCorreo();
+        AbsCorreo correo = CorreoFactory.buildCorreo();
         correo.setIdCorreo(rs.getInt("id_correo"))
             .setIdUsuario(rs.getInt("id_usuario"))
             .setAsunto(rs.getString("asunto"))
