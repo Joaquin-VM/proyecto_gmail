@@ -1,10 +1,10 @@
 package com.gmail.dao;
 
-import com.gmail.conf.JDBCUtil;
+import com.gmail.conf.DBCPDataSourceFactory;
+import com.gmail.exception.SQLError;
 import com.gmail.model.AbsCorreo;
 import com.gmail.model.CorreoFactory;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,15 +16,14 @@ import java.util.List;
 
 public class CorreoDAO {
 
-  public AbsCorreo addCorreo(AbsCorreo correo) {
+  public AbsCorreo addCorreo(AbsCorreo correo) throws SQLError {
 
     String INSERT_CORREO_SQL = "INSERT INTO correo" +
         "(id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante)"
         +
         "VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?)";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CORREO_SQL,
             Statement.RETURN_GENERATED_KEYS)) {
 
@@ -49,13 +48,13 @@ public class CorreoDAO {
       }
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError("Error al agregar el correo.");
     }
 
     return correo;
   }
 
-  public AbsCorreo getCorreo(int idCorreo) {
+  public AbsCorreo getCorreo(int idCorreo) throws SQLError {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -64,10 +63,8 @@ public class CorreoDAO {
 
     AbsCorreo correo = null;
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idCorreo);
 
@@ -88,14 +85,14 @@ public class CorreoDAO {
       }
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError("Error al obtener el correo con el id " + idCorreo + ".");
     }
 
     return correo;
 
   }
 
-  public AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) {
+  public AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) throws SQLError {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, r.borrado, r.leido, r.destacado, r.importante"
@@ -104,8 +101,7 @@ public class CorreoDAO {
 
     AbsCorreo correo = null;
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
             Statement.RETURN_GENERATED_KEYS)) {
 
@@ -116,7 +112,7 @@ public class CorreoDAO {
 
       ResultSet rs = preparedStatement.executeQuery();
 
-      while (rs.next()) {
+      if (rs.next()) {
         correo = CorreoFactory.buildCorreo();
         correo.setIdCorreo(rs.getInt("id_correo"))
             .setIdUsuario(rs.getInt("id_usuario"))
@@ -130,14 +126,16 @@ public class CorreoDAO {
 
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError(
+          "Error al obtener el correo con el id " + idCorreo + " recibido por el usuario "
+              + idUsuario + ".");
     }
 
     return correo;
 
   }
 
-  public List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) {
+  public List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) throws SQLError {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -145,12 +143,9 @@ public class CorreoDAO {
             "WHERE r.borrado = ? AND r.id_usuario_2 =  ? ";
 
     List<AbsCorreo> correos = new ArrayList<>();
-    AbsCorreo correo = null;
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setShort(1, (short) (borrado ? 1 : 0));
       preparedStatement.setInt(2, idUsuario);
@@ -160,7 +155,7 @@ public class CorreoDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        correo = CorreoFactory.buildCorreo();
+        AbsCorreo correo = CorreoFactory.buildCorreo();
         correo.setIdCorreo(rs.getInt("id_correo"))
             .setIdUsuario(rs.getInt("id_usuario"))
             .setAsunto(rs.getString("asunto"))
@@ -174,14 +169,16 @@ public class CorreoDAO {
 
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError(
+          "Error al obtener la lista de correos recibidos por el usuario con el id " + idUsuario
+              + ".");
     }
 
     return correos;
 
   }
 
-  public List<AbsCorreo> getCorreosEnviados(int idUsuario, boolean borrado) {
+  public List<AbsCorreo> getCorreosEnviados(int idUsuario, boolean borrado) throws SQLError {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -190,8 +187,7 @@ public class CorreoDAO {
     List<AbsCorreo> correos = new ArrayList<>();
     AbsCorreo correo = null;
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
             Statement.RETURN_GENERATED_KEYS)) {
 
@@ -217,20 +213,21 @@ public class CorreoDAO {
 
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError(
+          "Error al obtener la lista de correos enviados por el usuario con el id " + idUsuario
+              + ".");
     }
 
     return correos;
 
   }
 
-  public boolean updateCorreo(AbsCorreo correo) {
+  public boolean updateCorreo(AbsCorreo correo) throws SQLError {
     String UPDATE_CORREO_SQL = "UPDATE correo " +
         "SET id_usuario = ?, asunto = ?,  cuerpo = ?,  fecha_hora = ?,  confirmado = ?,  borrado = ?,"
         + " leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ?;";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
 
       preparedStatement.setInt(1, correo.getIdUsuario());
@@ -251,21 +248,19 @@ public class CorreoDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError("Error al actualizar el correo con el id " + correo.getIdCorreo() + ".");
     }
 
     return true;
 
   }
 
-  public boolean deleteCorreo(int idCorreo, int idUsuario) {
+  public boolean deleteCorreo(int idCorreo, int idUsuario) throws SQLError {
 
-    String BORRAR_CORREO_SQL = "UPDATE recibidos SET borrado = ? WHERE id_usuario_2 = ? AND id_correo = ?";
+    String DELETE_CORREO_SQL = "UPDATE recibidos SET borrado = ? WHERE id_usuario_2 = ? AND id_correo = ?";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(BORRAR_CORREO_SQL)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CORREO_SQL)) {
 
       preparedStatement.setShort(1, (short) 1);
       preparedStatement.setInt(2, idUsuario);
@@ -278,20 +273,18 @@ public class CorreoDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError("Error al eliminar el correo con el id " + idCorreo + ".");
     }
 
     return true;
 
   }
 
-  public boolean deleteCorreo(int idCorreo) {
+  public boolean deleteCorreo(int idCorreo) throws SQLError {
 
     String UPDATE_CORREO_SQL = "UPDATE correo SET borrado = ? WHERE id_correo = ?;";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
 
       preparedStatement.setShort(1, (short) 1);
@@ -304,25 +297,22 @@ public class CorreoDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError("Error al eliminar el correo con el id " + idCorreo + ".");
     }
 
     return true;
 
   }
 
-  public boolean enviarCorreo(AbsCorreo correo, int id_receptor) {
+  public boolean enviarCorreo(AbsCorreo correo, int id_receptor) throws SQLError {
 
     String INSERT_ENVIAR_SQL = "INSERT INTO recibidos" +
         "(id_usuario_2, id_correo, borrado, leido, destacado, importante)" +
         "VALUES (?, ?, ?, ?, ?, ?)";
 
-
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ENVIAR_SQL,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection
+            .prepareStatement(INSERT_ENVIAR_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, id_receptor);
       preparedStatement.setInt(2, correo.getIdUsuario());
@@ -336,19 +326,19 @@ public class CorreoDAO {
       preparedStatement.executeUpdate();
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError(
+          "Error al enviar el correo con el id " + correo.getIdCorreo() + " al usuario con el id "
+              + id_receptor + ".");
     }
 
     return true;
   }
 
-  public boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario) {
+  public boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario) throws SQLError {
     String UPDATE_CORREO_SQL = "UPDATE correo " +
         "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ? AND id_usuario_2;";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
 
       preparedStatement.setShort(1, (short) (correo.getBorrado() ? 1 : 0));
@@ -365,15 +355,15 @@ public class CorreoDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError("Error al actualizar el correo con el id " + correo.getIdCorreo()
+          + " recibido por el usuario con el id " + idUsuario + ".");
     }
 
     return true;
 
   }
 
-  public int enviarCorreo(AbsCorreo correo, int[] id_receptores) {
+  public int enviarCorreo(AbsCorreo correo, int[] id_receptores) throws SQLError {
     int cantE = 0;
     for (int i : id_receptores) {
 

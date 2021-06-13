@@ -1,10 +1,10 @@
 package com.gmail.dao;
 
-import com.gmail.conf.JDBCUtil;
+import com.gmail.conf.DBCPDataSourceFactory;
+import com.gmail.exception.SQLError;
 import com.gmail.model.AbsFiltro;
 import com.gmail.model.FiltroFactory;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,15 +14,14 @@ import java.util.List;
 
 public class FiltroDAO {
 
-  public static AbsFiltro addFiltro(AbsFiltro filtro) {
+  public static AbsFiltro addFiltro(AbsFiltro filtro) throws SQLError {
 
     String INSERT_FILTRO_SQL =
         "INSERT INTO filtro (id_usuario, emisor, receptor, asunto, contiene, leido, "
             + "destacar, importante, eliminar, spam, id_etiqueta, id_usuario_reenviar) "
             + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    try (Connection connection = DriverManager
-        .getConnection(JDBCUtil.getURL(), JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_FILTRO_SQL,
             Statement.RETURN_GENERATED_KEYS)) {
 
@@ -50,13 +49,13 @@ public class FiltroDAO {
       }
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError("Error al crear el filtro.");
     }
 
     return filtro;
   }
 
-  public AbsFiltro getFiltro(int idFiltro) {
+  public AbsFiltro getFiltro(int idFiltro) throws SQLError {
 
     String QUERY = "SELECT id_filtro, id_usuario, emisor, receptor, asunto, "
         + "contiene, leido, destacar, importante, eliminar, spam,"
@@ -64,10 +63,8 @@ public class FiltroDAO {
 
     AbsFiltro filtro = null;
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idFiltro);
 
@@ -91,21 +88,19 @@ public class FiltroDAO {
       }
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError("Error al obtener el filtro con el id " + idFiltro + ".");
     }
 
     return filtro;
 
   }
 
-  public List<AbsFiltro> listarFiltrosUsuario(int idUsuario) {
+  public List<AbsFiltro> listarFiltrosUsuario(int idUsuario) throws SQLError {
 
     String QUERY = "SELECT * FROM filtro WHERE id_usuario = ?";
-    AbsFiltro filtro = null;
     List<AbsFiltro> listaFiltros = new ArrayList<>();
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idUsuario);
@@ -113,7 +108,7 @@ public class FiltroDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        filtro = FiltroFactory.buildFiltro();
+        AbsFiltro filtro = FiltroFactory.buildFiltro();
         filtro.setIdFiltro(rs.getInt("id_filtro"))
             .setIdUsuario(rs.getInt("id_usuario"))
             .setIdEmisor(rs.getInt("emisor"))
@@ -129,13 +124,14 @@ public class FiltroDAO {
       }
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError(
+          "Error al obtener el listado de filtros del usuario con id " + idUsuario + ".");
     }
 
     return listaFiltros;
   }
 
-  public boolean updateFiltro(AbsFiltro filtro) {
+  public boolean updateFiltro(AbsFiltro filtro) throws SQLError {
 
     String UPDATE_FILTRO_SQL = "UPDATE filtro " +
         "SET id_usuario = ?," +
@@ -144,8 +140,7 @@ public class FiltroDAO {
         + " spam = ?, id_etiqueta = ?, id_usuario_reenviar = ? " +
         " WHERE id_filtro = ?";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_FILTRO_SQL)) {
 
       preparedStatement.setInt(1, filtro.getIdUsuario());
@@ -169,20 +164,18 @@ public class FiltroDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError("Error al actualizar el filtro con id " + filtro.getIdFiltro() + ".");
     }
 
     return true;
 
   }
 
-  public boolean deleteFiltro(int idFiltro) {
+  public boolean deleteFiltro(int idFiltro) throws SQLError {
 
     String DELETE_FILTRO_SQL = "DELETE FROM filtro WHERE id_filtro = ?";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_FILTRO_SQL)) {
 
       preparedStatement.setInt(1, idFiltro);
@@ -194,8 +187,7 @@ public class FiltroDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError("Error al actualizar el filtro con id " + idFiltro + ".");
     }
 
     return true;

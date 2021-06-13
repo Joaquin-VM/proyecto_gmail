@@ -1,11 +1,10 @@
 package com.gmail.dao;
 
-import com.gmail.conf.JDBCUtil;
+import com.gmail.conf.DBCPDataSourceFactory;
 import com.gmail.exception.SQLError;
 import com.gmail.model.AbsEtiqueta;
 import com.gmail.model.EtiquetaFactory;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +19,7 @@ public class EtiquetaDAO {
     String INSERT_ETIQUETA_SQL = "INSERT INTO etiqueta" +
         "(nombre_etiqueta, id_usuario) VALUES (?, ?)";
 
-    try (Connection connection = DriverManager
-        .getConnection(JDBCUtil.getURL(), JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ETIQUETA_SQL,
             Statement.RETURN_GENERATED_KEYS)) {
 
@@ -39,7 +37,8 @@ public class EtiquetaDAO {
       }
 
     } catch (SQLException e) {
-      throw new SQLError("Error al agregar la etiqueta de nombre " + etiqueta.getNombreEtiqueta());
+      throw new SQLError(
+          "Error al agregar la etiqueta de nombre " + etiqueta.getNombreEtiqueta() + ".");
     }
 
     return etiqueta;
@@ -51,10 +50,8 @@ public class EtiquetaDAO {
 
     AbsEtiqueta etiqueta = null;
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idEtiqueta);
 
@@ -86,10 +83,8 @@ public class EtiquetaDAO {
 
     List<AbsEtiqueta> listaCoincidentes = new ArrayList<>();
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setString(1, nombreEtiqueta);
       preparedStatement.setInt(2, idUsuario);
@@ -122,8 +117,7 @@ public class EtiquetaDAO {
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
     List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idUsuario);
@@ -150,8 +144,7 @@ public class EtiquetaDAO {
 
     String UPDATE_ETIQUETA_SQL = "UPDATE etiqueta SET nombre_etiqueta = ? WHERE id_etiqueta = ?";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ETIQUETA_SQL)) {
 
       preparedStatement.setString(1, etiqueta.getNombreEtiqueta());
@@ -164,7 +157,7 @@ public class EtiquetaDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      throw new SQLError("Error al modificar la etiqueta con id " + etiqueta.getIdEtiqueta());
+      throw new SQLError("Error al modificar la etiqueta con id " + etiqueta.getIdEtiqueta() + ".");
     }
 
     return true;
@@ -175,8 +168,7 @@ public class EtiquetaDAO {
 
     String DELETE_ETIQUETA_SQL = "DELETE FROM etiqueta WHERE id_etiqueta = ?";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ETIQUETA_SQL)) {
 
       preparedStatement.setInt(1, idEtiqueta);
@@ -188,7 +180,7 @@ public class EtiquetaDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      throw new SQLError("Error al eliminar la etiqueta con id " + idEtiqueta);
+      throw new SQLError("Error al eliminar la etiqueta con id " + idEtiqueta + ".");
     }
 
     return true;
@@ -200,10 +192,9 @@ public class EtiquetaDAO {
     String INSERT_CLASIFICAR_SQL = "INSERT INTO clasificar" +
         "(id_correo, id_etiqueta) VALUES (?, ?)";
 
-    try (Connection connection = DriverManager
-        .getConnection(JDBCUtil.getURL(), JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CLASIFICAR_SQL,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection
+            .prepareStatement(INSERT_CLASIFICAR_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, idCorreo);
       preparedStatement.setInt(2, idEtiqueta);
@@ -214,7 +205,8 @@ public class EtiquetaDAO {
 
     } catch (SQLException e) {
       throw new SQLError(
-          "Error al agregar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta);
+          "Error al agregar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta
+              + ".");
     }
 
     return true;
@@ -226,8 +218,7 @@ public class EtiquetaDAO {
     AbsEtiqueta etiqueta = null;
     List<AbsEtiqueta> listaCoincidentes = null;
 
-    try (Connection connection = DriverManager
-        .getConnection(JDBCUtil.getURL(), JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idCorreo);
@@ -236,7 +227,7 @@ public class EtiquetaDAO {
 
       ResultSet rs = preparedStatement.executeQuery();
 
-      while(rs.next()){
+      while (rs.next()) {
         etiqueta = EtiquetaFactory.buildEtiqueta();
         etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
         etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));
@@ -245,7 +236,8 @@ public class EtiquetaDAO {
       }
 
     } catch (SQLException e) {
-      throw new SQLError("Error al obtener el listado de etiquetas del correo con id " + idCorreo + ".");
+      throw new SQLError(
+          "Error al obtener el listado de etiquetas del correo con id " + idCorreo + ".");
     }
 
     return listaCoincidentes;
@@ -256,8 +248,7 @@ public class EtiquetaDAO {
 
     String DELETE_ETIQUETA_SQL = "DELETE FROM clasificar WHERE id_etiqueta = ? AND id_correo = ?";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ETIQUETA_SQL)) {
 
       preparedStatement.setInt(1, idEtiqueta);
@@ -271,7 +262,8 @@ public class EtiquetaDAO {
 
     } catch (SQLException e) {
       throw new SQLError(
-          "Error al quitar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta);
+          "Error al quitar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta
+              + ".");
     }
 
     return true;

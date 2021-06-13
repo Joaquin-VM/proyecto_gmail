@@ -1,12 +1,11 @@
 package com.gmail.dao;
 
-import com.gmail.conf.JDBCUtil;
+import com.gmail.conf.DBCPDataSourceFactory;
 import com.gmail.exception.SQLError;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.UsuarioFactory;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +19,7 @@ public class UsuarioDAO {
         "(nombre_usuario, apellido, correo, contrasenia, telefono, fecha_nacimiento, sexo)" +
         "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USUARIO_SQL,
             Statement.RETURN_GENERATED_KEYS)) {
 
@@ -44,7 +42,7 @@ public class UsuarioDAO {
       }
 
     } catch (SQLException e) {
-      throw new SQLError("Error al agregar el usuario de correo " + usuario.getCorreo());
+      throw new SQLError("Error al agregar el usuario de correo " + usuario.getCorreo() + ".");
     }
 
     return usuario;
@@ -58,10 +56,8 @@ public class UsuarioDAO {
 
     AbsUsuario usuario = null;
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idUsuario);
 
@@ -69,7 +65,7 @@ public class UsuarioDAO {
 
       ResultSet rs = preparedStatement.executeQuery();
 
-      while (rs.next()) {
+      if (rs.next()) {
         usuario = UsuarioFactory.buildUsuario();
         usuario.setIdUsuario(rs.getInt("id_usuario")).setNombre(rs.getString("nombre_usuario"))
             .setApellido(rs.getString("apellido")).setCorreo(rs.getString("correo"))
@@ -94,10 +90,8 @@ public class UsuarioDAO {
 
     AbsUsuario usuario = null;
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY,
-            Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setString(1, correo);
 
@@ -105,7 +99,7 @@ public class UsuarioDAO {
 
       ResultSet rs = preparedStatement.executeQuery();
 
-      while (rs.next()) {
+      if (rs.next()) {
         usuario = UsuarioFactory.buildUsuario();
         usuario.setIdUsuario(rs.getInt("id_usuario")).setNombre(rs.getString("nombre_usuario"))
             .setApellido(rs.getString("apellido")).setCorreo(rs.getString("correo"))
@@ -129,8 +123,7 @@ public class UsuarioDAO {
         "SET nombre_usuario = ?, apellido = ?, contrasenia = ?, " +
         "telefono = ?, sexo = ? WHERE id_usuario = ?;";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USUARIO_SQL)) {
 
       preparedStatement.setString(1, usuario.getNombre());
@@ -153,7 +146,7 @@ public class UsuarioDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      throw new SQLError("Error al modificar el usuario con id " + usuario.getIdUsuario());
+      throw new SQLError("Error al modificar el usuario con id " + usuario.getIdUsuario() + ".");
     }
 
     return usuario;
@@ -164,8 +157,7 @@ public class UsuarioDAO {
 
     String DELETE_USUARIO_SQL = "DELETE FROM usuario WHERE id_usuario = ?";
 
-    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USUARIO_SQL)) {
 
       preparedStatement.setInt(1, idUsuario);
@@ -177,7 +169,7 @@ public class UsuarioDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      throw new SQLError("Error al eliminar el usuario con id " + idUsuario);
+      throw new SQLError("Error al eliminar el usuario con id " + idUsuario + ".");
     }
 
     return true;

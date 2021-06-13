@@ -1,11 +1,30 @@
 package com.gmail;
 
-import java.time.LocalDateTime;
+import com.gmail.dao.UsuarioDAO;
+import com.gmail.exception.SQLError;
+import com.gmail.model.AbsUsuario;
+import com.gmail.model.UsuarioFactory;
+import java.time.LocalDate;
 
 public class Main {
 
 
   public static void main(String[] args) {
+
+//    UsuarioDAO usuarioDAO = new UsuarioDAO();
+//
+//    AbsUsuario usuario = UsuarioFactory.buildUsuario();
+//
+//    usuario.setNombre("Pablito").setApellido("Perez").setCorreo("hola3@gmail.com")
+//        .setContrasenia("a").setFechaNacimiento(
+//        LocalDate.now()).setSexo("Masculino").setTelefono("54 9 32313213");
+//
+//    try {
+//      usuarioDAO.addUsuario(usuario);
+//    } catch (SQLError throwables) {
+//      System.out.println("Error al crear el usuario.");
+//      ;
+//    }
 
     //FALTA PROBAR QUITARETIQUETA Y CLASFICAR.
 
@@ -74,9 +93,6 @@ public class Main {
 //    EtiquetaDAO.deleteEtiqueta(5);
 
     //USUARIO YA SE PROBO.
-
-
-
 
   }
 
