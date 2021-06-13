@@ -261,7 +261,7 @@ public class CorreoDAO {
 
   public static boolean deleteCorreo(int idCorreo, int idUsuario) {
 
-    String BORRAR_CORREO_SQL = "UPDATE correo SET borrado = ? WHERE id_usuario = ? AND id_correo = ?";
+    String BORRAR_CORREO_SQL = "UPDATE recibidos SET borrado = ? WHERE id_usuario_2 = ? AND id_correo = ?";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -315,7 +315,7 @@ public class CorreoDAO {
   public static boolean enviarCorreo(int id_correo, int id_receptor) {
 
     String INSERT_ENVIAR_SQL = "INSERT INTO recibidos" +
-        "(id_usuario_2, id_correo, borrado, leido, destacado, importante))" +
+        "(id_usuario_2, id_correo, borrado, leido, destacado, importante)" +
         "VALUES (?, ?, ?, ?, ?, ?)";
 
     AbsCorreo correo = CorreoDAO.getCorreo(id_correo);
@@ -342,6 +342,36 @@ public class CorreoDAO {
     }
 
     return true;
+  }
+
+  public static boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario)  {
+    String UPDATE_CORREO_SQL = "UPDATE correo " +
+            "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ? AND id_usuario_2;";
+
+    try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
+            JDBCUtil.getUsuario(), JDBCUtil.getClave());
+         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
+
+      preparedStatement.setShort(1, (short) (correo.getBorrado() ? 1 : 0));
+      preparedStatement.setShort(2, (short) (correo.getLeido() ? 1 : 0));
+      preparedStatement.setShort(3, (short) (correo.getDestacado() ? 1 : 0));
+      preparedStatement.setShort(4, (short) (correo.getImportante() ? 1 : 0));
+      preparedStatement.setInt(5, correo.getIdCorreo());
+      preparedStatement.setInt(6, idUsuario);
+
+      System.out.println(preparedStatement);
+
+      int filasAfectadas = preparedStatement.executeUpdate();
+
+      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+
+    } catch (SQLException e) {
+      System.out.println(e);
+      return false;
+    }
+
+    return true;
+
   }
 
   public static int enviarCorreo(int id_correo, int[] id_receptores) {

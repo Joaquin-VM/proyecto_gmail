@@ -8,6 +8,7 @@ import com.gmail.exception.SQLError;
 import com.gmail.model.AbsCorreo;
 import com.gmail.model.CorreoFactory;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CorreoService implements ICorreoService {
@@ -216,6 +217,133 @@ public class CorreoService implements ICorreoService {
 
     return correoGuardado;
   }
+
+  public List<AbsCorreo> obtenerImportantes(int idUsuario)
+          throws CorreoError, SQLError {
+
+    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+      throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
+    }
+
+    List<AbsCorreo> correosRecibidos = CorreoDAO.getCorreosRecibidos(idUsuario, false);
+    List<AbsCorreo> correosEnviados = CorreoDAO.getCorreosEnviados(idUsuario, false);
+    List<AbsCorreo> correosImportantes= new ArrayList<AbsCorreo>();
+
+    for (AbsCorreo correo:correosRecibidos) {
+
+      if(correo.getImportante())
+        correosImportantes.add(correo);
+      
+    }
+
+    for (AbsCorreo correo:correosEnviados) {
+
+      if(correo.getImportante())
+        correosImportantes.add(correo);
+
+    }
+
+    return correosImportantes;
+  }
+
+  public List<AbsCorreo> obtenerDestacados(int idUsuario)
+          throws CorreoError, SQLError {
+
+    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+      throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
+    }
+
+    List<AbsCorreo> correosRecibidos = CorreoDAO.getCorreosRecibidos(idUsuario, false);
+    List<AbsCorreo> correosEnviados = CorreoDAO.getCorreosEnviados(idUsuario, false);
+    List<AbsCorreo> correosDestacados= new ArrayList<AbsCorreo>();
+
+    for (AbsCorreo correo:correosRecibidos) {
+
+      if(correo.getDestacado())
+        correosDestacados.add(correo);
+
+    }
+
+    for (AbsCorreo correo:correosEnviados) {
+
+      if(correo.getDestacado())
+        correosDestacados.add(correo);
+
+    }
+
+    return correosDestacados;
+  }
+
+  public List<AbsCorreo> obtenerBorrados(int idUsuario)
+          throws CorreoError, SQLError {
+
+    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+      throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
+    }
+
+    List<AbsCorreo> correosRecibidos = CorreoDAO.getCorreosRecibidos(idUsuario, true);
+    List<AbsCorreo> correosEnviados = CorreoDAO.getCorreosEnviados(idUsuario, true);
+    List<AbsCorreo> correosBorrados= new ArrayList<AbsCorreo>();
+
+    for (AbsCorreo correo:correosRecibidos) {
+        correosBorrados.add(correo);
+    }
+
+    for (AbsCorreo correo:correosEnviados) {
+        correosBorrados.add(correo);
+    }
+
+    return correosBorrados;
+  }
+
+  public List<AbsCorreo> obtenerNoLeidos(int idUsuario)
+          throws CorreoError, SQLError {
+
+    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+      throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
+    }
+
+    List<AbsCorreo> correosRecibidos = CorreoDAO.getCorreosRecibidos(idUsuario, false);
+    List<AbsCorreo> correosNoLeidos= new ArrayList<AbsCorreo>();
+
+    for (AbsCorreo correo:correosRecibidos) {
+
+      if(!correo.getLeido())
+      correosNoLeidos.add(correo);
+
+    }
+
+
+    return correosNoLeidos;
+  }
+
+  public AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError {
+
+
+    AbsCorreo correoGuardado = CorreoDAO.getCorreoRecibido(idCorreo, idUsuario);
+
+    if (correoGuardado == null) {
+      throw new CorreoError(1, idCorreo);
+    }
+
+    if (correoGuardado.getBorrado()) {
+      throw new CorreoError(2);
+    }
+
+    if(correoGuardado.getLeido())
+      return correoGuardado;
+    else{
+      if (!CorreoDAO.updateCorreoRecibido(correoGuardado,idUsuario)) {
+        throw new CorreoError(4);
+      }
+      return correoGuardado;
+    }
+
+  }
+
+
+
+
 
   private CorreoDTO cargarNulls(CorreoDTO correo) {
 
