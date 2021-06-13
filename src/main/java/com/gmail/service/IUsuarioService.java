@@ -8,13 +8,15 @@ import java.sql.SQLException;
 
 public interface IUsuarioService {
 
-  AbsUsuario crear(UsuarioDTO usuario) throws ValidationError;
+  AbsUsuario crear(UsuarioDTO usuario) throws ValidationError, SQLError;
 
-  AbsUsuario modificar(int idUsuario, UsuarioDTO usuarioModificado)
+  AbsUsuario obtenerUno(int idUsuario) throws SQLError;
+
+  AbsUsuario obtenerUno(String correo) throws SQLError;
+
+  AbsUsuario modificar(UsuarioDTO usuarioModificado)
       throws ValidationError, SQLException;
 
   boolean eliminar(int idUsuario) throws SQLError;
-
-  AbsUsuario obtenerUno(int idUsuario) throws SQLError;
 
 }

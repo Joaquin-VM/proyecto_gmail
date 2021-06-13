@@ -12,10 +12,15 @@ public class UsuarioService implements IUsuarioService {
   private UsuarioDAO dao = new UsuarioDAO();
 
   @Override
-  public AbsUsuario crear(UsuarioDTO dto) throws ValidationError {
+  public AbsUsuario crear(UsuarioDTO dto) throws ValidationError, SQLError {
 
     if (!validarDatos(dto)) {
-      throw new ValidationError("Los datos ingresados son invalidos");
+      throw new ValidationError("Los datos ingresados de usuario son invalidos.");
+    }
+
+    if (existeUsuario(dto.getCorreo())) {
+      throw new SQLError(
+          "El usuario a agregar tiene un correo que ya ha sido elegido por otro usuario.");
     }
 
     return dao.addUsuario(UsuarioFactory.buildUsuario(dto));
@@ -23,36 +28,78 @@ public class UsuarioService implements IUsuarioService {
   }
 
   @Override
-  public AbsUsuario modificar(int idUsuario, UsuarioDTO usuarioModificado)
-      throws ValidationError, SQLError {
+  public AbsUsuario obtenerUno(int idUsuario) throws SQLError {
 
-    if (!validarDatos(usuarioModificado)) {
-      throw new ValidationError("Los datos ingresados son invalidos");
+    if (!existeUsuario(idUsuario)) {
+      throw new SQLError("El usuario a obtener no existe.");
     }
 
-    UsuarioDAO.updateUsuario(usuarioModificado);
-
     return dao.getUsuario(idUsuario);
+
+  }
+
+  @Override
+  public AbsUsuario obtenerUno(String correo) throws SQLError {
+
+    if (!existeUsuario(correo)) {
+      throw new SQLError("El usuario a obtener no existe.");
+    }
+
+    return dao.getUsuario(correo);
+
+  }
+
+  @Override
+  public AbsUsuario modificar(UsuarioDTO usuarioModificado)
+      throws ValidationError, SQLError {
+
+    if (!existeUsuario(usuarioModificado.getIdUsuario())) {
+      throw new SQLError("El usuario a modificar no existe.");
+    }
+
+    if (!validarDatos(usuarioModificado)) {
+      throw new ValidationError("Los datos ingresados de usuario son invalidos.");
+    }
+
+    return dao.updateUsuario(UsuarioFactory.buildUsuario(usuarioModificado));
 
   }
 
   @Override
   public boolean eliminar(int idUsuario) throws SQLError {
+
+    if (!existeUsuario(idUsuario)) {
+      throw new SQLError("El usuario a eliminar no existe.");
+    }
+
     return dao.deleteUsuario(idUsuario);
+
   }
 
-  @Override
-  public AbsUsuario obtenerUno(int idUsuario) throws SQLError {
-    return dao.getUsuario(idUsuario);
+
+  private boolean existeUsuario(int idUsuario) throws SQLError {
+
+    if (idUsuario <= 0) {
+      return false;
+    }
+
+    return dao.getUsuario(idUsuario) != null;
+
+  }
+
+  private boolean existeUsuario(String correo) throws SQLError {
+
+    if (correo.isBlank()) {
+      return false;
+    }
+
+    return dao.getUsuario(correo) != null;
+
   }
 
   private boolean validarDatos(UsuarioDTO dto) {
 
     if (dto == null) {
-      return false;
-    }
-
-    if (dto.getIdUsuario() < 1) {
       return false;
     }
 

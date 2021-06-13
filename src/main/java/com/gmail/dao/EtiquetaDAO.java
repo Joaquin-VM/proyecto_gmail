@@ -1,6 +1,7 @@
 package com.gmail.dao;
 
 import com.gmail.conf.JDBCUtil;
+import com.gmail.exception.SQLError;
 import com.gmail.model.AbsEtiqueta;
 import com.gmail.model.EtiquetaFactory;
 import java.sql.Connection;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class EtiquetaDAO {
 
-  public static AbsEtiqueta addEtiqueta(AbsEtiqueta etiqueta) {
+  public AbsEtiqueta addEtiqueta(AbsEtiqueta etiqueta) throws SQLError {
 
     String INSERT_ETIQUETA_SQL = "INSERT INTO etiqueta" +
         "(nombre_etiqueta, id_usuario) VALUES (?, ?)";
@@ -38,13 +39,13 @@ public class EtiquetaDAO {
       }
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError("Error al agregar la etiqueta de nombre " + etiqueta.getNombreEtiqueta());
     }
 
     return etiqueta;
   }
 
-  public static AbsEtiqueta getEtiqueta(int idEtiqueta) {
+  public AbsEtiqueta getEtiqueta(int idEtiqueta) throws SQLError {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_etiqueta = ?";
 
@@ -70,21 +71,20 @@ public class EtiquetaDAO {
 
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError("Error al obtener la etiqueta con el id " + idEtiqueta + ".");
     }
 
     return etiqueta;
 
   }
 
-  public static List<AbsEtiqueta> getEtiqueta(String nombreEtiqueta, int idUsuario) {
+  public List<AbsEtiqueta> getEtiquetasCoincidentes(String nombreEtiqueta, int idUsuario)
+      throws SQLError {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta "
-        + "WHERE nombre_etiqueta LIKE '% ? %' AND id_usuario = ?";
+        + "WHERE nombre_etiqueta LIKE '%?%' AND id_usuario = ?";
 
-    AbsEtiqueta etiqueta = null;
-    List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();
-    ;
+    List<AbsEtiqueta> listaCoincidentes = new ArrayList<>();
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -99,26 +99,27 @@ public class EtiquetaDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        etiqueta = EtiquetaFactory.buildEtiqueta();
+        AbsEtiqueta etiqueta = EtiquetaFactory.buildEtiqueta();
         etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
         etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));
         etiqueta.setIdEtiqueta(rs.getInt("id_usuario"));
-        listaEtiquetas.add(etiqueta);
+        listaCoincidentes.add(etiqueta);
       }
 
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError(
+          "Error al obtener la lista de etiquetas con el nombre " +
+              nombreEtiqueta + ".");
     }
 
-    return listaEtiquetas;
+    return listaCoincidentes;
 
   }
 
-  public static List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario) {
+  public List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario) throws SQLError {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
-    AbsEtiqueta etiqueta = null;
     List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -130,7 +131,7 @@ public class EtiquetaDAO {
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        etiqueta = EtiquetaFactory.buildEtiqueta();
+        AbsEtiqueta etiqueta = EtiquetaFactory.buildEtiqueta();
         etiqueta = etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"))
             .setNombreEtiqueta(rs.getString("nombre_etiqueta"))
             .setIdUsuario(rs.getInt("id_usuario"));
@@ -138,13 +139,15 @@ public class EtiquetaDAO {
       }
 
     } catch (SQLException e) {
-      System.out.println(e);
+      throw new SQLError(
+          "Error al obtener el listado de etiquetas del usuario con id " + idUsuario + ".");
     }
 
     return listaEtiquetas;
   }
 
-  public static boolean updateEtiqueta(AbsEtiqueta etiqueta) {
+  public boolean updateEtiqueta(AbsEtiqueta etiqueta) throws SQLError {
+
     String UPDATE_ETIQUETA_SQL = "UPDATE etiqueta SET nombre_etiqueta = ? WHERE id_etiqueta = ?";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
@@ -161,15 +164,14 @@ public class EtiquetaDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError("Error al modificar la etiqueta con id " + etiqueta.getIdEtiqueta());
     }
 
     return true;
 
   }
 
-  public static boolean deleteEtiqueta(int idEtiqueta) {
+  public boolean deleteEtiqueta(int idEtiqueta) throws SQLError {
 
     String DELETE_ETIQUETA_SQL = "DELETE FROM etiqueta WHERE id_etiqueta = ?";
 
@@ -186,15 +188,14 @@ public class EtiquetaDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError("Error al eliminar la etiqueta con id " + idEtiqueta);
     }
 
     return true;
 
   }
 
-  public static boolean agregarCorreoEtiqueta(int idCorreo, int idEtiqueta) {
+  public boolean agregarEtiquetaACorreo(int idCorreo, int idEtiqueta) throws SQLError {
 
     String INSERT_CLASIFICAR_SQL = "INSERT INTO clasificar" +
         "(id_correo, id_etiqueta) VALUES (?, ?)";
@@ -212,14 +213,46 @@ public class EtiquetaDAO {
       preparedStatement.executeUpdate();
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError(
+          "Error al agregar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta);
     }
 
     return true;
   }
 
-  public static boolean quitarEtiqueta(int idCorreo, int idEtiqueta) {
+  public List<AbsEtiqueta> obtenerEtiquetasDeCorreo(int idCorreo) throws SQLError {
+
+    String QUERY = "SELECT id_etiqueta FROM clasificar WHERE id_correo = ? ORDER BY id_etiqueta";
+    AbsEtiqueta etiqueta = null;
+    List<AbsEtiqueta> listaCoincidentes = null;
+
+    try (Connection connection = DriverManager
+        .getConnection(JDBCUtil.getURL(), JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
+
+      preparedStatement.setInt(1, idCorreo);
+
+      System.out.println(preparedStatement);
+
+      ResultSet rs = preparedStatement.executeQuery();
+
+      while(rs.next()){
+        etiqueta = EtiquetaFactory.buildEtiqueta();
+        etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
+        etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));
+        etiqueta.setIdEtiqueta(rs.getInt("id_usuario"));
+        listaCoincidentes.add(etiqueta);
+      }
+
+    } catch (SQLException e) {
+      throw new SQLError("Error al obtener el listado de etiquetas del correo con id " + idCorreo + ".");
+    }
+
+    return listaCoincidentes;
+
+  }
+
+  public boolean quitarEtiquetaACorreo(int idCorreo, int idEtiqueta) throws SQLError {
 
     String DELETE_ETIQUETA_SQL = "DELETE FROM clasificar WHERE id_etiqueta = ? AND id_correo = ?";
 
@@ -237,8 +270,8 @@ public class EtiquetaDAO {
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
-      System.out.println(e);
-      return false;
+      throw new SQLError(
+          "Error al quitar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta);
     }
 
     return true;
