@@ -187,6 +187,7 @@ public class CorreoService implements ICorreoService {
     return correoGuardado;
   }
 
+  @Override
   public AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError {
 
     AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
@@ -218,6 +219,7 @@ public class CorreoService implements ICorreoService {
     return correoGuardado;
   }
 
+  @Override
   public List<AbsCorreo> obtenerImportantes(int idUsuario)
           throws CorreoError, SQLError {
 
@@ -246,6 +248,7 @@ public class CorreoService implements ICorreoService {
     return correosImportantes;
   }
 
+  @Override
   public List<AbsCorreo> obtenerDestacados(int idUsuario)
           throws CorreoError, SQLError {
 
@@ -274,6 +277,7 @@ public class CorreoService implements ICorreoService {
     return correosDestacados;
   }
 
+  @Override
   public List<AbsCorreo> obtenerBorrados(int idUsuario)
           throws CorreoError, SQLError {
 
@@ -296,6 +300,7 @@ public class CorreoService implements ICorreoService {
     return correosBorrados;
   }
 
+  @Override
   public List<AbsCorreo> obtenerNoLeidos(int idUsuario)
           throws CorreoError, SQLError {
 
@@ -317,6 +322,7 @@ public class CorreoService implements ICorreoService {
     return correosNoLeidos;
   }
 
+  @Override
   public AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError {
 
 

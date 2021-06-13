@@ -36,21 +36,21 @@ public interface ICorreoService {
         throws CorreoError, SQLError;
 
 
-    public AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoError, SQLError ;
+    AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoError, SQLError ;
 
-    public AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError;
+    AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError;
 
-    public List<AbsCorreo> obtenerImportantes(int idUsuario)
+    List<AbsCorreo> obtenerImportantes(int idUsuario)
             throws CorreoError, SQLError;
 
-    public List<AbsCorreo> obtenerDestacados(int idUsuario)
+    List<AbsCorreo> obtenerDestacados(int idUsuario)
             throws CorreoError, SQLError;
 
-    public List<AbsCorreo> obtenerBorrados(int idUsuario)
+    List<AbsCorreo> obtenerBorrados(int idUsuario)
             throws CorreoError, SQLError;
-    public List<AbsCorreo> obtenerNoLeidos(int idUsuario)
+    List<AbsCorreo> obtenerNoLeidos(int idUsuario)
             throws CorreoError, SQLError;
 
-    public AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError;
+    AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError;
 
 }
