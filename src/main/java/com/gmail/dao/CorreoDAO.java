@@ -75,7 +75,7 @@ public class CorreoDAO {
 
       ResultSet rs = preparedStatement.executeQuery();
 
-      while (rs.next()) {
+      if (rs.next()) {
         correo = CorreoFactory.buildCorreo();
         correo.setIdCorreo(rs.getInt("id_correo"))
             .setIdUsuario(rs.getInt("id_usuario"))

@@ -1,130 +1,112 @@
 package com.gmail.service;
 
-import com.gmail.dao.CorreoDAO;
 import com.gmail.dao.FiltroDAO;
 import com.gmail.dao.UsuarioDAO;
-import com.gmail.dto.CorreoDTO;
 import com.gmail.dto.FiltroDTO;
-import com.gmail.exception.CorreoError;
 import com.gmail.exception.FiltroError;
 import com.gmail.exception.SQLError;
-import com.gmail.model.*;
-
-import java.time.LocalDateTime;
+import com.gmail.model.AbsFiltro;
+import com.gmail.model.FiltroFactory;
 import java.util.List;
 
-public class FiltroService implements IFiltroService{
+public class FiltroService implements IFiltroService {
 
+  FiltroDAO dao = new FiltroDAO();
+  UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-    @Override
-    public AbsFiltro crear(FiltroDTO filtro) throws FiltroError, SQLError {
+  @Override
+  public AbsFiltro crear(FiltroDTO filtro) throws FiltroError, SQLError {
 
-        filtro = cargarNulls(filtro);
+    filtro = cargarNulls(filtro);
 
-        FiltroDAO fdao=new FiltroDAO();
-        UsuarioDAO udao= new UsuarioDAO();
-
-        if (udao.getUsuario(filtro.getIdUsuario()) == null) {
-            throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdUsuario());
-        }
-
-        return fdao.addFiltro(FiltroFactory.buildFiltro(filtro));
+    if (usuarioDAO.getUsuario(filtro.getIdUsuario()) == null) {
+      throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdUsuario());
     }
 
-    @Override
-    public AbsFiltro modificar(FiltroDTO filtro) throws FiltroError ,SQLError{
+    return dao.addFiltro(FiltroFactory.buildFiltro(filtro));
+  }
 
-        filtro = cargarNulls(filtro);
+  @Override
+  public AbsFiltro modificar(FiltroDTO filtro) throws FiltroError, SQLError {
 
-        FiltroDAO fdao=new FiltroDAO();
-        UsuarioDAO udao= new UsuarioDAO();
+    filtro = cargarNulls(filtro);
 
-        AbsFiltro filtroGuardado = fdao.getFiltro(filtro.getIdFiltro());
+    AbsFiltro filtroGuardado = dao.getFiltro(filtro.getIdFiltro());
 
-        if (filtroGuardado == null) {
-            throw new FiltroError(1, filtro.getIdFiltro());
-        }
-
-        if (udao.getUsuario(filtro.getIdUsuario())==null) {
-            throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdUsuario());
-        }
-
-        if (!fdao.updateFiltro(FiltroFactory.buildFiltro(filtro))) {
-            throw new FiltroError(4);
-        }
-
-        return filtroGuardado;
+    if (filtroGuardado == null) {
+      throw new FiltroError(1, filtro.getIdFiltro());
     }
 
-    @Override
-    public AbsFiltro eliminarEnviado(int idFiltro) throws FiltroError {
-
-        FiltroDAO fdao=new FiltroDAO();
-        UsuarioDAO udao= new UsuarioDAO();
-
-        AbsFiltro filtroGuardado = fdao.getFiltro(idFiltro);
-
-        if (filtroGuardado == null) {
-            throw new FiltroError(1, idFiltro);
-        }
-
-        if (!fdao.deleteFiltro(idFiltro)) {
-            throw new FiltroError(5);
-        }
-
-        return filtroGuardado;
-
+    if (usuarioDAO.getUsuario(filtro.getIdUsuario()) == null) {
+      throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdUsuario());
     }
 
-    @Override
-    public AbsFiltro obtenerUno(int idFiltro) throws FiltroError, SQLError {
-
-        FiltroDAO fdao=new FiltroDAO();
-
-        AbsFiltro filtroGuardado = fdao.getFiltro(idFiltro);
-
-        if (filtroGuardado == null) {
-            throw new FiltroError(1, idFiltro);
-        }
-
-        return filtroGuardado;
-
+    if (!dao.updateFiltro(FiltroFactory.buildFiltro(filtro))) {
+      throw new FiltroError(4);
     }
 
-    @Override
-    public List<AbsFiltro> listarFiltroPorUsuario(int idUsuario) throws FiltroError, SQLError {
+    return filtroGuardado;
+  }
 
-        FiltroDAO fdao=new FiltroDAO();
-        UsuarioDAO udao= new UsuarioDAO();
+  @Override
+  public AbsFiltro eliminarEnviado(int idFiltro) throws FiltroError {
 
-        if (udao.getUsuario(idUsuario) == null) {
-            throw new FiltroError("Error: No existe Usuario con id = " + idUsuario);
-        }
+    AbsFiltro filtroGuardado = dao.getFiltro(idFiltro);
 
-        return fdao.listarFiltrosUsuario(idUsuario);
-
+    if (filtroGuardado == null) {
+      throw new FiltroError(1, idFiltro);
     }
 
-
-
-    private FiltroDTO cargarNulls(FiltroDTO  filtro) {
-
-        if (filtro.getLeido() == null) {
-            filtro.setLeido(false);
-        }
-
-        if (filtro.getDestacar() == null) {
-            filtro.setDestacar(false);
-        }
-        if (filtro.getImportante() == null) {
-            filtro.setImportante(false);
-        }
-        if (filtro.getEliminar() == null) {
-            filtro.setEliminar(false);
-        }
-        return filtro;
-
+    if (!dao.deleteFiltro(idFiltro)) {
+      throw new FiltroError(5);
     }
+
+    return filtroGuardado;
+
+  }
+
+  @Override
+  public AbsFiltro obtenerUno(int idFiltro) throws FiltroError, SQLError {
+
+    AbsFiltro filtroGuardado = dao.getFiltro(idFiltro);
+
+    if (filtroGuardado == null) {
+      throw new FiltroError(1, idFiltro);
+    }
+
+    return filtroGuardado;
+
+  }
+
+  @Override
+  public List<AbsFiltro> listarFiltroPorUsuario(int idUsuario) throws FiltroError, SQLError {
+
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
+      throw new FiltroError("Error: No existe Usuario con id = " + idUsuario);
+    }
+
+    return dao.listarFiltrosUsuario(idUsuario);
+
+  }
+
+  private FiltroDTO cargarNulls(FiltroDTO filtro) {
+
+    if (filtro.getLeido() == null) {
+      filtro.setLeido(false);
+    }
+
+    if (filtro.getDestacar() == null) {
+      filtro.setDestacar(false);
+    }
+    if (filtro.getImportante() == null) {
+      filtro.setImportante(false);
+    }
+    if (filtro.getEliminar() == null) {
+      filtro.setEliminar(false);
+    }
+    return filtro;
+
+  }
 
 
 }
