@@ -56,7 +56,7 @@ public class FiltroDAO {
     return filtro;
   }
 
-  public static AbsFiltro getFiltro(int idFiltro) {
+  public AbsFiltro getFiltro(int idFiltro) {
 
     String QUERY = "SELECT id_filtro, id_usuario, emisor, receptor, asunto, "
         + "contiene, leido, destacar, importante, eliminar, spam,"
@@ -98,7 +98,7 @@ public class FiltroDAO {
 
   }
 
-  public static List<AbsFiltro> listarFiltrosUsuario(int idUsuario) {
+  public List<AbsFiltro> listarFiltrosUsuario(int idUsuario) {
 
     String QUERY = "SELECT * FROM filtro WHERE id_usuario = ?";
     AbsFiltro filtro = null;
@@ -135,7 +135,7 @@ public class FiltroDAO {
     return listaFiltros;
   }
 
-  public static boolean updateFiltro(AbsFiltro filtro) {
+  public boolean updateFiltro(AbsFiltro filtro) {
 
     String UPDATE_FILTRO_SQL = "UPDATE filtro " +
         "SET id_usuario = ?," +
@@ -177,7 +177,7 @@ public class FiltroDAO {
 
   }
 
-  public static boolean deleteFiltro(int idFiltro) {
+  public boolean deleteFiltro(int idFiltro) {
 
     String DELETE_FILTRO_SQL = "DELETE FROM filtro WHERE id_filtro = ?";
 

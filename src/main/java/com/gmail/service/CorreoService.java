@@ -13,18 +13,21 @@ import java.util.List;
 
 public class CorreoService implements ICorreoService {
 
+  CorreoDAO dao = new CorreoDAO();
+  UsuarioDAO usuarioDAO = new UsuarioDAO();
+
   @Override
   public AbsCorreo crear(CorreoDTO correo) throws CorreoError, SQLError {
 
     correo = cargarNulls(correo);
 
-    if (UsuarioDAO.getUsuario(correo.getIdUsuario()) == null) {
+    if (usuarioDAO.getUsuario(correo.getIdUsuario()) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + correo.getIdUsuario());
     }
 
     correo.setFechaHora(LocalDateTime.now());
 
-    return CorreoDAO.addCorreo(CorreoFactory.buildCorreo(correo));
+    return dao.addCorreo(CorreoFactory.buildCorreo(correo));
   }
 
   @Override
@@ -32,7 +35,7 @@ public class CorreoService implements ICorreoService {
 
     correo = cargarNulls(correo);
 
-    AbsCorreo correoGuardado = CorreoDAO.getCorreo(correo.getIdCorreo());
+    AbsCorreo correoGuardado = dao.getCorreo(correo.getIdCorreo());
 
     if (correoGuardado == null) {
       throw new CorreoError(1, correo.getIdCorreo());
@@ -48,7 +51,7 @@ public class CorreoService implements ICorreoService {
 
     correo.setFechaHora(LocalDateTime.now());
 
-    if (!CorreoDAO.updateCorreo(CorreoFactory.buildCorreo(correo))) {
+    if (!dao.updateCorreo(CorreoFactory.buildCorreo(correo))) {
       throw new CorreoError(4);
     }
 
@@ -58,7 +61,7 @@ public class CorreoService implements ICorreoService {
   @Override
   public AbsCorreo eliminarEnviado(int idCorreo) throws CorreoError {
 
-    AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
+    AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
@@ -68,7 +71,7 @@ public class CorreoService implements ICorreoService {
       throw new CorreoError(2);
     }
 
-    if (!CorreoDAO.deleteCorreo(idCorreo)) {
+    if (!dao.deleteCorreo(idCorreo)) {
       throw new CorreoError(5);
     }
 
@@ -79,7 +82,7 @@ public class CorreoService implements ICorreoService {
   @Override
   public AbsCorreo eliminarRecibido(int idCorreo, int idUsuario) throws CorreoError {
 
-    AbsCorreo correoGuardado = CorreoDAO.getCorreoRecibido(idCorreo, idUsuario);
+    AbsCorreo correoGuardado = dao.getCorreoRecibido(idCorreo, idUsuario);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
@@ -89,7 +92,7 @@ public class CorreoService implements ICorreoService {
       throw new CorreoError(2);
     }
 
-    if (!CorreoDAO.deleteCorreo(idCorreo, idUsuario)) {
+    if (!dao.deleteCorreo(idCorreo, idUsuario)) {
       throw new CorreoError(5);
     }
 
@@ -100,7 +103,7 @@ public class CorreoService implements ICorreoService {
   @Override
   public AbsCorreo obtenerEnviado(int idCorreo) throws CorreoError {
 
-    AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
+    AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
@@ -112,9 +115,9 @@ public class CorreoService implements ICorreoService {
   @Override
   public AbsCorreo obtenerRecibido(int idCorreo, int idUsuario) throws CorreoError, SQLError {
 
-    AbsCorreo correoGuardado = CorreoDAO.getCorreoRecibido(idCorreo, idUsuario);
+    AbsCorreo correoGuardado = dao.getCorreoRecibido(idCorreo, idUsuario);
 
-    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
     }
 
@@ -129,11 +132,11 @@ public class CorreoService implements ICorreoService {
   public List<AbsCorreo> obtenerRecibidos(int idUsuario, boolean borrado)
       throws CorreoError, SQLError {
 
-    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
     }
 
-    List<AbsCorreo> correosGuardados = CorreoDAO.getCorreosRecibidos(idUsuario, borrado);
+    List<AbsCorreo> correosGuardados = dao.getCorreosRecibidos(idUsuario, borrado);
 
     return correosGuardados;
 
@@ -143,11 +146,11 @@ public class CorreoService implements ICorreoService {
   public List<AbsCorreo> obtenerEnviados(int idUsuario, boolean borrado)
       throws CorreoError, SQLError {
 
-    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
     }
 
-    List<AbsCorreo> correosGuardados = CorreoDAO.getCorreosRecibidos(idUsuario, borrado);
+    List<AbsCorreo> correosGuardados = dao.getCorreosRecibidos(idUsuario, borrado);
 
     return correosGuardados;
   }
@@ -155,7 +158,7 @@ public class CorreoService implements ICorreoService {
   @Override
   public AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoError, SQLError {
 
-    AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
+    AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
@@ -169,15 +172,15 @@ public class CorreoService implements ICorreoService {
       throw new CorreoError(2);
     }
 
-    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
     }
 
     correoGuardado.setFechaHora(LocalDateTime.now());
     correoGuardado.setConfirmado(true);
 
-    if (CorreoDAO.enviarCorreo(idCorreo, idUsuario)) {
-      if (!CorreoDAO.updateCorreo(correoGuardado)) {
+    if (dao.enviarCorreo(idCorreo, idUsuario)) {
+      if (!dao.updateCorreo(correoGuardado)) {
         throw new CorreoError(4);
       }
     } else {
@@ -190,7 +193,7 @@ public class CorreoService implements ICorreoService {
   @Override
   public AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError {
 
-    AbsCorreo correoGuardado = CorreoDAO.getCorreo(idCorreo);
+    AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
@@ -207,9 +210,9 @@ public class CorreoService implements ICorreoService {
     correoGuardado.setFechaHora(LocalDateTime.now());
     correoGuardado.setConfirmado(true);
 
-    int x = CorreoDAO.enviarCorreo(idCorreo, idUsuario);
+    int x = dao.enviarCorreo(idCorreo, idUsuario);
     if (x == 0) {
-      if (!CorreoDAO.updateCorreo(correoGuardado)) {
+      if (!dao.updateCorreo(correoGuardado)) {
         throw new CorreoError(4);
       }
     } else {
@@ -221,27 +224,29 @@ public class CorreoService implements ICorreoService {
 
   @Override
   public List<AbsCorreo> obtenerImportantes(int idUsuario)
-          throws CorreoError, SQLError {
+      throws CorreoError, SQLError {
 
-    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
     }
 
-    List<AbsCorreo> correosRecibidos = CorreoDAO.getCorreosRecibidos(idUsuario, false);
-    List<AbsCorreo> correosEnviados = CorreoDAO.getCorreosEnviados(idUsuario, false);
-    List<AbsCorreo> correosImportantes= new ArrayList<AbsCorreo>();
+    List<AbsCorreo> correosRecibidos = dao.getCorreosRecibidos(idUsuario, false);
+    List<AbsCorreo> correosEnviados = dao.getCorreosEnviados(idUsuario, false);
+    List<AbsCorreo> correosImportantes = new ArrayList<AbsCorreo>();
 
-    for (AbsCorreo correo:correosRecibidos) {
+    for (AbsCorreo correo : correosRecibidos) {
 
-      if(correo.getImportante())
+      if (correo.getImportante()) {
         correosImportantes.add(correo);
-      
+      }
+
     }
 
-    for (AbsCorreo correo:correosEnviados) {
+    for (AbsCorreo correo : correosEnviados) {
 
-      if(correo.getImportante())
+      if (correo.getImportante()) {
         correosImportantes.add(correo);
+      }
 
     }
 
@@ -250,27 +255,29 @@ public class CorreoService implements ICorreoService {
 
   @Override
   public List<AbsCorreo> obtenerDestacados(int idUsuario)
-          throws CorreoError, SQLError {
+      throws CorreoError, SQLError {
 
-    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
     }
 
-    List<AbsCorreo> correosRecibidos = CorreoDAO.getCorreosRecibidos(idUsuario, false);
-    List<AbsCorreo> correosEnviados = CorreoDAO.getCorreosEnviados(idUsuario, false);
-    List<AbsCorreo> correosDestacados= new ArrayList<AbsCorreo>();
+    List<AbsCorreo> correosRecibidos = dao.getCorreosRecibidos(idUsuario, false);
+    List<AbsCorreo> correosEnviados = dao.getCorreosEnviados(idUsuario, false);
+    List<AbsCorreo> correosDestacados = new ArrayList<AbsCorreo>();
 
-    for (AbsCorreo correo:correosRecibidos) {
+    for (AbsCorreo correo : correosRecibidos) {
 
-      if(correo.getDestacado())
+      if (correo.getDestacado()) {
         correosDestacados.add(correo);
+      }
 
     }
 
-    for (AbsCorreo correo:correosEnviados) {
+    for (AbsCorreo correo : correosEnviados) {
 
-      if(correo.getDestacado())
+      if (correo.getDestacado()) {
         correosDestacados.add(correo);
+      }
 
     }
 
@@ -279,22 +286,22 @@ public class CorreoService implements ICorreoService {
 
   @Override
   public List<AbsCorreo> obtenerBorrados(int idUsuario)
-          throws CorreoError, SQLError {
+      throws CorreoError, SQLError {
 
-    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
     }
 
-    List<AbsCorreo> correosRecibidos = CorreoDAO.getCorreosRecibidos(idUsuario, true);
-    List<AbsCorreo> correosEnviados = CorreoDAO.getCorreosEnviados(idUsuario, true);
-    List<AbsCorreo> correosBorrados= new ArrayList<AbsCorreo>();
+    List<AbsCorreo> correosRecibidos = dao.getCorreosRecibidos(idUsuario, true);
+    List<AbsCorreo> correosEnviados = dao.getCorreosEnviados(idUsuario, true);
+    List<AbsCorreo> correosBorrados = new ArrayList<AbsCorreo>();
 
-    for (AbsCorreo correo:correosRecibidos) {
-        correosBorrados.add(correo);
+    for (AbsCorreo correo : correosRecibidos) {
+      correosBorrados.add(correo);
     }
 
-    for (AbsCorreo correo:correosEnviados) {
-        correosBorrados.add(correo);
+    for (AbsCorreo correo : correosEnviados) {
+      correosBorrados.add(correo);
     }
 
     return correosBorrados;
@@ -302,22 +309,22 @@ public class CorreoService implements ICorreoService {
 
   @Override
   public List<AbsCorreo> obtenerNoLeidos(int idUsuario)
-          throws CorreoError, SQLError {
+      throws CorreoError, SQLError {
 
-    if (UsuarioDAO.getUsuario(idUsuario) == null) {
+    if (usuarioDAO.getUsuario(idUsuario) == null) {
       throw new CorreoError("Error: No existe Usuario con id = " + idUsuario);
     }
 
-    List<AbsCorreo> correosRecibidos = CorreoDAO.getCorreosRecibidos(idUsuario, false);
-    List<AbsCorreo> correosNoLeidos= new ArrayList<AbsCorreo>();
+    List<AbsCorreo> correosRecibidos = dao.getCorreosRecibidos(idUsuario, false);
+    List<AbsCorreo> correosNoLeidos = new ArrayList<AbsCorreo>();
 
-    for (AbsCorreo correo:correosRecibidos) {
+    for (AbsCorreo correo : correosRecibidos) {
 
-      if(!correo.getLeido())
-      correosNoLeidos.add(correo);
+      if (!correo.getLeido()) {
+        correosNoLeidos.add(correo);
+      }
 
     }
-
 
     return correosNoLeidos;
   }
@@ -325,8 +332,7 @@ public class CorreoService implements ICorreoService {
   @Override
   public AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError {
 
-
-    AbsCorreo correoGuardado = CorreoDAO.getCorreoRecibido(idCorreo, idUsuario);
+    AbsCorreo correoGuardado = dao.getCorreoRecibido(idCorreo, idUsuario);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
@@ -336,20 +342,16 @@ public class CorreoService implements ICorreoService {
       throw new CorreoError(2);
     }
 
-    if(correoGuardado.getLeido())
+    if (correoGuardado.getLeido()) {
       return correoGuardado;
-    else{
-      if (!CorreoDAO.updateCorreoRecibido(correoGuardado,idUsuario)) {
+    } else {
+      if (!dao.updateCorreoRecibido(correoGuardado, idUsuario)) {
         throw new CorreoError(4);
       }
       return correoGuardado;
     }
 
   }
-
-
-
-
 
   private CorreoDTO cargarNulls(CorreoDTO correo) {
 

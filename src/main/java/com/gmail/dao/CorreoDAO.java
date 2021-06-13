@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CorreoDAO {
 
-  public static AbsCorreo addCorreo(AbsCorreo correo) {
+  public AbsCorreo addCorreo(AbsCorreo correo) {
 
     String INSERT_CORREO_SQL = "INSERT INTO correo" +
         "(id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante)"
@@ -55,7 +55,7 @@ public class CorreoDAO {
     return correo;
   }
 
-  public static AbsCorreo getCorreo(int idCorreo) {
+  public AbsCorreo getCorreo(int idCorreo) {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -95,7 +95,7 @@ public class CorreoDAO {
 
   }
 
-  public static AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) {
+  public AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, r.borrado, r.leido, r.destacado, r.importante"
@@ -137,7 +137,7 @@ public class CorreoDAO {
 
   }
 
-  public static List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) {
+  public List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -181,7 +181,7 @@ public class CorreoDAO {
 
   }
 
-  public static List<AbsCorreo> getCorreosEnviados(int idUsuario, boolean borrado) {
+  public List<AbsCorreo> getCorreosEnviados(int idUsuario, boolean borrado) {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -224,7 +224,7 @@ public class CorreoDAO {
 
   }
 
-  public static boolean updateCorreo(AbsCorreo correo) {
+  public boolean updateCorreo(AbsCorreo correo) {
     String UPDATE_CORREO_SQL = "UPDATE correo " +
         "SET id_usuario = ?, asunto = ?,  cuerpo = ?,  fecha_hora = ?,  confirmado = ?,  borrado = ?,"
         + " leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ?;";
@@ -259,7 +259,7 @@ public class CorreoDAO {
 
   }
 
-  public static boolean deleteCorreo(int idCorreo, int idUsuario) {
+  public boolean deleteCorreo(int idCorreo, int idUsuario) {
 
     String BORRAR_CORREO_SQL = "UPDATE recibidos SET borrado = ? WHERE id_usuario_2 = ? AND id_correo = ?";
 
@@ -286,7 +286,7 @@ public class CorreoDAO {
 
   }
 
-  public static boolean deleteCorreo(int idCorreo) {
+  public boolean deleteCorreo(int idCorreo) {
 
     String UPDATE_CORREO_SQL = "UPDATE correo SET borrado = ? WHERE id_correo = ?;";
 
@@ -312,13 +312,13 @@ public class CorreoDAO {
 
   }
 
-  public static boolean enviarCorreo(int id_correo, int id_receptor) {
+  public boolean enviarCorreo(int id_correo, int id_receptor) {
 
     String INSERT_ENVIAR_SQL = "INSERT INTO recibidos" +
         "(id_usuario_2, id_correo, borrado, leido, destacado, importante)" +
         "VALUES (?, ?, ?, ?, ?, ?)";
 
-    AbsCorreo correo = CorreoDAO.getCorreo(id_correo);
+    AbsCorreo correo = this.getCorreo(id_correo);
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -344,13 +344,13 @@ public class CorreoDAO {
     return true;
   }
 
-  public static boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario)  {
+  public boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario) {
     String UPDATE_CORREO_SQL = "UPDATE correo " +
-            "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ? AND id_usuario_2;";
+        "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ? AND id_usuario_2;";
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
-            JDBCUtil.getUsuario(), JDBCUtil.getClave());
-         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
+        JDBCUtil.getUsuario(), JDBCUtil.getClave());
+        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
 
       preparedStatement.setShort(1, (short) (correo.getBorrado() ? 1 : 0));
       preparedStatement.setShort(2, (short) (correo.getLeido() ? 1 : 0));
@@ -374,7 +374,7 @@ public class CorreoDAO {
 
   }
 
-  public static int enviarCorreo(int id_correo, int[] id_receptores) {
+  public int enviarCorreo(int id_correo, int[] id_receptores) {
     int cantE = 0;
     for (int i : id_receptores) {
 
