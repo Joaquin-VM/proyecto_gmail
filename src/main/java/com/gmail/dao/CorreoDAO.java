@@ -312,13 +312,12 @@ public class CorreoDAO {
 
   }
 
-  public boolean enviarCorreo(int id_correo, int id_receptor) {
+  public boolean enviarCorreo(AbsCorreo correo, int id_receptor) {
 
     String INSERT_ENVIAR_SQL = "INSERT INTO recibidos" +
         "(id_usuario_2, id_correo, borrado, leido, destacado, importante)" +
         "VALUES (?, ?, ?, ?, ?, ?)";
 
-    AbsCorreo correo = this.getCorreo(id_correo);
 
     try (Connection connection = DriverManager.getConnection(JDBCUtil.getURL(),
         JDBCUtil.getUsuario(), JDBCUtil.getClave());
@@ -326,7 +325,7 @@ public class CorreoDAO {
             Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, id_receptor);
-      preparedStatement.setInt(2, id_correo);
+      preparedStatement.setInt(2, correo.getIdUsuario());
       preparedStatement.setShort(6, (short) (correo.getBorrado() ? 1 : 0));
       preparedStatement.setShort(7, (short) (correo.getLeido() ? 1 : 0));
       preparedStatement.setShort(8, (short) (correo.getDestacado() ? 1 : 0));
@@ -374,11 +373,11 @@ public class CorreoDAO {
 
   }
 
-  public int enviarCorreo(int id_correo, int[] id_receptores) {
+  public int enviarCorreo(AbsCorreo correo, int[] id_receptores) {
     int cantE = 0;
     for (int i : id_receptores) {
 
-      if (!(enviarCorreo(id_correo, i))) {
+      if (!(enviarCorreo(correo, i))) {
         System.out.println("Fallo el envio, receptor: " + i);
         continue;
       }

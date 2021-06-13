@@ -3,6 +3,7 @@ package com.gmail.service;
 import com.gmail.dao.FiltroDAO;
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.FiltroDTO;
+import com.gmail.exception.CorreoError;
 import com.gmail.exception.FiltroError;
 import com.gmail.exception.SQLError;
 import com.gmail.model.AbsFiltro;
@@ -22,6 +23,17 @@ public class FiltroService implements IFiltroService {
     if (usuarioDAO.getUsuario(filtro.getIdUsuario()) == null) {
       throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdUsuario());
     }
+    if (usuarioDAO.getUsuario(filtro.getIdEmisor()) == null) {
+        throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdEmisor());
+    }
+    if (usuarioDAO.getUsuario(filtro.getIdReceptor()) == null) {
+        throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdReceptor());
+    }
+    if (usuarioDAO.getUsuario(filtro.getIdUsuarioReenviar()) == null && !(filtro.getIdUsuarioReenviar()==0)) {
+        throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdUsuarioReenviar());
+    }
+
+
 
     return dao.addFiltro(FiltroFactory.buildFiltro(filtro));
   }

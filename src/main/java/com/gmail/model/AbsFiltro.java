@@ -17,7 +17,7 @@ public abstract class AbsFiltro implements Cloneable {
   Boolean eliminar;
   Boolean spam;
   int idEtiqueta;
-  int idUsuarioReenviar;
+  int idUsuarioReenviar=0;
 
   public AbsFiltro(){}
 

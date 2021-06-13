@@ -1,20 +1,24 @@
 package com.gmail.service;
 
 import com.gmail.dao.CorreoDAO;
+import com.gmail.dao.FiltroDAO;
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.CorreoDTO;
 import com.gmail.exception.CorreoError;
 import com.gmail.exception.SQLError;
 import com.gmail.model.AbsCorreo;
+import com.gmail.model.AbsFiltro;
 import com.gmail.model.CorreoFactory;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CorreoService implements ICorreoService {
 
   CorreoDAO dao = new CorreoDAO();
   UsuarioDAO usuarioDAO = new UsuarioDAO();
+  FiltroDAO filtroDAO = new FiltroDAO();
 
   @Override
   public AbsCorreo crear(CorreoDTO correo) throws CorreoError, SQLError {
@@ -156,16 +160,15 @@ public class CorreoService implements ICorreoService {
   }
 
   @Override
-  public AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoError, SQLError {
+  public AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoError, SQLError,CloneNotSupportedException {
 
     AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
+    AbsCorreo correoPorEnviar = (AbsCorreo) correoGuardado.clone();
+    correoPorEnviar.setDestacado(false);
+    correoPorEnviar.setImportante(false);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
-    }
-
-    if (correoGuardado.getConfirmado()) {
-      throw new CorreoError(3);
     }
 
     if (correoGuardado.getBorrado()) {
@@ -179,7 +182,98 @@ public class CorreoService implements ICorreoService {
     correoGuardado.setFechaHora(LocalDateTime.now());
     correoGuardado.setConfirmado(true);
 
-    if (dao.enviarCorreo(idCorreo, idUsuario)) {
+    List<AbsFiltro> filtroRecibido = filtroDAO.listarFiltrosUsuario(idUsuario);
+    List<AbsFiltro> filtroEnvio = filtroDAO.listarFiltrosUsuario(correoGuardado.getIdUsuario());
+    List<AbsFiltro> filtroEnviadoCoincidente = new ArrayList<AbsFiltro>();
+    List<AbsFiltro> filtroRecibidoCoincidente = new ArrayList<AbsFiltro>();
+
+    for (AbsFiltro filtro: filtroEnvio ) {
+
+      //ASUNTO
+      if(!(filtro.getAsunto()==null) && !(correoGuardado.getAsunto()==null)){
+        if(correoGuardado.getAsunto().toLowerCase().contains(filtro.getAsunto().toLowerCase())){
+          filtroEnviadoCoincidente.add(filtro);
+          continue;
+        }
+      }
+
+      //CUERPO
+      if(!(filtro.getContiene()==null) && !(correoGuardado.getCuerpo()==null)){
+        if(correoGuardado.getCuerpo().toLowerCase().contains(filtro.getContiene().toLowerCase())){
+          filtroEnviadoCoincidente.add(filtro);
+          continue;
+        }
+      }
+      //IDRECEPTOR
+      if(filtro.getIdReceptor()==idUsuario){
+        filtroEnviadoCoincidente.add(filtro);
+        continue;
+      }
+
+    }
+    for (AbsFiltro filtro: filtroRecibido ) {
+
+      //ASUNTO
+      if(!(filtro.getAsunto()==null) && !(correoGuardado.getAsunto()==null)){
+        if(correoGuardado.getAsunto().toLowerCase().contains(filtro.getAsunto().toLowerCase())){
+          filtroEnviadoCoincidente.add(filtro);
+          continue;
+        }
+      }
+
+      //CUERPO
+      if(!(filtro.getContiene()==null) && !(correoGuardado.getCuerpo()==null)){
+        if(correoGuardado.getCuerpo().toLowerCase().contains(filtro.getContiene().toLowerCase())){
+          filtroEnviadoCoincidente.add(filtro);
+          continue;
+        }
+      }
+      //IDEMISOR
+      if(filtro.getIdEmisor()==correoGuardado.getIdUsuario()){
+        filtroEnviadoCoincidente.add(filtro);
+        continue;
+      }
+    }
+
+    for (AbsFiltro filtro: filtroEnviadoCoincidente ){
+
+      if(filtro.getDestacar()){
+        correoGuardado.setDestacado(true);
+      }
+      if(filtro.getImportante()){
+        correoGuardado.setImportante(true);
+      }
+      if(filtro.getLeido()){
+        correoGuardado.setLeido(true);
+      }
+      if(filtro.getEliminar()){
+        correoGuardado.setBorrado(true);
+      }
+      if(!(filtro.getIdUsuarioReenviar()==0)){
+        enviar(idCorreo, filtro.getIdUsuarioReenviar());
+      }
+    }
+
+    for (AbsFiltro filtro: filtroRecibidoCoincidente ){
+
+      if(filtro.getDestacar()){
+        correoPorEnviar.setDestacado(true);
+      }
+      if(filtro.getImportante()){
+        correoPorEnviar.setImportante(true);
+      }
+      if(filtro.getLeido()){
+        correoPorEnviar.setLeido(true);
+      }
+      if(filtro.getEliminar()){
+        correoPorEnviar.setBorrado(true);
+      }
+      if(!(filtro.getIdUsuarioReenviar()==0)){
+        enviar(idCorreo, filtro.getIdUsuarioReenviar());
+      }
+    }
+
+    if (dao.enviarCorreo(correoPorEnviar, idUsuario)) {
       if (!dao.updateCorreo(correoGuardado)) {
         throw new CorreoError(4);
       }
@@ -187,13 +281,17 @@ public class CorreoService implements ICorreoService {
       throw new CorreoError(6, idUsuario);
     }
 
+
     return correoGuardado;
   }
 
   @Override
-  public AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError {
+  public AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError, SQLError, CloneNotSupportedException {
 
     AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
+    AbsCorreo correoPorEnviar = (AbsCorreo) correoGuardado.clone();
+    correoPorEnviar.setDestacado(false);
+    correoPorEnviar.setImportante(false);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
@@ -206,11 +304,16 @@ public class CorreoService implements ICorreoService {
     if (correoGuardado.getBorrado()) {
       throw new CorreoError(2);
     }
+    for (int id: idUsuario) {
+      if (usuarioDAO.getUsuario(id) == null) {
+        throw new CorreoError("Error: No existe Usuario con id = " + id);
+      }
+    }
 
     correoGuardado.setFechaHora(LocalDateTime.now());
     correoGuardado.setConfirmado(true);
 
-    int x = dao.enviarCorreo(idCorreo, idUsuario);
+    int x = dao.enviarCorreo(correoPorEnviar, idUsuario);
     if (x == 0) {
       if (!dao.updateCorreo(correoGuardado)) {
         throw new CorreoError(4);
@@ -218,6 +321,17 @@ public class CorreoService implements ICorreoService {
     } else {
       throw new CorreoError(7, x);
     }
+
+    return correoGuardado;
+  }
+
+  public AbsCorreo reeEnviar(int idCorreo, int idUsuario, int idUsuarioReenviador) throws CorreoError, SQLError,CloneNotSupportedException {
+
+    AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
+    AbsCorreo correoPorEnviar = (AbsCorreo)correoGuardado.clone();
+    correoPorEnviar.setDestacado(false);
+    correoPorEnviar.setImportante(false);
+
 
     return correoGuardado;
   }

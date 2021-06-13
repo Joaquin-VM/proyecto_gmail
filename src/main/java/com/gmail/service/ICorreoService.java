@@ -36,9 +36,9 @@ public interface ICorreoService {
         throws CorreoError, SQLError;
 
 
-    AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoError, SQLError ;
+    AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoError, SQLError, CloneNotSupportedException;
 
-    AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError;
+    AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError, CloneNotSupportedException, SQLError;
 
     List<AbsCorreo> obtenerImportantes(int idUsuario)
             throws CorreoError, SQLError;
