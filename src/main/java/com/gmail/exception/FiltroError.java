@@ -8,6 +8,12 @@ public class FiltroError extends Exception{
         super(msg);
     }
 
+    public FiltroError(int error, int id) {
+        super();
+        this.error = error;
+        this.id = id;
+    }
+
     public FiltroError(int error) {
         super();
         this.error = error;
