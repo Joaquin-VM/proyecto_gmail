@@ -12,19 +12,9 @@ public class DBCPDataSourceFactory {
   private static final String puerto = "3306";
   private static final String baseDeDatos = "jvega420_3";
   private static final String cantidadConexionesMax = "max-connections=10";
-
-  public static String getURL() {
-    return "jdbc:mysql://" + host + ":" + puerto + "/" + baseDeDatos + "?" + cantidadConexionesMax
-        + "useSSL=false";
-  }
-
-  public static String getUsuario() {
-    return usuario;
-  }
-
-  public static String getClave() {
-    return clave;
-  }
+  private static String URL =
+      "jdbc:mysql://" + host + ":" + puerto + "/" + baseDeDatos + "?" + cantidadConexionesMax
+          + "useSSL=false";
 
   public static DataSource getMySQLDataSource() throws SQLException {
 
@@ -32,7 +22,7 @@ public class DBCPDataSourceFactory {
 
     mysqlDS.setUser(usuario);
     mysqlDS.setPassword(clave);
-    mysqlDS.setURL(getURL());
+    mysqlDS.setURL(URL);
     mysqlDS.setAllowMultiQueries(true);
     return mysqlDS;
 
