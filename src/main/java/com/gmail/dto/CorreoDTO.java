@@ -1,5 +1,7 @@
 package com.gmail.dto;
 
+import com.gmail.model.AbsCorreo;
+
 import java.time.LocalDateTime;
 
 public class CorreoDTO {
@@ -14,6 +16,21 @@ public class CorreoDTO {
   Boolean leido;
   Boolean destacado;
   Boolean importante;
+
+  public CorreoDTO(AbsCorreo correo){
+    this.idCorreo=correo.getIdCorreo();
+    this.idUsuario=correo.getIdUsuario();
+    this.asunto=correo.getAsunto();
+    this.cuerpo=correo.getCuerpo();
+    this.fechaHora=correo.getFechaHora();
+    this.confirmado= correo.getConfirmado();
+    this.borrado=correo.getBorrado();
+    this.leido=correo.getLeido();
+    this.destacado=correo.getDestacado();
+    this.importante=correo.getImportante();
+  }
+
+  public CorreoDTO(){ }
 
   public int getIdCorreo() {
     return idCorreo;
