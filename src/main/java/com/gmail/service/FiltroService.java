@@ -1,5 +1,6 @@
 package com.gmail.service;
 
+import com.gmail.dao.EtiquetaDAO;
 import com.gmail.dao.FiltroDAO;
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.FiltroDTO;
@@ -14,6 +15,7 @@ public class FiltroService implements IFiltroService {
 
   FiltroDAO dao = new FiltroDAO();
   UsuarioDAO usuarioDAO = new UsuarioDAO();
+  EtiquetaDAO etiquetaDAO = new EtiquetaDAO();
 
   @Override
   public AbsFiltro crear(FiltroDTO filtro) throws FiltroError, SQLError {
@@ -31,6 +33,9 @@ public class FiltroService implements IFiltroService {
     }
     if (usuarioDAO.getUsuario(filtro.getIdUsuarioReenviar()) == null && !(filtro.getIdUsuarioReenviar()==0)) {
         throw new FiltroError("Error: No existe Usuario con id = " + filtro.getIdUsuarioReenviar());
+    }
+    if (etiquetaDAO.getEtiqueta(filtro.getIdEtiqueta()) == null && !(filtro.getIdEtiqueta()==0)) {
+      throw new FiltroError("Error: No existe etiqueta con id = " + filtro.getIdEtiqueta());
     }
 
 

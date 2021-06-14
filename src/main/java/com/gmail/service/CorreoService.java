@@ -1,6 +1,7 @@
 package com.gmail.service;
 
 import com.gmail.dao.CorreoDAO;
+import com.gmail.dao.EtiquetaDAO;
 import com.gmail.dao.FiltroDAO;
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.CorreoDTO;
@@ -19,6 +20,7 @@ public class CorreoService implements ICorreoService {
   CorreoDAO dao = new CorreoDAO();
   UsuarioDAO usuarioDAO = new UsuarioDAO();
   FiltroDAO filtroDAO = new FiltroDAO();
+  EtiquetaDAO etiquetaDAO = new EtiquetaDAO();
 
   @Override
   public AbsCorreo crear(CorreoDTO correo) throws CorreoError, SQLError {
@@ -249,6 +251,9 @@ public class CorreoService implements ICorreoService {
       if(filtro.getEliminar()){
         correoGuardado.setBorrado(true);
       }
+      if(filtro.getIdEtiqueta()!=0){
+        etiquetaDAO.agregarEtiquetaACorreo(correoGuardado.getIdCorreo(),filtro.getIdEtiqueta());
+      }
       if(filtro.getIdUsuarioReenviar()!=0){
         enviar(idCorreo, filtro.getIdUsuarioReenviar());
       }
@@ -267,6 +272,9 @@ public class CorreoService implements ICorreoService {
       }
       if(filtro.getEliminar()){
         correoPorEnviar.setBorrado(true);
+      }
+      if(filtro.getIdEtiqueta()!=0){
+        etiquetaDAO.agregarEtiquetaACorreo(correoGuardado.getIdCorreo(),filtro.getIdEtiqueta());
       }
       if(!(filtro.getIdUsuarioReenviar()==0)){
         enviar(idCorreo, filtro.getIdUsuarioReenviar());
