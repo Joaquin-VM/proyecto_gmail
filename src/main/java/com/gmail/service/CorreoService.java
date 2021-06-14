@@ -9,6 +9,7 @@ import com.gmail.exception.CorreoError;
 import com.gmail.exception.SQLError;
 import com.gmail.model.AbsCorreo;
 import com.gmail.model.AbsFiltro;
+import com.gmail.model.AbsUsuario;
 import com.gmail.model.CorreoFactory;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -168,6 +169,7 @@ public class CorreoService implements ICorreoService {
     AbsCorreo correoPorEnviar = (AbsCorreo) correoGuardado.clone();
     correoPorEnviar.setDestacado(false);
     correoPorEnviar.setImportante(false);
+    correoPorEnviar.setLeido(false);
 
     if (correoGuardado == null) {
       throw new CorreoError(1, idCorreo);
@@ -333,12 +335,28 @@ public class CorreoService implements ICorreoService {
     return correoGuardado;
   }
 
-  public AbsCorreo reeEnviar(int idCorreo, int idUsuario, int idUsuarioReenviador) throws CorreoError, SQLError,CloneNotSupportedException {
+  public AbsCorreo reeEnviar(int idCorreo, int idUsuarioEmisor, int idUsuarioReceptor) throws CorreoError, SQLError,CloneNotSupportedException {
 
-    AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
-    AbsCorreo correoPorEnviar = (AbsCorreo)correoGuardado.clone();
-    correoPorEnviar.setDestacado(false);
-    correoPorEnviar.setImportante(false);
+    AbsCorreo correoGuardado = obtenerRecibido(idCorreo, idUsuarioEmisor);
+    AbsUsuario emisor= usuarioDAO.getUsuario(correoGuardado.getIdUsuario());
+    AbsUsuario receptor= usuarioDAO.getUsuario(idUsuarioEmisor);
+
+    correoGuardado.setBorrado(false);
+    correoGuardado.setLeido(false);
+    correoGuardado.setDestacado(false);
+    correoGuardado.setImportante(false);
+    correoGuardado.setIdUsuario(idUsuarioEmisor);
+
+    correoGuardado.setCuerpo("\"Reenvio de correo\" \n De: " + emisor.getCorreo()+"-->Para: " + receptor.getCorreo()+"\n" +
+            "Enviado en la fecha: " + correoGuardado.getFechaHora() + "\n" + correoGuardado.getCuerpo());
+
+    CorreoDTO correoDTO= new CorreoDTO(correoGuardado);
+
+    correoGuardado = crear(correoDTO);
+
+    enviar(correoGuardado.getIdCorreo(),idUsuarioReceptor);
+
+
 
     return correoGuardado;
   }
