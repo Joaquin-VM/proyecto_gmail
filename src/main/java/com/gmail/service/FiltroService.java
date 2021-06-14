@@ -61,7 +61,7 @@ public class FiltroService implements IFiltroService {
   }
 
   @Override
-  public AbsFiltro eliminarEnviado(int idFiltro) throws FiltroError {
+  public AbsFiltro eliminarEnviado(int idFiltro) throws FiltroError, SQLError {
 
     AbsFiltro filtroGuardado = dao.getFiltro(idFiltro);
 

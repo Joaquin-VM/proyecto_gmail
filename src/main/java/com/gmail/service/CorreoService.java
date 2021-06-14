@@ -35,7 +35,7 @@ public class CorreoService implements ICorreoService {
   }
 
   @Override
-  public AbsCorreo modificar(CorreoDTO correo) throws CorreoError {
+  public AbsCorreo modificar(CorreoDTO correo) throws CorreoError, SQLError {
 
     correo = cargarNulls(correo);
 
@@ -63,7 +63,7 @@ public class CorreoService implements ICorreoService {
   }
 
   @Override
-  public AbsCorreo eliminarEnviado(int idCorreo) throws CorreoError {
+  public AbsCorreo eliminarEnviado(int idCorreo) throws CorreoError, SQLError {
 
     AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
 
@@ -84,7 +84,7 @@ public class CorreoService implements ICorreoService {
   }
 
   @Override
-  public AbsCorreo eliminarRecibido(int idCorreo, int idUsuario) throws CorreoError {
+  public AbsCorreo eliminarRecibido(int idCorreo, int idUsuario) throws CorreoError, SQLError {
 
     AbsCorreo correoGuardado = dao.getCorreoRecibido(idCorreo, idUsuario);
 
@@ -105,7 +105,7 @@ public class CorreoService implements ICorreoService {
   }
 
   @Override
-  public AbsCorreo obtenerEnviado(int idCorreo) throws CorreoError {
+  public AbsCorreo obtenerEnviado(int idCorreo) throws CorreoError, SQLError {
 
     AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
 
@@ -190,7 +190,7 @@ public class CorreoService implements ICorreoService {
     for (AbsFiltro filtro: filtroEnvio ) {
 
       //ASUNTO
-      if(!(filtro.getAsunto()==null) && !(correoGuardado.getAsunto()==null)){
+      if((filtro.getAsunto()!=null) && (correoGuardado.getAsunto()!=null)){
         if(correoGuardado.getAsunto().toLowerCase().contains(filtro.getAsunto().toLowerCase())){
           filtroEnviadoCoincidente.add(filtro);
           continue;
@@ -198,7 +198,7 @@ public class CorreoService implements ICorreoService {
       }
 
       //CUERPO
-      if(!(filtro.getContiene()==null) && !(correoGuardado.getCuerpo()==null)){
+      if((filtro.getContiene()!=null) && (correoGuardado.getCuerpo()!=null)){
         if(correoGuardado.getCuerpo().toLowerCase().contains(filtro.getContiene().toLowerCase())){
           filtroEnviadoCoincidente.add(filtro);
           continue;
@@ -249,7 +249,7 @@ public class CorreoService implements ICorreoService {
       if(filtro.getEliminar()){
         correoGuardado.setBorrado(true);
       }
-      if(!(filtro.getIdUsuarioReenviar()==0)){
+      if(filtro.getIdUsuarioReenviar()!=0){
         enviar(idCorreo, filtro.getIdUsuarioReenviar());
       }
     }
@@ -331,7 +331,6 @@ public class CorreoService implements ICorreoService {
     AbsCorreo correoPorEnviar = (AbsCorreo)correoGuardado.clone();
     correoPorEnviar.setDestacado(false);
     correoPorEnviar.setImportante(false);
-
 
     return correoGuardado;
   }
@@ -444,7 +443,7 @@ public class CorreoService implements ICorreoService {
   }
 
   @Override
-  public AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError {
+  public AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError, SQLError {
 
     AbsCorreo correoGuardado = dao.getCorreoRecibido(idCorreo, idUsuario);
 

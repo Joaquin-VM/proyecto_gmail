@@ -18,7 +18,7 @@ public interface IFiltroService {
     AbsFiltro modificar(FiltroDTO filtro) throws FiltroError ,SQLError;
 
 
-    AbsFiltro eliminarEnviado(int idFiltro) throws FiltroError;
+    AbsFiltro eliminarEnviado(int idFiltro) throws FiltroError, SQLError;
 
     AbsFiltro obtenerUno(int idFiltro) throws FiltroError, SQLError;
 

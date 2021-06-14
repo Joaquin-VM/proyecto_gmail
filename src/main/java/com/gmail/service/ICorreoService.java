@@ -18,13 +18,13 @@ public interface ICorreoService {
 
     AbsCorreo crear(CorreoDTO correo) throws SQLError, CorreoError;
 
-    AbsCorreo modificar(CorreoDTO correo) throws  CorreoError;
+    AbsCorreo modificar(CorreoDTO correo) throws CorreoError, SQLError;
 
-    AbsCorreo eliminarEnviado(int idCorreo) throws CorreoError;
+    AbsCorreo eliminarEnviado(int idCorreo) throws CorreoError, SQLError;
 
-    AbsCorreo eliminarRecibido(int idCorreo, int idUsuario) throws CorreoError;
+    AbsCorreo eliminarRecibido(int idCorreo, int idUsuario) throws CorreoError, SQLError;
 
-    AbsCorreo obtenerEnviado(int idCorreo) throws CorreoError;
+    AbsCorreo obtenerEnviado(int idCorreo) throws CorreoError, SQLError;
 
     AbsCorreo obtenerRecibido(int idCorreo, int idUsuario)
         throws CorreoError, SQLError;
@@ -51,6 +51,6 @@ public interface ICorreoService {
     List<AbsCorreo> obtenerNoLeidos(int idUsuario)
             throws CorreoError, SQLError;
 
-    AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError;
+    AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError, SQLError;
 
 }
