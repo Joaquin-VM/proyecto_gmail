@@ -257,7 +257,10 @@ public class CorreoService implements ICorreoService {
         etiquetaDAO.agregarEtiquetaACorreo(correoGuardado.getIdCorreo(),filtro.getIdEtiqueta());
       }
       if(filtro.getIdUsuarioReenviar()!=0){
-        enviar(idCorreo, filtro.getIdUsuarioReenviar());
+        if (dao.enviarCorreo(correoPorEnviar, filtro.getIdUsuarioReenviar())) {
+        } else {
+          throw new CorreoError(6, filtro.getIdUsuarioReenviar());
+        }
       }
     }
 
@@ -279,7 +282,7 @@ public class CorreoService implements ICorreoService {
         etiquetaDAO.agregarEtiquetaACorreo(correoGuardado.getIdCorreo(),filtro.getIdEtiqueta());
       }
       if(!(filtro.getIdUsuarioReenviar()==0)){
-        enviar(idCorreo, filtro.getIdUsuarioReenviar());
+        reeEnviar(idCorreo, idUsuario, filtro.getIdUsuarioReenviar());
       }
     }
 
@@ -484,6 +487,7 @@ public class CorreoService implements ICorreoService {
     if (correoGuardado.getLeido()) {
       return correoGuardado;
     } else {
+      correoGuardado.setLeido(true);
       if (!dao.updateCorreoRecibido(correoGuardado, idUsuario)) {
         throw new CorreoError(4);
       }
