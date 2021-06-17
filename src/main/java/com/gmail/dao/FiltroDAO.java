@@ -1,20 +1,19 @@
 package com.gmail.dao;
 
 import com.gmail.conf.DBCPDataSourceFactory;
-import com.gmail.exception.SQLError;
+import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsFiltro;
 import com.gmail.model.FiltroFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FiltroDAO {
 
-  public static AbsFiltro addFiltro(AbsFiltro filtro) throws SQLError {
+  public static AbsFiltro addFiltro(AbsFiltro filtro) throws SQLDBException {
 
     String INSERT_FILTRO_SQL =
         "INSERT INTO filtro (id_usuario, emisor, receptor, asunto, contiene, leido, "
@@ -48,14 +47,14 @@ public class FiltroDAO {
         filtro.setIdFiltro(rs.getInt(1));
       }
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al crear el filtro.");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al crear el filtro.");
     }
 
     return filtro;
   }
 
-  public AbsFiltro getFiltro(int idFiltro) throws SQLError {
+  public AbsFiltro getFiltro(int idFiltro) throws SQLDBException {
 
     String QUERY = "SELECT id_filtro, id_usuario, emisor, receptor, asunto, "
         + "contiene, leido, destacar, importante, eliminar, spam,"
@@ -87,15 +86,15 @@ public class FiltroDAO {
             .setIdUsuarioReenviar(rs.getInt("id_usuario_reenviar"));
       }
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al obtener el filtro con el id " + idFiltro + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al obtener el filtro con el id " + idFiltro + ".");
     }
 
     return filtro;
 
   }
 
-  public List<AbsFiltro> listarFiltrosUsuario(int idUsuario) throws SQLError {
+  public List<AbsFiltro> listarFiltrosUsuario(int idUsuario) throws SQLDBException {
 
     String QUERY = "SELECT * FROM filtro WHERE id_usuario = ?";
     List<AbsFiltro> listaFiltros = new ArrayList<>();
@@ -123,15 +122,15 @@ public class FiltroDAO {
         listaFiltros.add(filtro);
       }
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al obtener el listado de filtros del usuario con id " + idUsuario + ".");
     }
 
     return listaFiltros;
   }
 
-  public boolean updateFiltro(AbsFiltro filtro) throws SQLError {
+  public boolean updateFiltro(AbsFiltro filtro) throws SQLDBException {
 
     String UPDATE_FILTRO_SQL = "UPDATE filtro " +
         "SET id_usuario = ?," +
@@ -163,15 +162,16 @@ public class FiltroDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al actualizar el filtro con id " + filtro.getIdFiltro() + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
+          "Error al actualizar el filtro con id " + filtro.getIdFiltro() + ".");
     }
 
     return true;
 
   }
 
-  public boolean deleteFiltro(int idFiltro) throws SQLError {
+  public boolean deleteFiltro(int idFiltro) throws SQLDBException {
 
     String DELETE_FILTRO_SQL = "DELETE FROM filtro WHERE id_filtro = ?";
 
@@ -186,8 +186,8 @@ public class FiltroDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al actualizar el filtro con id " + idFiltro + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al actualizar el filtro con id " + idFiltro + ".");
     }
 
     return true;

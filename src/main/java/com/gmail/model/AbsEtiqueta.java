@@ -9,9 +9,10 @@ public abstract class AbsEtiqueta implements Cloneable {
   String nombreEtiqueta;
   int idUsuario;
 
-  public AbsEtiqueta(){}
+  public AbsEtiqueta() {
+  }
 
-  public AbsEtiqueta(EtiquetaDTO dto){
+  public AbsEtiqueta(EtiquetaDTO dto) {
     this.idEtiqueta = dto.getIdEtiqueta();
     this.nombreEtiqueta = dto.getNombreEtiqueta();
     this.idUsuario = dto.getIdUsuario();

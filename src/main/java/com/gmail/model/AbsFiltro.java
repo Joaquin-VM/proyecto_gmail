@@ -16,12 +16,13 @@ public abstract class AbsFiltro implements Cloneable {
   Boolean importante;
   Boolean eliminar;
   Boolean spam;
-  int idEtiqueta=0;
-  int idUsuarioReenviar=0;
+  int idEtiqueta = 0;
+  int idUsuarioReenviar = 0;
 
-  public AbsFiltro(){}
+  public AbsFiltro() {
+  }
 
-  public AbsFiltro(FiltroDTO dto){
+  public AbsFiltro(FiltroDTO dto) {
     this.idFiltro = dto.getIdFiltro();
     this.idUsuario = dto.getIdUsuario();
     this.idEmisor = dto.getIdEmisor();

@@ -2,8 +2,8 @@ package com.gmail.service;
 
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.UsuarioDTO;
-import com.gmail.exception.SQLError;
-import com.gmail.exception.ValidationError;
+import com.gmail.exception.SQLDBException;
+import com.gmail.exception.ValidationException;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.UsuarioFactory;
 
@@ -12,14 +12,14 @@ public class UsuarioService implements IUsuarioService {
   private UsuarioDAO dao = new UsuarioDAO();
 
   @Override
-  public AbsUsuario crear(UsuarioDTO dto) throws ValidationError, SQLError {
+  public AbsUsuario crear(UsuarioDTO dto) throws ValidationException, SQLDBException {
 
     if (!validarDatos(dto)) {
-      throw new ValidationError("Los datos ingresados de usuario son invalidos.");
+      throw new ValidationException("Los datos ingresados de usuario son invalidos.");
     }
 
     if (existeUsuario(dto.getCorreo())) {
-      throw new SQLError(
+      throw new SQLDBException(
           "El usuario a agregar tiene un correo que ya ha sido elegido por otro usuario.");
     }
 
@@ -28,10 +28,10 @@ public class UsuarioService implements IUsuarioService {
   }
 
   @Override
-  public AbsUsuario obtenerUno(int idUsuario) throws SQLError {
+  public AbsUsuario obtenerUno(int idUsuario) throws SQLDBException {
 
     if (!existeUsuario(idUsuario)) {
-      throw new SQLError("El usuario a obtener no existe.");
+      throw new SQLDBException("El usuario a obtener no existe.");
     }
 
     return dao.getUsuario(idUsuario);
@@ -39,10 +39,10 @@ public class UsuarioService implements IUsuarioService {
   }
 
   @Override
-  public AbsUsuario obtenerUno(String correo) throws SQLError {
+  public AbsUsuario obtenerUno(String correo) throws SQLDBException {
 
     if (!existeUsuario(correo)) {
-      throw new SQLError("El usuario a obtener no existe.");
+      throw new SQLDBException("El usuario a obtener no existe.");
     }
 
     return dao.getUsuario(correo);
@@ -51,14 +51,14 @@ public class UsuarioService implements IUsuarioService {
 
   @Override
   public AbsUsuario modificar(UsuarioDTO usuarioModificado)
-      throws ValidationError, SQLError {
+      throws ValidationException, SQLDBException {
 
     if (!existeUsuario(usuarioModificado.getIdUsuario())) {
-      throw new SQLError("El usuario a modificar no existe.");
+      throw new SQLDBException("El usuario a modificar no existe.");
     }
 
     if (!validarDatos(usuarioModificado)) {
-      throw new ValidationError("Los datos ingresados de usuario son invalidos.");
+      throw new ValidationException("Los datos ingresados de usuario son invalidos.");
     }
 
     return dao.updateUsuario(UsuarioFactory.buildUsuario(usuarioModificado));
@@ -66,10 +66,10 @@ public class UsuarioService implements IUsuarioService {
   }
 
   @Override
-  public boolean eliminar(int idUsuario) throws SQLError {
+  public boolean eliminar(int idUsuario) throws SQLDBException {
 
     if (!existeUsuario(idUsuario)) {
-      throw new SQLError("El usuario a eliminar no existe.");
+      throw new SQLDBException("El usuario a eliminar no existe.");
     }
 
     return dao.deleteUsuario(idUsuario);
@@ -77,20 +77,20 @@ public class UsuarioService implements IUsuarioService {
   }
 
 
-  private boolean existeUsuario(int idUsuario) throws SQLError {
+  private boolean existeUsuario(int idUsuario) throws SQLDBException {
 
     if (idUsuario <= 0) {
-      return false;
+      throw new SQLDBException("El usuario a eliminar no existe.");
     }
 
     return dao.getUsuario(idUsuario) != null;
 
   }
 
-  private boolean existeUsuario(String correo) throws SQLError {
+  private boolean existeUsuario(String correo) throws SQLDBException {
 
     if (correo.isBlank()) {
-      return false;
+      throw new SQLDBException("El usuario a eliminar no existe.");
     }
 
     return dao.getUsuario(correo) != null;

@@ -2,7 +2,6 @@ package com.gmail.model;
 
 import com.gmail.dto.CorreoDTO;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public abstract class AbsCorreo implements Cloneable {
 
@@ -17,7 +16,8 @@ public abstract class AbsCorreo implements Cloneable {
   Boolean destacado;
   Boolean importante;
 
-  public AbsCorreo() {}
+  public AbsCorreo() {
+  }
 
   public AbsCorreo(CorreoDTO dto) {
     this.idCorreo = dto.getIdCorreo();
@@ -73,46 +73,13 @@ public abstract class AbsCorreo implements Cloneable {
   public abstract AbsCorreo setImportante(Boolean importante);
 
   @Override
-  public String toString() {
-    return "AbsCorreo{" +
-        "idCorreo=" + idCorreo +
-        ", idUsuario=" + idUsuario +
-        ", asunto='" + asunto + '\'' +
-        ", cuerpo='" + cuerpo + '\'' +
-        ", fechaHora=" + fechaHora +
-        ", confirmado=" + confirmado +
-        ", borrado=" + borrado +
-        ", leido=" + leido +
-        ", destacado=" + destacado +
-        ", importante=" + importante +
-        '}';
-  }
+  public abstract String toString();
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof AbsCorreo)) {
-      return false;
-    }
-    AbsCorreo absCorreo = (AbsCorreo) o;
-    return idCorreo == absCorreo.idCorreo && idUsuario == absCorreo.idUsuario && Objects
-        .equals(asunto, absCorreo.asunto) && Objects.equals(cuerpo, absCorreo.cuerpo)
-        && Objects.equals(fechaHora, absCorreo.fechaHora) && Objects
-        .equals(confirmado, absCorreo.confirmado) && Objects
-        .equals(borrado, absCorreo.borrado) && Objects.equals(leido, absCorreo.leido)
-        && Objects.equals(destacado, absCorreo.destacado) && Objects
-        .equals(importante, absCorreo.importante);
-  }
+  public abstract boolean equals(Object o);
 
   @Override
-  public int hashCode() {
-    return Objects
-        .hash(idCorreo, idUsuario, asunto, cuerpo, fechaHora, confirmado, borrado, leido,
-            destacado,
-            importante);
-  }
+  public abstract int hashCode();
 
   @Override
   public Object clone() throws CloneNotSupportedException {

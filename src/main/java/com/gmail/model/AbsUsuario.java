@@ -2,7 +2,6 @@ package com.gmail.model;
 
 import com.gmail.dto.UsuarioDTO;
 import java.time.LocalDate;
-import java.util.Objects;
 
 public abstract class AbsUsuario implements Cloneable {
 
@@ -15,14 +14,16 @@ public abstract class AbsUsuario implements Cloneable {
   String sexo;
   LocalDate fechaNacimiento;
 
-  public AbsUsuario(){}
+  public AbsUsuario() {
+  }
 
-  public AbsUsuario(UsuarioDTO dto){
+  public AbsUsuario(UsuarioDTO dto) {
     this.idUsuario = dto.getIdUsuario();
     this.nombre = dto.getNombre();
     this.apellido = dto.getApellido();
     this.correo = dto.getCorreo();
     this.contrasenia = dto.getContrasenia();
+    this.telefono = dto.getTelefono();
     this.sexo = dto.getSexo();
     this.fechaNacimiento = dto.getFechaNacimiento();
   }
@@ -60,45 +61,15 @@ public abstract class AbsUsuario implements Cloneable {
   public abstract AbsUsuario setFechaNacimiento(LocalDate fechaNacimiento);
 
   @Override
-  public String toString() {
-    return "AbsUsuario{" +
-        "idUsuario=" + idUsuario +
-        ", nombre='" + nombre + '\'' +
-        ", apellido='" + apellido + '\'' +
-        ", correo='" + correo + '\'' +
-        ", contrasenia='" + contrasenia + '\'' +
-        ", telefono='" + telefono + '\'' +
-        ", sexo='" + sexo + '\'' +
-        ", fechaNacimiento=" + fechaNacimiento +
-        '}';
-  }
+  public abstract String toString();
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof AbsUsuario)) {
-      return false;
-    }
-    AbsUsuario that = (AbsUsuario) o;
-    return idUsuario == that.idUsuario && Objects.equals(nombre, that.nombre)
-        && Objects.equals(apellido, that.apellido) && Objects
-        .equals(correo, that.correo) && Objects.equals(contrasenia, that.contrasenia)
-        && Objects.equals(telefono, that.telefono) && Objects
-        .equals(sexo, that.sexo) && Objects.equals(fechaNacimiento, that.fechaNacimiento);
-  }
+  public abstract boolean equals(Object o);
 
   @Override
-  public int hashCode() {
-    return Objects
-        .hash(idUsuario, nombre, apellido, correo, contrasenia, telefono, sexo,
-            fechaNacimiento);
-  }
+  public abstract int hashCode();
 
   @Override
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
+  public abstract Object clone() throws CloneNotSupportedException;
 
 }

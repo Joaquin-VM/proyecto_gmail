@@ -1,12 +1,10 @@
 package com.gmail.exception;
 
-import java.sql.SQLException;
-
-public class SQLError extends SQLException {
+public class SQLDBException extends java.sql.SQLException {
 
   String mensaje;
 
-  public SQLError(String mensaje) {
+  public SQLDBException(String mensaje) {
     this.mensaje = mensaje;
   }
 

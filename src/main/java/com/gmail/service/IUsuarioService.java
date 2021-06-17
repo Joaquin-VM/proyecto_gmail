@@ -1,22 +1,21 @@
 package com.gmail.service;
 
 import com.gmail.dto.UsuarioDTO;
-import com.gmail.exception.SQLError;
-import com.gmail.exception.ValidationError;
+import com.gmail.exception.SQLDBException;
+import com.gmail.exception.ValidationException;
 import com.gmail.model.AbsUsuario;
-import java.sql.SQLException;
 
 public interface IUsuarioService {
 
-  AbsUsuario crear(UsuarioDTO usuario) throws ValidationError, SQLError;
+  AbsUsuario crear(UsuarioDTO usuario) throws ValidationException, SQLDBException;
 
-  AbsUsuario obtenerUno(int idUsuario) throws SQLError;
+  AbsUsuario obtenerUno(int idUsuario) throws SQLDBException;
 
-  AbsUsuario obtenerUno(String correo) throws SQLError;
+  AbsUsuario obtenerUno(String correo) throws SQLDBException;
 
   AbsUsuario modificar(UsuarioDTO usuarioModificado)
-      throws ValidationError, SQLException;
+      throws ValidationException, java.sql.SQLException;
 
-  boolean eliminar(int idUsuario) throws SQLError;
+  boolean eliminar(int idUsuario) throws SQLDBException;
 
 }
