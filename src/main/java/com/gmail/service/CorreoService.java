@@ -278,9 +278,6 @@ public class CorreoService implements ICorreoService {
       if(filtro.getEliminar()){
         correoPorEnviar.setBorrado(true);
       }
-      if(filtro.getIdEtiqueta()!=0){
-        etiquetaDAO.agregarEtiquetaACorreo(correoGuardado.getIdCorreo(),filtro.getIdEtiqueta());
-      }
       if(!(filtro.getIdUsuarioReenviar()==0)){
         reeEnviar(idCorreo, idUsuario, filtro.getIdUsuarioReenviar());
       }
