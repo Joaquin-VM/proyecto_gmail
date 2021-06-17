@@ -7,13 +7,10 @@ import com.gmail.dto.CorreoDTO;
 import com.gmail.dto.EtiquetaDTO;
 import com.gmail.dto.FiltroDTO;
 import com.gmail.dto.UsuarioDTO;
-import com.gmail.exception.CorreoError;
-import com.gmail.exception.SQLError;
-import com.gmail.exception.ValidationError;
-import com.gmail.model.AbsCorreo;
-import com.gmail.model.AbsUsuario;
-import com.gmail.model.CorreoFactory;
-import com.gmail.model.UsuarioFactory;
+import com.gmail.exception.CorreoException;
+import com.gmail.exception.SQLDBException;
+import com.gmail.exception.ValidationException;
+import com.gmail.model.*;
 import com.gmail.service.*;
 
 import java.time.LocalDate;
@@ -21,7 +18,7 @@ import java.time.LocalDate;
 public class Main {
 
 
-  public static void main(String[] args) throws SQLError, ValidationError, CorreoError, CloneNotSupportedException {
+  public static void main(String[] args) throws CloneNotSupportedException, SQLDBException, CorreoException, ValidationException {
 
 //    UsuarioDAO usuarioDAO = new UsuarioDAO();
 //
@@ -112,6 +109,7 @@ public class Main {
       FiltroService filtroService=new FiltroService();
       MostarService mostarService=new MostarService();
       UsuarioDTO usuario = new UsuarioDTO();
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //CARGAMOS 3 USUARIOS A MODO DE EJEMPLO
       usuario.setNombre("Gaston");
       usuario.setApellido("Zaragosi");
@@ -121,6 +119,7 @@ public class Main {
       usuario.setSexo("Masculino");
       usuario.setTelefono("54 9 32313213");
       usuarioService.crear(usuario);
+      ////////////
       usuario.setNombre("Joaquin");
       usuario.setApellido("Vega");
       usuario.setCorreo("jvega420@iua.edu.ar");
@@ -129,6 +128,7 @@ public class Main {
       usuario.setSexo("Masculino");
       usuario.setTelefono("54 9 323786952");
       usuarioService.crear(usuario);
+      ////////////
       usuario.setNombre("Marta");
       usuario.setApellido("Gonzales");
       usuario.setCorreo("mgonzales999@iua.edu.ar");
@@ -138,12 +138,14 @@ public class Main {
       usuario.setTelefono("54 9 32313213");
       usuarioService.crear(usuario);
 
-      //OBTENEMOS UN SUSUARIO POR CORREO Y POR ID
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
+      //OBTENEMOS UN USUARIO POR CORREO Y POR ID
       AbsUsuario absUsuario= UsuarioFactory.buildUsuario();
       absUsuario = usuarioService.obtenerUno("gzaragoi782@iua.edu.ar");
       System.out.println(absUsuario.getIdUsuario());
       System.out.println(usuarioService.obtenerUno(1));
 
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "gzaragoi782@iua.edu.ar" CREA UN CORREO
       CorreoDTO correo = new CorreoDTO();
       AbsCorreo absCorreo = CorreoFactory.buildCorreo();
@@ -152,33 +154,45 @@ public class Main {
       correo.setCuerpo("Te queria contar que hoy fue un buen dia para mi");
       absCorreo=correoService.crear(correo);
 
-
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "gzaragoi782@iua.edu.ar" ENVIA EL CORREO A "jvega420@iua.edu.ar"
       absUsuario = usuarioService.obtenerUno("jvega420@iua.edu.ar");
       correoService.enviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario());
 
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "gzaragoi782@iua.edu.ar" BORRA EL CORREO QUE ENVIO
       correoService.eliminarEnviado(absCorreo.getIdCorreo());
 
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "jvega420@iua.edu.ar" CREA UN FILTRO PARA DESTACAR AUTOMATICAMENTE LOS CORREOS DE ASUNTO "Hola"
       FiltroDTO filtro = new FiltroDTO();
       filtro.setDestacar(true);
       filtro.setAsunto("Hola");
 
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "jvega420@iua.edu.ar" REENVIA EL CORREO A "mgonzales999@iua.edu.ar"
       AbsUsuario absUsuario2 = usuarioService.obtenerUno("mgonzales999@iua.edu.ar");
       correoService.reeEnviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario(),absUsuario2.getIdUsuario());
       absCorreo=correoService.crear(correo);
 
 
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "jvega420@iua.edu.ar" CREEA UNA ETIQUETA LLAMADA "PrimeraEtiqueta"
       EtiquetaDTO etiquetaDTO= new EtiquetaDTO();
+      AbsEtiqueta absEtiqueta=EtiquetaFactory.buildEtiqueta();
       etiquetaDTO.setIdUsuario(absUsuario.getIdUsuario());
       etiquetaDTO.setNombreEtiqueta("PrimeraEtiqueta");
+      absEtiqueta=etiquetaService.crear(etiquetaDTO);
 
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
+      //EL USUARIO "jvega420@iua.edu.ar" ASIGNA LA ETIQUETA "PrimeraEtiqueta" A EL CORREO QUE REENVIO
+      etiquetaService.agregarEtiquetaACorreo(absEtiqueta.getIdEtiqueta(),absCorreo.getIdCorreo());
+
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "jvega420@iua.edu.ar" VE SUS MAIL ENVIADOS
-      correoService.obtenerEnviados(absUsuario.getIdUsuario(), false);
+      mostarService.mostrarCorreos(correoService.obtenerEnviados(absUsuario.getIdUsuario(), false));
 
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "mgonzales999@iua.edu.ar" CREA Y ENVIA UN CORREO A "jvega420@iua.edu.ar"
       correo.setIdUsuario(absUsuario2.getIdUsuario());
       correo.setAsunto("Como andas?");
@@ -186,9 +200,29 @@ public class Main {
       absCorreo=correoService.crear(correo);
       correoService.enviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario());
 
-
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       //EL USUARIO "jvega420@iua.edu.ar" VE SUS MAIL RECIBIDOS
-      correoService.obtenerRecibidos(absUsuario.getIdUsuario(),false);
+      mostarService.mostrarCorreos(correoService.obtenerRecibidos(absUsuario.getIdUsuario(),false));
+
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
+      //EL USUARIO "jvega420@iua.edu.ar" LISTA SUS ETIQUETAS
+      for(AbsEtiqueta etiqueta:etiquetaService.listarEtiquetasUsuario(absUsuario.getIdUsuario())){
+          System.out.println(etiqueta);
+      }
+
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
+      //EL USUARIO "jvega420@iua.edu.ar" LEE EL CORREO QUE LE ENVIO "mgonzales999@iua.edu.ar"
+      mostarService.abrirCorreo(correoService.leeCorreo(absUsuario.getIdUsuario(), absCorreo.getIdCorreo()));
+
+      System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
+      //EL USUARIO "jvega420@iua.edu.ar" CREA UN CORREO, LO MODIFICA Y LUEGO LO ENVIA A "gzaragoi782@iua.edu.ar"
+      correo.setIdUsuario(absUsuario.getIdUsuario());
+      correo.setAsunto("Todo vien?");
+      correo.setCuerpo("Yo bien, al menos");
+      absCorreo=correoService.crear(correo);
+      correo.setAsunto("Todo bien?");
+      absCorreo=correoService.modificar(correo);
+      correoService.enviar(absCorreo.getIdCorreo(),usuarioService.obtenerUno("gzaragoi782@iua.edu.ar").getIdUsuario());
 
 
 
