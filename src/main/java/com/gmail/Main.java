@@ -94,6 +94,11 @@ public class Main {
 
     //USUARIO YA SE PROBO.
 
+    AbsUsuario usuario = UsuarioFactory.buildUsuario();
+       usuario.setNombre("Pablito").setApellido("Perez")
+               .setCorreo("hola3@gmail.com").setContrasenia("a").setFechaNacimiento(LocalDate.now())
+               .setSexo("Masculino").setTelefono("54 9 32313213");
+
 
 
 
