@@ -1,13 +1,12 @@
 package com.gmail.dao;
 
 import com.gmail.conf.DBCPDataSourceFactory;
-import com.gmail.exception.SQLError;
+import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsCorreo;
 import com.gmail.model.CorreoFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class CorreoDAO {
 
-  public AbsCorreo addCorreo(AbsCorreo correo) throws SQLError {
+  public AbsCorreo addCorreo(AbsCorreo correo) throws SQLDBException {
 
     String INSERT_CORREO_SQL = "INSERT INTO correo" +
         "(id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante)"
@@ -47,14 +46,14 @@ public class CorreoDAO {
         correo.setIdCorreo(rs.getInt(1));
       }
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al agregar el correo.");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al agregar el correo.");
     }
 
     return correo;
   }
 
-  public AbsCorreo getCorreo(int idCorreo) throws SQLError {
+  public AbsCorreo getCorreo(int idCorreo) throws SQLDBException {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -84,15 +83,15 @@ public class CorreoDAO {
             .setImportante(rs.getShort("importante") == 1);
       }
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al obtener el correo con el id " + idCorreo + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al obtener el correo con el id " + idCorreo + ".");
     }
 
     return correo;
 
   }
 
-  public AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) throws SQLError {
+  public AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) throws SQLDBException {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, r.borrado, r.leido, r.destacado, r.importante"
@@ -125,8 +124,8 @@ public class CorreoDAO {
       }
 
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al obtener el correo con el id " + idCorreo + " recibido por el usuario "
               + idUsuario + ".");
     }
@@ -135,7 +134,7 @@ public class CorreoDAO {
 
   }
 
-  public List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) throws SQLError {
+  public List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) throws SQLDBException {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -168,8 +167,8 @@ public class CorreoDAO {
       }
 
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al obtener la lista de correos recibidos por el usuario con el id " + idUsuario
               + ".");
     }
@@ -178,7 +177,7 @@ public class CorreoDAO {
 
   }
 
-  public List<AbsCorreo> getCorreosEnviados(int idUsuario, boolean borrado) throws SQLError {
+  public List<AbsCorreo> getCorreosEnviados(int idUsuario, boolean borrado) throws SQLDBException {
 
     String QUERY =
         "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
@@ -211,8 +210,8 @@ public class CorreoDAO {
       }
 
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al obtener la lista de correos enviados por el usuario con el id " + idUsuario
               + ".");
     }
@@ -221,7 +220,7 @@ public class CorreoDAO {
 
   }
 
-  public boolean updateCorreo(AbsCorreo correo) throws SQLError {
+  public boolean updateCorreo(AbsCorreo correo) throws SQLDBException {
     String UPDATE_CORREO_SQL = "UPDATE correo " +
         "SET id_usuario = ?, asunto = ?,  cuerpo = ?,  fecha_hora = ?,  confirmado = ?,  borrado = ?,"
         + " leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ?;";
@@ -246,15 +245,16 @@ public class CorreoDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al actualizar el correo con el id " + correo.getIdCorreo() + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
+          "Error al actualizar el correo con el id " + correo.getIdCorreo() + ".");
     }
 
     return true;
 
   }
 
-  public boolean deleteCorreo(int idCorreo, int idUsuario) throws SQLError {
+  public boolean deleteCorreo(int idCorreo, int idUsuario) throws SQLDBException {
 
     String DELETE_CORREO_SQL = "UPDATE recibidos SET borrado = ? WHERE id_usuario_2 = ? AND id_correo = ?";
 
@@ -271,15 +271,15 @@ public class CorreoDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al eliminar el correo con el id " + idCorreo + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al eliminar el correo con el id " + idCorreo + ".");
     }
 
     return true;
 
   }
 
-  public boolean deleteCorreo(int idCorreo) throws SQLError {
+  public boolean deleteCorreo(int idCorreo) throws SQLDBException {
 
     String UPDATE_CORREO_SQL = "UPDATE correo SET borrado = ? WHERE id_correo = ?;";
 
@@ -295,15 +295,15 @@ public class CorreoDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al eliminar el correo con el id " + idCorreo + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al eliminar el correo con el id " + idCorreo + ".");
     }
 
     return true;
 
   }
 
-  public boolean enviarCorreo(AbsCorreo correo, int id_receptor) throws SQLError {
+  public boolean enviarCorreo(AbsCorreo correo, int id_receptor) throws SQLDBException {
 
     String INSERT_ENVIAR_SQL = "INSERT INTO recibidos" +
         "(id_usuario_2, id_correo, borrado, leido, destacado, importante)" +
@@ -324,8 +324,8 @@ public class CorreoDAO {
 
       preparedStatement.executeUpdate();
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al enviar el correo con el id " + correo.getIdCorreo() + " al usuario con el id "
               + id_receptor + ".");
     }
@@ -333,7 +333,7 @@ public class CorreoDAO {
     return true;
   }
 
-  public boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario) throws SQLError {
+  public boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario) throws SQLDBException {
     String UPDATE_CORREO_SQL = "UPDATE correo " +
         "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ? AND id_usuario_2;";
 
@@ -353,8 +353,8 @@ public class CorreoDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al actualizar el correo con el id " + correo.getIdCorreo()
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al actualizar el correo con el id " + correo.getIdCorreo()
           + " recibido por el usuario con el id " + idUsuario + ".");
     }
 
@@ -362,7 +362,7 @@ public class CorreoDAO {
 
   }
 
-  public int enviarCorreo(AbsCorreo correo, int[] id_receptores) throws SQLError {
+  public int enviarCorreo(AbsCorreo correo, int[] id_receptores) throws SQLDBException {
     int cantE = 0;
     for (int i : id_receptores) {
 

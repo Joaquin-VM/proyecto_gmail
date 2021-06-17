@@ -1,29 +1,24 @@
 package com.gmail.service;
 
-import com.gmail.dao.FiltroDAO;
-import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.FiltroDTO;
-import com.gmail.exception.FiltroError;
-import com.gmail.exception.SQLError;
+import com.gmail.exception.FiltroException;
+import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsFiltro;
-import com.gmail.model.FiltroFactory;
-
 import java.util.List;
 
 public interface IFiltroService {
 
-    AbsFiltro crear(FiltroDTO filtro) throws FiltroError, SQLError;
+  AbsFiltro crear(FiltroDTO filtro) throws FiltroException, SQLDBException;
 
 
-    AbsFiltro modificar(FiltroDTO filtro) throws FiltroError ,SQLError;
+  AbsFiltro modificar(FiltroDTO filtro) throws FiltroException, SQLDBException;
 
 
-    AbsFiltro eliminarEnviado(int idFiltro) throws FiltroError, SQLError;
+  AbsFiltro eliminarEnviado(int idFiltro) throws FiltroException, SQLDBException;
 
-    AbsFiltro obtenerUno(int idFiltro) throws FiltroError, SQLError;
+  AbsFiltro obtenerUno(int idFiltro) throws FiltroException, SQLDBException;
 
-    List<AbsFiltro> listarFiltroPorUsuario(int idUsuario) throws FiltroError, SQLError;
-
+  List<AbsFiltro> listarFiltroPorUsuario(int idUsuario) throws FiltroException, SQLDBException;
 
 
 }

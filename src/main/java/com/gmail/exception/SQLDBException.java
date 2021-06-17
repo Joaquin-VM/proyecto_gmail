@@ -1,7 +1,5 @@
 package com.gmail.exception;
 
-import java.sql.SQLException;
-
 public class SQLDBException extends java.sql.SQLException {
 
   String mensaje;

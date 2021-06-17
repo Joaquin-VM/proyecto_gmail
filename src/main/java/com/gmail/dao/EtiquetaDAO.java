@@ -1,20 +1,19 @@
 package com.gmail.dao;
 
 import com.gmail.conf.DBCPDataSourceFactory;
-import com.gmail.exception.SQLError;
+import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsEtiqueta;
 import com.gmail.model.EtiquetaFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EtiquetaDAO {
 
-  public AbsEtiqueta addEtiqueta(AbsEtiqueta etiqueta) throws SQLError {
+  public AbsEtiqueta addEtiqueta(AbsEtiqueta etiqueta) throws SQLDBException {
 
     String INSERT_ETIQUETA_SQL = "INSERT INTO etiqueta" +
         "(nombre_etiqueta, id_usuario) VALUES (?, ?)";
@@ -36,15 +35,15 @@ public class EtiquetaDAO {
         etiqueta.setIdEtiqueta(rs.getInt(1));
       }
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al agregar la etiqueta de nombre " + etiqueta.getNombreEtiqueta() + ".");
     }
 
     return etiqueta;
   }
 
-  public AbsEtiqueta getEtiqueta(int idEtiqueta) throws SQLError {
+  public AbsEtiqueta getEtiqueta(int idEtiqueta) throws SQLDBException {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_etiqueta = ?";
 
@@ -67,8 +66,8 @@ public class EtiquetaDAO {
       }
 
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al obtener la etiqueta con el id " + idEtiqueta + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al obtener la etiqueta con el id " + idEtiqueta + ".");
     }
 
     return etiqueta;
@@ -76,7 +75,7 @@ public class EtiquetaDAO {
   }
 
   public List<AbsEtiqueta> getEtiquetasCoincidentes(String nombreEtiqueta, int idUsuario)
-      throws SQLError {
+      throws SQLDBException {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta "
         + "WHERE nombre_etiqueta LIKE '%?%' AND id_usuario = ?";
@@ -102,8 +101,8 @@ public class EtiquetaDAO {
       }
 
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al obtener la lista de etiquetas con el nombre " +
               nombreEtiqueta + ".");
     }
@@ -112,7 +111,7 @@ public class EtiquetaDAO {
 
   }
 
-  public List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario) throws SQLError {
+  public List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario) throws SQLDBException {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta WHERE id_usuario = ?";
     List<AbsEtiqueta> listaEtiquetas = new ArrayList<>();
@@ -132,15 +131,15 @@ public class EtiquetaDAO {
         listaEtiquetas.add(etiqueta);
       }
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al obtener el listado de etiquetas del usuario con id " + idUsuario + ".");
     }
 
     return listaEtiquetas;
   }
 
-  public boolean updateEtiqueta(AbsEtiqueta etiqueta) throws SQLError {
+  public boolean updateEtiqueta(AbsEtiqueta etiqueta) throws SQLDBException {
 
     String UPDATE_ETIQUETA_SQL = "UPDATE etiqueta SET nombre_etiqueta = ? WHERE id_etiqueta = ?";
 
@@ -156,15 +155,16 @@ public class EtiquetaDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al modificar la etiqueta con id " + etiqueta.getIdEtiqueta() + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
+          "Error al modificar la etiqueta con id " + etiqueta.getIdEtiqueta() + ".");
     }
 
     return true;
 
   }
 
-  public boolean deleteEtiqueta(int idEtiqueta) throws SQLError {
+  public boolean deleteEtiqueta(int idEtiqueta) throws SQLDBException {
 
     String DELETE_ETIQUETA_SQL = "DELETE FROM etiqueta WHERE id_etiqueta = ?";
 
@@ -179,15 +179,15 @@ public class EtiquetaDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al eliminar la etiqueta con id " + idEtiqueta + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al eliminar la etiqueta con id " + idEtiqueta + ".");
     }
 
     return true;
 
   }
 
-  public boolean agregarEtiquetaACorreo(int idCorreo, int idEtiqueta) throws SQLError {
+  public boolean agregarEtiquetaACorreo(int idCorreo, int idEtiqueta) throws SQLDBException {
 
     String INSERT_CLASIFICAR_SQL = "INSERT INTO clasificar" +
         "(id_correo, id_etiqueta) VALUES (?, ?)";
@@ -203,8 +203,8 @@ public class EtiquetaDAO {
 
       preparedStatement.executeUpdate();
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al agregar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta
               + ".");
     }
@@ -212,7 +212,7 @@ public class EtiquetaDAO {
     return true;
   }
 
-  public List<AbsEtiqueta> obtenerEtiquetasDeCorreo(int idCorreo) throws SQLError {
+  public List<AbsEtiqueta> obtenerEtiquetasDeCorreo(int idCorreo) throws SQLDBException {
 
     String QUERY = "SELECT id_etiqueta FROM clasificar WHERE id_correo = ? ORDER BY id_etiqueta";
     AbsEtiqueta etiqueta = null;
@@ -235,8 +235,8 @@ public class EtiquetaDAO {
         listaCoincidentes.add(etiqueta);
       }
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al obtener el listado de etiquetas del correo con id " + idCorreo + ".");
     }
 
@@ -244,7 +244,7 @@ public class EtiquetaDAO {
 
   }
 
-  public boolean quitarEtiquetaACorreo(int idCorreo, int idEtiqueta) throws SQLError {
+  public boolean quitarEtiquetaACorreo(int idCorreo, int idEtiqueta) throws SQLDBException {
 
     String DELETE_ETIQUETA_SQL = "DELETE FROM clasificar WHERE id_etiqueta = ? AND id_correo = ?";
 
@@ -260,8 +260,8 @@ public class EtiquetaDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError(
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
           "Error al quitar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta
               + ".");
     }

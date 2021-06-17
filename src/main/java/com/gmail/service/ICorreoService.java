@@ -1,56 +1,51 @@
 package com.gmail.service;
 
-import com.gmail.dao.CorreoDAO;
-import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.CorreoDTO;
-import com.gmail.exception.CorreoError;
-import com.gmail.exception.CorreoError;
-import com.gmail.exception.SQLError;
+import com.gmail.exception.CorreoException;
+import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsCorreo;
-import com.gmail.model.AbsUsuario;
-import com.gmail.model.CorreoFactory;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface ICorreoService {
 
-    AbsCorreo crear(CorreoDTO correo) throws SQLError, CorreoError;
+  AbsCorreo crear(CorreoDTO correo) throws SQLDBException, CorreoException;
 
-    AbsCorreo modificar(CorreoDTO correo) throws CorreoError, SQLError;
+  AbsCorreo modificar(CorreoDTO correo) throws CorreoException, SQLDBException;
 
-    AbsCorreo eliminarEnviado(int idCorreo) throws CorreoError, SQLError;
+  AbsCorreo eliminarEnviado(int idCorreo) throws CorreoException, SQLDBException;
 
-    AbsCorreo eliminarRecibido(int idCorreo, int idUsuario) throws CorreoError, SQLError;
+  AbsCorreo eliminarRecibido(int idCorreo, int idUsuario) throws CorreoException, SQLDBException;
 
-    AbsCorreo obtenerEnviado(int idCorreo) throws CorreoError, SQLError;
+  AbsCorreo obtenerEnviado(int idCorreo) throws CorreoException, SQLDBException;
 
-    AbsCorreo obtenerRecibido(int idCorreo, int idUsuario)
-        throws CorreoError, SQLError;
+  AbsCorreo obtenerRecibido(int idCorreo, int idUsuario)
+      throws CorreoException, SQLDBException;
 
-    List<AbsCorreo> obtenerRecibidos(int idUsuario, boolean borrado)
-        throws CorreoError, SQLError;
+  List<AbsCorreo> obtenerRecibidos(int idUsuario, boolean borrado)
+      throws CorreoException, SQLDBException;
 
-    List<AbsCorreo> obtenerEnviados(int idUsuario, boolean borrado)
-        throws CorreoError, SQLError;
+  List<AbsCorreo> obtenerEnviados(int idUsuario, boolean borrado)
+      throws CorreoException, SQLDBException;
 
 
-    AbsCorreo enviar(int idCorreo, int idUsuario) throws CorreoError, SQLError, CloneNotSupportedException;
+  AbsCorreo enviar(int idCorreo, int idUsuario)
+      throws CorreoException, SQLDBException, CloneNotSupportedException;
 
-    AbsCorreo enviar(int idCorreo, int[] idUsuario) throws CorreoError, CloneNotSupportedException, SQLError;
+  AbsCorreo enviar(int idCorreo, int[] idUsuario)
+      throws CorreoException, CloneNotSupportedException, SQLDBException;
 
-    List<AbsCorreo> obtenerImportantes(int idUsuario)
-            throws CorreoError, SQLError;
+  List<AbsCorreo> obtenerImportantes(int idUsuario)
+      throws CorreoException, SQLDBException;
 
-    List<AbsCorreo> obtenerDestacados(int idUsuario)
-            throws CorreoError, SQLError;
+  List<AbsCorreo> obtenerDestacados(int idUsuario)
+      throws CorreoException, SQLDBException;
 
-    List<AbsCorreo> obtenerBorrados(int idUsuario)
-            throws CorreoError, SQLError;
-    List<AbsCorreo> obtenerNoLeidos(int idUsuario)
-            throws CorreoError, SQLError;
+  List<AbsCorreo> obtenerBorrados(int idUsuario)
+      throws CorreoException, SQLDBException;
 
-    AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoError, SQLError;
+  List<AbsCorreo> obtenerNoLeidos(int idUsuario)
+      throws CorreoException, SQLDBException;
+
+  AbsCorreo leeCorreo(int idCorreo, int idUsuario) throws CorreoException, SQLDBException;
 
 }

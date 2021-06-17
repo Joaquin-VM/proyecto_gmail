@@ -1,19 +1,18 @@
 package com.gmail.dao;
 
 import com.gmail.conf.DBCPDataSourceFactory;
-import com.gmail.exception.SQLError;
+import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.UsuarioFactory;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UsuarioDAO {
 
-  public AbsUsuario addUsuario(AbsUsuario usuario) throws SQLError {
+  public AbsUsuario addUsuario(AbsUsuario usuario) throws SQLDBException {
 
     String INSERT_USUARIO_SQL = "INSERT INTO usuario" +
         "(nombre_usuario, apellido, correo, contrasenia, telefono, fecha_nacimiento, sexo)" +
@@ -41,15 +40,16 @@ public class UsuarioDAO {
         usuario.setIdUsuario(rs.getInt(1));
       }
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al agregar el usuario de correo " + usuario.getCorreo() + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
+          "Error al agregar el usuario de correo " + usuario.getCorreo() + ".");
     }
 
     return usuario;
 
   }
 
-  public AbsUsuario getUsuario(int idUsuario) throws SQLError {
+  public AbsUsuario getUsuario(int idUsuario) throws SQLDBException {
 
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
         "fecha_nacimiento, sexo FROM usuario WHERE id_usuario = ?";
@@ -75,15 +75,15 @@ public class UsuarioDAO {
       }
 
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al obtener el usuario con el id " + idUsuario + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al obtener el usuario con el id " + idUsuario + ".");
     }
 
     return usuario;
 
   }
 
-  public AbsUsuario getUsuario(String correo) throws SQLError {
+  public AbsUsuario getUsuario(String correo) throws SQLDBException {
 
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
         "fecha_nacimiento, sexo FROM usuario WHERE correo = ?";
@@ -109,15 +109,15 @@ public class UsuarioDAO {
       }
 
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al obtener el usuario con el correo " + correo + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al obtener el usuario con el correo " + correo + ".");
     }
 
     return usuario;
 
   }
 
-  public AbsUsuario updateUsuario(AbsUsuario usuario) throws SQLError {
+  public AbsUsuario updateUsuario(AbsUsuario usuario) throws SQLDBException {
 
     String UPDATE_USUARIO_SQL = "UPDATE usuario " +
         "SET nombre_usuario = ?, apellido = ?, contrasenia = ?, " +
@@ -145,15 +145,16 @@ public class UsuarioDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al modificar el usuario con id " + usuario.getIdUsuario() + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException(
+          "Error al modificar el usuario con id " + usuario.getIdUsuario() + ".");
     }
 
     return usuario;
 
   }
 
-  public boolean deleteUsuario(int idUsuario) throws SQLError {
+  public boolean deleteUsuario(int idUsuario) throws SQLDBException {
 
     String DELETE_USUARIO_SQL = "DELETE FROM usuario WHERE id_usuario = ?";
 
@@ -168,8 +169,8 @@ public class UsuarioDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (SQLException e) {
-      throw new SQLError("Error al eliminar el usuario con id " + idUsuario + ".");
+    } catch (java.sql.SQLException e) {
+      throw new SQLDBException("Error al eliminar el usuario con id " + idUsuario + ".");
     }
 
     return true;

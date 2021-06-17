@@ -4,7 +4,7 @@ import com.gmail.dto.FiltroDTO;
 
 class Filtro extends AbsFiltro {
 
-  public Filtro(){
+  public Filtro() {
     super();
   }
 
