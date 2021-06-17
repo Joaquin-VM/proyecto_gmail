@@ -1,10 +1,10 @@
 package com.gmail.exception;
 
-public class ValidationError extends Exception {
+public class ValidationException extends Exception {
 
   String mensaje;
 
-  public ValidationError(String mensaje) {
+  public ValidationException(String mensaje) {
     this.mensaje = mensaje;
   }
 

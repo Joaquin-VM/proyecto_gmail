@@ -1,20 +1,20 @@
 package com.gmail.exception;
 
-public class FiltroError extends Exception{
+public class FiltroException extends Exception{
 
     private int error;
     private int id;
-    public FiltroError(String msg) {
+    public FiltroException(String msg) {
         super(msg);
     }
 
-    public FiltroError(int error, int id) {
+    public FiltroException(int error, int id) {
         super();
         this.error = error;
         this.id = id;
     }
 
-    public FiltroError(int error) {
+    public FiltroException(int error) {
         super();
         this.error = error;
     }
