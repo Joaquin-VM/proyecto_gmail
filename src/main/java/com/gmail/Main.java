@@ -1,15 +1,26 @@
 package com.gmail;
 
+
+
 import com.gmail.dao.UsuarioDAO;
+import com.gmail.dto.CorreoDTO;
+import com.gmail.dto.FiltroDTO;
+import com.gmail.dto.UsuarioDTO;
+import com.gmail.exception.CorreoError;
 import com.gmail.exception.SQLError;
+import com.gmail.exception.ValidationError;
+import com.gmail.model.AbsCorreo;
 import com.gmail.model.AbsUsuario;
+import com.gmail.model.CorreoFactory;
 import com.gmail.model.UsuarioFactory;
+import com.gmail.service.*;
+
 import java.time.LocalDate;
 
 public class Main {
 
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws SQLError, ValidationError, CorreoError, CloneNotSupportedException {
 
 //    UsuarioDAO usuarioDAO = new UsuarioDAO();
 //
@@ -94,10 +105,73 @@ public class Main {
 
     //USUARIO YA SE PROBO.
 
-    AbsUsuario usuario = UsuarioFactory.buildUsuario();
-       usuario.setNombre("Pablito").setApellido("Perez")
-               .setCorreo("hola3@gmail.com").setContrasenia("a").setFechaNacimiento(LocalDate.now())
-               .setSexo("Masculino").setTelefono("54 9 32313213");
+      UsuarioService usuarioService=new UsuarioService();
+      CorreoService correoService=new CorreoService();
+      EtiquetaService etiquetaService=new EtiquetaService();
+      FiltroService filtroService=new FiltroService();
+      MostarService mostarService=new MostarService();
+      UsuarioDTO usuario = new UsuarioDTO();
+      //CARGAMOS 3 USUARIOS A MODO DE EJEMPLO
+      usuario.setNombre("Gaston");
+      usuario.setApellido("Zaragosi");
+      usuario.setCorreo("gzaragoi7828@iua.edu.ar");
+      usuario.setContrasenia("duck");
+      usuario.setFechaNacimiento(LocalDate.now());
+      usuario.setSexo("Masculino");
+      usuario.setTelefono("54 9 32313213");
+      usuarioService.crear(usuario);
+      usuario.setNombre("Joaquin");
+      usuario.setApellido("Vega");
+      usuario.setCorreo("jvega420@iua.edu.ar");
+      usuario.setContrasenia("horse");
+      usuario.setFechaNacimiento(LocalDate.now());
+      usuario.setSexo("Masculino");
+      usuario.setTelefono("54 9 323786952");
+      usuarioService.crear(usuario);
+      usuario.setNombre("Marta");
+      usuario.setApellido("Gonzales");
+      usuario.setCorreo("mgonzales999@iua.edu.ar");
+      usuario.setContrasenia("mouse");
+      usuario.setFechaNacimiento(LocalDate.now());
+      usuario.setSexo("Femenino");
+      usuario.setTelefono("54 9 32313213");
+      usuarioService.crear(usuario);
+
+      //OBTENEMOS UN SUSUARIO POR CORREO Y POR ID
+      AbsUsuario absUsuario= UsuarioFactory.buildUsuario();
+      absUsuario = usuarioService.obtenerUno("gzaragoi782@iua.edu.ar");
+      System.out.println(absUsuario.getIdUsuario());
+      System.out.println(usuarioService.obtenerUno(1));
+
+      //EL USUARIO "gzaragoi782@iua.edu.ar" CREA UN CORREO
+      CorreoDTO correo = new CorreoDTO();
+      AbsCorreo absCorreo = CorreoFactory.buildCorreo();
+      correo.setIdUsuario(absUsuario.getIdUsuario());
+      correo.setAsunto("Hola");
+      correo.setCuerpo("Te queria contar que hoy fue un buen dia para mi");
+      absCorreo=correoService.crear(correo);
+
+
+      //EL USUARIO "gzaragoi782@iua.edu.ar" ENVIA EL CORREO A "jvega420@iua.edu.ar"
+      absUsuario = usuarioService.obtenerUno("jvega420@iua.edu.ar");
+      correoService.enviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario());
+
+      //EL USUARIO "gzaragoi782@iua.edu.ar" BORRA EL CORREO QUE ENVIO
+      correoService.eliminarEnviado(absCorreo.getIdCorreo());
+
+      //EL USUARIO "jvega420@iua.edu.ar" CREA UN FILTRO PARA DESTACAR AUTOMATICAMENTE LOS CORREOS DE ASUNTO "Hola"
+      FiltroDTO filtro = new FiltroDTO();
+      filtro.setDestacar(true);
+      filtro.setAsunto("Hola");
+
+      //EL USUARIO "jvega420@iua.edu.ar" REENVIA EL CORREO A "mgonzales999@iua.edu.ar"
+      AbsUsuario absUsuario2 = usuarioService.obtenerUno("mgonzales999@iua.edu.ar");
+      correoService.reeEnviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario(),absUsuario2.getIdUsuario());
+      absCorreo=correoService.crear(correo);
+
+
+
+
 
 
 
