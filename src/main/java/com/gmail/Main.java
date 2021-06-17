@@ -110,10 +110,10 @@ public class Main {
       MostarService mostarService=new MostarService();
       UsuarioDTO usuario = new UsuarioDTO();
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //CARGAMOS 3 USUARIOS A MODO DE EJEMPLO
+      System.out.println("CARGAMOS 3 USUARIOS A MODO DE EJEMPLO");
       usuario.setNombre("Gaston");
       usuario.setApellido("Zaragosi");
-      usuario.setCorreo("gzaragoi7828@iua.edu.ar");
+      usuario.setCorreo("gzaragoi782@iua.edu.ar");
       usuario.setContrasenia("duck");
       usuario.setFechaNacimiento(LocalDate.now());
       usuario.setSexo("Masculino");
@@ -139,14 +139,14 @@ public class Main {
       usuarioService.crear(usuario);
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //OBTENEMOS UN USUARIO POR CORREO Y POR ID
+      System.out.println("OBTENEMOS UN USUARIO POR CORREO Y POR ID");
       AbsUsuario absUsuario= UsuarioFactory.buildUsuario();
       absUsuario = usuarioService.obtenerUno("gzaragoi782@iua.edu.ar");
       System.out.println(absUsuario.getIdUsuario());
       System.out.println(usuarioService.obtenerUno(1));
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "gzaragoi782@iua.edu.ar" CREA UN CORREO
+      System.out.println("EL USUARIO gzaragoi782@iua.edu.ar CREA UN CORREO");
       CorreoDTO correo = new CorreoDTO();
       AbsCorreo absCorreo = CorreoFactory.buildCorreo();
       correo.setIdUsuario(absUsuario.getIdUsuario());
@@ -155,29 +155,29 @@ public class Main {
       absCorreo=correoService.crear(correo);
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "gzaragoi782@iua.edu.ar" ENVIA EL CORREO A "jvega420@iua.edu.ar"
+      System.out.println("EL USUARIO gzaragoi782@iua.edu.ar ENVIA EL CORREO A jvega420@iua.edu.ar");
       absUsuario = usuarioService.obtenerUno("jvega420@iua.edu.ar");
       correoService.enviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario());
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "gzaragoi782@iua.edu.ar" BORRA EL CORREO QUE ENVIO
+      System.out.println("EL USUARIO gzaragoi782@iua.edu.ar BORRA EL CORREO QUE ENVIO");
       correoService.eliminarEnviado(absCorreo.getIdCorreo());
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" CREA UN FILTRO PARA DESTACAR AUTOMATICAMENTE LOS CORREOS DE ASUNTO "Hola"
+      System.out.println("EL USUARIO jvega420@iua.edu.ar CREA UN FILTRO PARA DESTACAR AUTOMATICAMENTE LOS CORREOS DE ASUNTO Hola");
       FiltroDTO filtro = new FiltroDTO();
       filtro.setDestacar(true);
       filtro.setAsunto("Hola");
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" REENVIA EL CORREO A "mgonzales999@iua.edu.ar"
+      System.out.println("EL USUARIO jvega420@iua.edu.ar REENVIA EL CORREO A mgonzales999@iua.edu.ar");
       AbsUsuario absUsuario2 = usuarioService.obtenerUno("mgonzales999@iua.edu.ar");
       correoService.reeEnviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario(),absUsuario2.getIdUsuario());
       absCorreo=correoService.crear(correo);
 
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" CREEA UNA ETIQUETA LLAMADA "PrimeraEtiqueta"
+      System.out.println("EL USUARIO jvega420@iua.edu.ar CREEA UNA ETIQUETA LLAMADA PrimeraEtiqueta");
       EtiquetaDTO etiquetaDTO= new EtiquetaDTO();
       AbsEtiqueta absEtiqueta=EtiquetaFactory.buildEtiqueta();
       etiquetaDTO.setIdUsuario(absUsuario.getIdUsuario());
@@ -185,15 +185,15 @@ public class Main {
       absEtiqueta=etiquetaService.crear(etiquetaDTO);
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" ASIGNA LA ETIQUETA "PrimeraEtiqueta" A EL CORREO QUE REENVIO
+      System.out.println("EL USUARIO jvega420@iua.edu.ar ASIGNA LA ETIQUETA PrimeraEtiqueta A EL CORREO QUE REENVIO");
       etiquetaService.agregarEtiquetaACorreo(absEtiqueta.getIdEtiqueta(),absCorreo.getIdCorreo());
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" VE SUS MAIL ENVIADOS
+      System.out.println("EL USUARIO jvega420@iua.edu.ar VE SUS MAIL ENVIADOS");
       mostarService.mostrarCorreos(correoService.obtenerEnviados(absUsuario.getIdUsuario(), false));
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "mgonzales999@iua.edu.ar" CREA Y ENVIA UN CORREO A "jvega420@iua.edu.ar"
+      System.out.println("EL USUARIO mgonzales999@iua.edu.ar CREA Y ENVIA UN CORREO A jvega420@iua.edu.ar");
       correo.setIdUsuario(absUsuario2.getIdUsuario());
       correo.setAsunto("Como andas?");
       correo.setCuerpo("Yo bien, al menos");
@@ -201,21 +201,21 @@ public class Main {
       correoService.enviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario());
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" VE SUS MAIL RECIBIDOS
+      System.out.println("EL USUARIO jvega420@iua.edu.ar VE SUS MAIL RECIBIDOS");
       mostarService.mostrarCorreos(correoService.obtenerRecibidos(absUsuario.getIdUsuario(),false));
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" LISTA SUS ETIQUETAS
+      System.out.println("EL USUARIO jvega420@iua.edu.ar LISTA SUS ETIQUETAS");
       for(AbsEtiqueta etiqueta:etiquetaService.listarEtiquetasUsuario(absUsuario.getIdUsuario())){
           System.out.println(etiqueta);
       }
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" LEE EL CORREO QUE LE ENVIO "mgonzales999@iua.edu.ar"
+      System.out.println("EL USUARIO jvega420@iua.edu.ar LEE EL CORREO QUE LE ENVIO mgonzales999@iua.edu.ar");
       mostarService.abrirCorreo(correoService.leeCorreo(absUsuario.getIdUsuario(), absCorreo.getIdCorreo()));
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      //EL USUARIO "jvega420@iua.edu.ar" CREA UN CORREO, LO MODIFICA Y LUEGO LO ENVIA A "gzaragoi782@iua.edu.ar"
+      System.out.println("EL USUARIO jvega420@iua.edu.ar CREA UN CORREO, LO MODIFICA Y LUEGO LO ENVIA A gzaragoi782@iua.edu.ar");
       correo.setIdUsuario(absUsuario.getIdUsuario());
       correo.setAsunto("Todo vien?");
       correo.setCuerpo("Yo bien, al menos");
