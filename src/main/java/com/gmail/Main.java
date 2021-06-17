@@ -4,6 +4,7 @@ package com.gmail;
 
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.CorreoDTO;
+import com.gmail.dto.EtiquetaDTO;
 import com.gmail.dto.FiltroDTO;
 import com.gmail.dto.UsuarioDTO;
 import com.gmail.exception.CorreoError;
@@ -169,6 +170,25 @@ public class Main {
       correoService.reeEnviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario(),absUsuario2.getIdUsuario());
       absCorreo=correoService.crear(correo);
 
+
+      //EL USUARIO "jvega420@iua.edu.ar" CREEA UNA ETIQUETA LLAMADA "PrimeraEtiqueta"
+      EtiquetaDTO etiquetaDTO= new EtiquetaDTO();
+      etiquetaDTO.setIdUsuario(absUsuario.getIdUsuario());
+      etiquetaDTO.setNombreEtiqueta("PrimeraEtiqueta");
+
+      //EL USUARIO "jvega420@iua.edu.ar" VE SUS MAIL ENVIADOS
+      correoService.obtenerEnviados(absUsuario.getIdUsuario(), false);
+
+      //EL USUARIO "mgonzales999@iua.edu.ar" CREA Y ENVIA UN CORREO A "jvega420@iua.edu.ar"
+      correo.setIdUsuario(absUsuario2.getIdUsuario());
+      correo.setAsunto("Como andas?");
+      correo.setCuerpo("Yo bien, al menos");
+      absCorreo=correoService.crear(correo);
+      correoService.enviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario());
+
+
+      //EL USUARIO "jvega420@iua.edu.ar" VE SUS MAIL RECIBIDOS
+      correoService.obtenerRecibidos(absUsuario.getIdUsuario(),false);
 
 
 
