@@ -137,7 +137,7 @@ public class CorreoDAO {
   public List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) throws SQLDBException {
 
     String QUERY =
-        "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
+        "SELECT c.id_correo, c.id_usuario, c.asunto, c.cuerpo, c.fecha_hora, c.confirmado, r.borrado, r.leido, r.destacado, r.importante"
             + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
             "WHERE r.borrado = ? AND r.id_usuario_2 =  ? ";
 

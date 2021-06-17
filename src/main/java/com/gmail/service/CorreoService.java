@@ -284,11 +284,10 @@ public class CorreoService implements ICorreoService {
         reeEnviar(idCorreo, idUsuario, filtro.getIdUsuarioReenviar());
       }
     }
-
+    if (!dao.updateCorreo(correoGuardado)) {
+      throw new CorreoException(4);
+    }
     if (dao.enviarCorreo(correoPorEnviar, idUsuario)) {
-      if (!dao.updateCorreo(correoGuardado)) {
-        throw new CorreoException(4);
-      }
     } else {
       throw new CorreoException(6, idUsuario);
     }

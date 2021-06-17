@@ -103,7 +103,7 @@ public class EtiquetaService implements IEtiquetaService {
 //      throw new SQLDBException("No existe etiqueta con el id ingresado.");
 //    }
 
-    return agregarEtiquetaACorreo(idCorreo, idEtiqueta);
+    return dao.agregarEtiquetaACorreo(idCorreo, idEtiqueta);
 
   }
 

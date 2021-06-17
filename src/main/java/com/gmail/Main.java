@@ -176,7 +176,6 @@ public class Main {
       System.out.println("EL USUARIO jvega420@iua.edu.ar REENVIA EL CORREO A mgonzales999@iua.edu.ar");
       AbsUsuario absUsuario2 = usuarioService.obtenerUno("mgonzales999@iua.edu.ar");
       correoService.reeEnviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario(),absUsuario2.getIdUsuario());
-      absCorreo=correoService.crear(correo);
 
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
