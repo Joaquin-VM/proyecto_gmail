@@ -33,8 +33,19 @@ public class FiltroDAO {
       preparedStatement.setShort(7, (short) (filtro.getDestacar() ? 1 : 0));
       preparedStatement.setShort(8, (short) (filtro.getImportante() ? 1 : 0));
       preparedStatement.setShort(9, (short) (filtro.getEliminar() ? 1 : 0));
-      preparedStatement.setShort(10, (short) (filtro.getSpam() ? 1 : 0));
-      preparedStatement.setInt(11, filtro.getIdEtiqueta());
+
+      if (filtro.getSpam() == null) {
+        preparedStatement.setShort(10, (short) 0);
+      } else {
+        preparedStatement.setInt(10, filtro.getSpam() ? 1 : 0);
+      }
+
+      if (filtro.getIdEtiqueta() != 0) {
+        preparedStatement.setInt(11, filtro.getIdEtiqueta());
+      } else {
+        preparedStatement.setObject(11, null);
+      }
+
       preparedStatement.setInt(12, filtro.getIdUsuarioReenviar());
 
       System.out.println(preparedStatement);

@@ -24,10 +24,10 @@ public class FiltroService implements IFiltroService {
     if (usuarioDAO.getUsuario(filtro.getIdUsuario()) == null) {
       throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdUsuario());
     }
-    if (usuarioDAO.getUsuario(filtro.getIdEmisor()) == null) {
+    if (usuarioDAO.getUsuario(filtro.getIdEmisor()) == null && filtro.getIdEmisor() != 0) {
       throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdEmisor());
     }
-    if (usuarioDAO.getUsuario(filtro.getIdReceptor()) == null) {
+    if (usuarioDAO.getUsuario(filtro.getIdReceptor()) == null && filtro.getIdReceptor() != 0) {
       throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdReceptor());
     }
     if (usuarioDAO.getUsuario(filtro.getIdUsuarioReenviar()) == null && !(

@@ -95,7 +95,7 @@ public class CorreoDAO {
 
     String QUERY =
         "SELECT c.id_correo, c.id_usuario, c.asunto, c.cuerpo, c.fecha_hora, r.borrado, r.leido, r.destacado, r.importante"
-            + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
+            + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo " +
             "WHERE c.id_correo = ? AND r.id_usuario_2 =  ? ";
 
     AbsCorreo correo = null;

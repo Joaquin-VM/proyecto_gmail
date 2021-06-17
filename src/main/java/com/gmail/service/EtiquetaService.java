@@ -17,9 +17,9 @@ public class EtiquetaService implements IEtiquetaService {
   @Override
   public AbsEtiqueta crear(EtiquetaDTO dto) throws ValidationException, SQLDBException {
 
-    if (!validarDatos(dto)) {
-      throw new ValidationException("Los datos ingresados de etiqueta son invalidos.");
-    }
+//    if (!validarDatos(dto)) {
+//      throw new ValidationException("Los datos ingresados de etiqueta son invalidos.");
+//    }
 
     return dao.addEtiqueta(EtiquetaFactory.buildEtiqueta(dto));
 
@@ -99,9 +99,9 @@ public class EtiquetaService implements IEtiquetaService {
       throw new SQLDBException("No existe correo con el id ingresado.");
     }
 
-    if (!existeEtiqueta(idEtiqueta)) {
-      throw new SQLDBException("No existe etiqueta con el id ingresado.");
-    }
+//    if (!existeEtiqueta(idEtiqueta)) {
+//      throw new SQLDBException("No existe etiqueta con el id ingresado.");
+//    }
 
     return agregarEtiquetaACorreo(idCorreo, idEtiqueta);
 
@@ -189,7 +189,7 @@ public class EtiquetaService implements IEtiquetaService {
       return false;
     }
 
-    if (existeUsuario(dto.getIdUsuario())) {
+    if (!existeUsuario(dto.getIdUsuario())) {
       return false;
     }
 

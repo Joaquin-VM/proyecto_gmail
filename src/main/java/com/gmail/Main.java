@@ -8,6 +8,7 @@ import com.gmail.dto.EtiquetaDTO;
 import com.gmail.dto.FiltroDTO;
 import com.gmail.dto.UsuarioDTO;
 import com.gmail.exception.CorreoException;
+import com.gmail.exception.FiltroException;
 import com.gmail.exception.SQLDBException;
 import com.gmail.exception.ValidationException;
 import com.gmail.model.*;
@@ -18,7 +19,8 @@ import java.time.LocalDate;
 public class Main {
 
 
-  public static void main(String[] args) throws CloneNotSupportedException, SQLDBException, CorreoException, ValidationException {
+  public static void main(String[] args)
+      throws CloneNotSupportedException, SQLDBException, CorreoException, ValidationException, FiltroException {
 
 //    UsuarioDAO usuarioDAO = new UsuarioDAO();
 //
@@ -168,7 +170,8 @@ public class Main {
       FiltroDTO filtro = new FiltroDTO();
       filtro.setDestacar(true);
       filtro.setAsunto("Hola");
-
+      filtro.setIdUsuario(absUsuario.getIdUsuario());
+      filtroService.crear(filtro);
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       System.out.println("EL USUARIO jvega420@iua.edu.ar REENVIA EL CORREO A mgonzales999@iua.edu.ar");
       AbsUsuario absUsuario2 = usuarioService.obtenerUno("mgonzales999@iua.edu.ar");
@@ -177,7 +180,7 @@ public class Main {
 
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
-      System.out.println("EL USUARIO jvega420@iua.edu.ar CREEA UNA ETIQUETA LLAMADA PrimeraEtiqueta");
+      System.out.println("EL USUARIO jvega420@iua.edu.ar CREA UNA ETIQUETA LLAMADA PrimeraEtiqueta");
       EtiquetaDTO etiquetaDTO= new EtiquetaDTO();
       AbsEtiqueta absEtiqueta=EtiquetaFactory.buildEtiqueta();
       etiquetaDTO.setIdUsuario(absUsuario.getIdUsuario());
