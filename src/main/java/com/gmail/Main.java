@@ -214,7 +214,7 @@ public class Main {
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       System.out.println("EL USUARIO jvega420@iua.edu.ar LEE EL CORREO QUE LE ENVIO mgonzales999@iua.edu.ar");
-      mostarService.abrirCorreo(correoService.leeCorreo(absUsuario.getIdUsuario(), absCorreo.getIdCorreo()));
+      mostarService.abrirCorreo(correoService.leeCorreo(absCorreo.getIdCorreo(), absUsuario.getIdUsuario()));
 
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       System.out.println("EL USUARIO jvega420@iua.edu.ar CREA UN CORREO, LO MODIFICA Y LUEGO LO ENVIA A gzaragoi782@iua.edu.ar");
@@ -223,6 +223,7 @@ public class Main {
       correo.setCuerpo("Yo bien, al menos");
       absCorreo=correoService.crear(correo);
       correo.setAsunto("Todo bien?");
+      correo.setIdCorreo(absCorreo.getIdCorreo());
       absCorreo=correoService.modificar(correo);
       correoService.enviar(absCorreo.getIdCorreo(),usuarioService.obtenerUno("gzaragoi782@iua.edu.ar").getIdUsuario());
 

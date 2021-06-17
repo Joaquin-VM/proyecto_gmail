@@ -138,7 +138,7 @@ public class CorreoDAO {
 
     String QUERY =
         "SELECT c.id_correo, c.id_usuario, c.asunto, c.cuerpo, c.fecha_hora, c.confirmado, r.borrado, r.leido, r.destacado, r.importante"
-            + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo" +
+            + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo " +
             "WHERE r.borrado = ? AND r.id_usuario_2 =  ? ";
 
     List<AbsCorreo> correos = new ArrayList<>();
@@ -192,7 +192,7 @@ public class CorreoDAO {
       preparedStatement.setShort(1, (short) (borrado ? 1 : 0));
       preparedStatement.setInt(2, idUsuario);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -334,8 +334,8 @@ public class CorreoDAO {
   }
 
   public boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario) throws SQLDBException {
-    String UPDATE_CORREO_SQL = "UPDATE correo " +
-        "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ? AND id_usuario_2;";
+    String UPDATE_CORREO_SQL = "UPDATE recibidos " +
+        "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ? AND id_usuario_2 = ?;";
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
