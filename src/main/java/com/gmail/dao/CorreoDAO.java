@@ -315,10 +315,10 @@ public class CorreoDAO {
 
       preparedStatement.setInt(1, id_receptor);
       preparedStatement.setInt(2, correo.getIdUsuario());
-      preparedStatement.setShort(6, (short) (correo.getBorrado() ? 1 : 0));
-      preparedStatement.setShort(7, (short) (correo.getLeido() ? 1 : 0));
-      preparedStatement.setShort(8, (short) (correo.getDestacado() ? 1 : 0));
-      preparedStatement.setShort(9, (short) (correo.getImportante() ? 1 : 0));
+      preparedStatement.setShort(3, (short) (correo.getBorrado() ? 1 : 0));
+      preparedStatement.setShort(4, (short) (correo.getLeido() ? 1 : 0));
+      preparedStatement.setShort(5, (short) (correo.getDestacado() ? 1 : 0));
+      preparedStatement.setShort(6, (short) (correo.getImportante() ? 1 : 0));
 
       System.out.println(preparedStatement);
 
