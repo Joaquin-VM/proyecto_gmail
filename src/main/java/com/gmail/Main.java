@@ -94,7 +94,6 @@ public class Main {
       AbsUsuario absUsuario2 = usuarioService.obtenerUno("mgonzales999@iua.edu.ar");
       correoService.reeEnviar(absCorreo.getIdCorreo(),absUsuario.getIdUsuario(),absUsuario2.getIdUsuario());
 
-
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       System.out.println("EL USUARIO jvega420@iua.edu.ar CREA UNA ETIQUETA LLAMADA PrimeraEtiqueta");
       EtiquetaDTO etiquetaDTO= new EtiquetaDTO();
