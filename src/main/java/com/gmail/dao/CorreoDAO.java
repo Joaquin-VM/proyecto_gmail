@@ -36,7 +36,7 @@ public class CorreoDAO {
       preparedStatement.setShort(8, (short) (correo.getDestacado() ? 1 : 0));
       preparedStatement.setShort(9, (short) (correo.getImportante() ? 1 : 0));
 
-      System.out.println(preparedStatement);
+      System.out.println(preparedStatement) ;
 
       preparedStatement.executeUpdate();
 
