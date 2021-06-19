@@ -1,13 +1,12 @@
 package com.gmail.model;
 
 import com.gmail.dto.EtiquetaDTO;
-import java.util.Objects;
 
 public abstract class AbsEtiqueta implements Cloneable {
 
-  int idEtiqueta;
-  String nombreEtiqueta;
-  int idUsuario;
+  protected int idEtiqueta;
+  protected String nombreEtiqueta;
+  protected int idUsuario;
 
   public AbsEtiqueta() {
   }
@@ -28,34 +27,16 @@ public abstract class AbsEtiqueta implements Cloneable {
 
   public abstract int getIdUsuario();
 
-  public abstract Etiqueta setIdUsuario(int idUsuario);
+  public abstract AbsEtiqueta setIdUsuario(int idUsuario);
 
   @Override
-  public String toString() {
-    return "AbsEtiqueta{" +
-        "idEtiqueta=" + idEtiqueta +
-        ", nombreEtiqueta='" + nombreEtiqueta + '\'' +
-        ", idUsuario=" + idUsuario +
-        '}';
-  }
+  public abstract String toString();
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof AbsEtiqueta)) {
-      return false;
-    }
-    AbsEtiqueta that = (AbsEtiqueta) o;
-    return idEtiqueta == that.idEtiqueta && idUsuario == that.idUsuario && Objects
-        .equals(nombreEtiqueta, that.nombreEtiqueta);
-  }
+  public abstract boolean equals(Object o);
 
   @Override
-  public int hashCode() {
-    return Objects.hash(idEtiqueta, nombreEtiqueta, idUsuario);
-  }
+  public abstract int hashCode();
 
   @Override
   public Object clone() throws CloneNotSupportedException {

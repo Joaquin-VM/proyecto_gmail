@@ -1,6 +1,7 @@
-package com.gmail.model;
+package com.gmail.model.impl;
 
 import com.gmail.dto.CorreoDTO;
+import com.gmail.model.AbsCorreo;
 import java.time.LocalDateTime;
 
 class Correo extends AbsCorreo {
@@ -141,6 +142,7 @@ class Correo extends AbsCorreo {
 
   @Override
   public boolean equals(Object o) {
+
     if (this == o) {
       return true;
     }
@@ -169,11 +171,5 @@ class Correo extends AbsCorreo {
         (this.leido ? 1 : 0) + (this.destacado ? 1 : 0) +
         (this.importante ? 1 : 0);
   }
-
-//
-//  @Override
-//  public Object clone() throws CloneNotSupportedException {
-//    super.clone();
-//  }
 
 }

@@ -5,16 +5,16 @@ import java.time.LocalDateTime;
 
 public abstract class AbsCorreo implements Cloneable {
 
-  int idCorreo;
-  int idUsuario;
-  String asunto;
-  String cuerpo;
-  LocalDateTime fechaHora;
-  Boolean confirmado;
-  Boolean borrado;
-  Boolean leido;
-  Boolean destacado;
-  Boolean importante;
+  protected int idCorreo;
+  protected int idUsuario;
+  protected String asunto;
+  protected String cuerpo;
+  protected LocalDateTime fechaHora;
+  protected Boolean confirmado;
+  protected Boolean borrado;
+  protected Boolean leido;
+  protected Boolean destacado;
+  protected Boolean importante;
 
   public AbsCorreo() {
   }

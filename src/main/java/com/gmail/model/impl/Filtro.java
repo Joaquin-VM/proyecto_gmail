@@ -1,6 +1,7 @@
-package com.gmail.model;
+package com.gmail.model.impl;
 
 import com.gmail.dto.FiltroDTO;
+import com.gmail.model.AbsFiltro;
 
 class Filtro extends AbsFiltro {
 
@@ -154,6 +155,62 @@ class Filtro extends AbsFiltro {
   public AbsFiltro setIdUsuarioReenviar(int idUsuarioReenviar) {
     this.idUsuarioReenviar = idUsuarioReenviar;
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return "Filtro{" +
+        "idFiltro=" + idFiltro +
+        ", idUsuario=" + idUsuario +
+        ", idEmisor=" + idEmisor +
+        ", idReceptor=" + idReceptor +
+        ", asunto='" + asunto + '\'' +
+        ", contiene='" + contiene + '\'' +
+        ", leido=" + leido +
+        ", destacar=" + destacar +
+        ", importante=" + importante +
+        ", eliminar=" + eliminar +
+        ", spam=" + spam +
+        ", idEtiqueta=" + idEtiqueta +
+        ", idUsuarioReenviar=" + idUsuarioReenviar +
+        '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null) {
+      return false;
+    }
+
+    if (!(o instanceof Filtro)) {
+      return false;
+    }
+
+    AbsFiltro filtro = (AbsFiltro) o;
+
+    return idFiltro == filtro.getIdFiltro();
+  }
+
+  @Override
+  public int hashCode() {
+    return this.idFiltro +
+        this.idUsuario +
+        this.idEmisor +
+        this.idReceptor +
+        this.asunto.length() +
+        this.contiene.length() +
+        (this.leido ? 1 : 0) +
+        (this.destacar ? 1 : 0) +
+        (this.importante ? 1 : 0) +
+        (this.eliminar ? 1 : 0) +
+        (this.spam ? 1 : 0) +
+        this.idEtiqueta +
+        this.idUsuarioReenviar;
   }
 
 }

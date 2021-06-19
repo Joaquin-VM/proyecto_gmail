@@ -1,5 +1,7 @@
-package com.gmail.model;
+package com.gmail.model.impl;
 
+import com.gmail.model.AbsUsuario;
+import com.gmail.model.impl.Usuario;
 import com.gmail.dto.UsuarioDTO;
 
 public class UsuarioFactory {

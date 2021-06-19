@@ -3,7 +3,7 @@ package com.gmail.dao;
 import com.gmail.conf.DBCPDataSourceFactory;
 import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsUsuario;
-import com.gmail.model.UsuarioFactory;
+import com.gmail.model.impl.UsuarioFactory;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;

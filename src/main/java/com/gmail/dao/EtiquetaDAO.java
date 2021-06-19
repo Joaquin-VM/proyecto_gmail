@@ -3,7 +3,7 @@ package com.gmail.dao;
 import com.gmail.conf.DBCPDataSourceFactory;
 import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsEtiqueta;
-import com.gmail.model.EtiquetaFactory;
+import com.gmail.model.impl.EtiquetaFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

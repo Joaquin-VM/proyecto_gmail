@@ -1,6 +1,7 @@
-package com.gmail.model;
+package com.gmail.model.impl;
 
 import com.gmail.dto.EtiquetaDTO;
+import com.gmail.model.AbsEtiqueta;
 
 class Etiqueta extends AbsEtiqueta {
 
@@ -43,6 +44,42 @@ class Etiqueta extends AbsEtiqueta {
   public Etiqueta setIdUsuario(int idUsuario) {
     this.idUsuario = idUsuario;
     return this;
+  }
+
+  @Override
+  public String toString() {
+    return "Etiqueta{" +
+        "idEtiqueta=" + idEtiqueta +
+        ", nombreEtiqueta='" + nombreEtiqueta + '\'' +
+        ", idUsuario=" + idUsuario +
+        '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null) {
+      return false;
+    }
+
+    if (!(o instanceof Etiqueta)) {
+      return false;
+    }
+
+    AbsEtiqueta etiqueta = (AbsEtiqueta) o;
+
+    return idEtiqueta == etiqueta.getIdEtiqueta();
+  }
+
+  @Override
+  public int hashCode() {
+    return this.idEtiqueta +
+        this.nombreEtiqueta.length() +
+        this.idUsuario;
   }
 
 }

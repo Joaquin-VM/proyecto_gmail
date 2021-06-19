@@ -1,6 +1,7 @@
-package com.gmail.model;
+package com.gmail.model.impl;
 
 import com.gmail.dto.UsuarioDTO;
+import com.gmail.model.AbsUsuario;
 import java.time.LocalDate;
 
 class Usuario extends AbsUsuario {
@@ -117,6 +118,7 @@ class Usuario extends AbsUsuario {
 
   @Override
   public boolean equals(Object o) {
+
     if (this == o) {
       return true;
     }
@@ -131,41 +133,21 @@ class Usuario extends AbsUsuario {
 
     AbsUsuario usuario = (AbsUsuario) o;
 
-    return this.idUsuario == usuario.getIdUsuario() &&
-        this.nombre.equals(usuario.getNombre()) &&
-        this.apellido.equals(usuario.getApellido()) &&
-        this.correo.equals(usuario.getCorreo()) &&
-        this.contrasenia.equals(usuario.getContrasenia()) &&
-        this.telefono.equals(usuario.getTelefono()) &&
-        this.sexo == usuario.getSexo() &&
-        this.fechaNacimiento.compareTo(usuario.getFechaNacimiento()) == 0;
+    return this.idUsuario == usuario.getIdUsuario();
   }
 
   @Override
   public int hashCode() {
     return this.idUsuario +
-        this.nombre.length() + this.apellido.length()
-        + this.correo.length() + this.contrasenia.length() +
-        this.telefono.length() / 1000000 + this.sexo.length()
-        + this.fechaNacimiento.getYear() / 1000
-        + this.fechaNacimiento.getMonthValue() + this.fechaNacimiento.getDayOfMonth();
-  }
-
-  @Override
-  public Object clone() throws CloneNotSupportedException {
-
-    AbsUsuario usuario = new Usuario();
-    usuario.setIdUsuario(this.idUsuario);
-    usuario.setNombre(this.nombre);
-    usuario.setApellido(this.apellido);
-    usuario.setCorreo(this.correo);
-    usuario.setContrasenia(this.contrasenia);
-    usuario.setTelefono(this.telefono);
-    usuario.setSexo(this.sexo);
-    usuario.setFechaNacimiento(LocalDate.from(this.fechaNacimiento));
-
-    return usuario;
-
+        this.nombre.length() +
+        this.apellido.length() +
+        this.correo.length() +
+        this.contrasenia.length() +
+        this.telefono.length() / 1000000 +
+        this.sexo.length() +
+        this.fechaNacimiento.getYear() / 1000 +
+        this.fechaNacimiento.getMonthValue() +
+        this.fechaNacimiento.getDayOfMonth();
   }
 
 }

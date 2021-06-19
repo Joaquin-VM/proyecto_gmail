@@ -5,7 +5,7 @@ import com.gmail.dto.UsuarioDTO;
 import com.gmail.exception.SQLDBException;
 import com.gmail.exception.ValidationException;
 import com.gmail.model.AbsUsuario;
-import com.gmail.model.UsuarioFactory;
+import com.gmail.model.impl.UsuarioFactory;
 
 public class UsuarioService implements IUsuarioService {
 

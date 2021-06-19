@@ -1,8 +1,5 @@
 package com.gmail;
 
-
-
-import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.CorreoDTO;
 import com.gmail.dto.EtiquetaDTO;
 import com.gmail.dto.FiltroDTO;
@@ -12,6 +9,9 @@ import com.gmail.exception.FiltroException;
 import com.gmail.exception.SQLDBException;
 import com.gmail.exception.ValidationException;
 import com.gmail.model.*;
+import com.gmail.model.impl.CorreoFactory;
+import com.gmail.model.impl.EtiquetaFactory;
+import com.gmail.model.impl.UsuarioFactory;
 import com.gmail.service.*;
 
 import java.time.LocalDate;
@@ -21,89 +21,6 @@ public class Main {
 
   public static void main(String[] args)
       throws CloneNotSupportedException, SQLDBException, CorreoException, ValidationException, FiltroException {
-
-//    UsuarioDAO usuarioDAO = new UsuarioDAO();
-//
-//    AbsUsuario usuario = UsuarioFactory.buildUsuario();
-//
-//    usuario.setNombre("Pablito").setApellido("Perez").setCorreo("hola3@gmail.com")
-//        .setContrasenia("a").setFechaNacimiento(
-//        LocalDate.now()).setSexo("Masculino").setTelefono("54 9 32313213");
-//
-//    try {
-//      usuarioDAO.addUsuario(usuario);
-//    } catch (SQLError throwables) {
-//      System.out.println("Error al crear el usuario.");
-//      ;
-//    }
-
-    //FALTA PROBAR QUITARETIQUETA Y CLASFICAR.
-
-    //FILTRO.
-
-//    AbsFiltro filtro = FiltroFactory.buildFiltro();
-//    filtro = FiltroDAO.getFiltro(1);
-//    filtro.setDestacar(false);
-//    FiltroDAO.addFiltro(filtro);
-
-//    filtro = FiltroDAO.getFiltro(1);
-//    filtro.setLeido(false).setIdEtiqueta(1);
-
-//    System.out.println(FiltroDAO.getFiltro(1));
-//    FiltroDAO.deleteFiltro(1);
-//    System.out.println(FiltroDAO.listarFiltrosUsuario(1));
-
-    //FiltroDAO.updateFiltro(filtro);
-
-    //CORREO.
-
-    //AbsCorreo correo = CorreoFactory.buildCorreo();
-    //AbsCorreo correo2 = CorreoFactory.buildCorreo();
-
-    //correo.setIdUsuario(1).setBorrado(true).setLeido(false).setImportante(false).setDestacado(false).setConfirmado(true);
-
-    //correo2.setIdCorreo(4).setIdUsuario(1).setBorrado(true).setLeido(true).setImportante(true).setDestacado(true).setConfirmado(true);
-
-    //CorreoDAO.updateCorreo(correo2);
-
-    //System.out.println(CorreoDAO.getCorreo(1));
-
-    //System.out.println(CorreoDAO.getCorreosEnviados(1, CorreoDAO.getCorreo(1).getBorrado()));
-
-    //System.out.println(CorreoDAO.getCorreo(1));
-
-    //CorreoDAO.deleteCorreo(2);
-
-    //CorreoDAO.enviarCorreo(1, 4);
-
-    //CorreoDAO.enviarCorreo(1, new int[] {2,3});
-
-    //ETIQUETA.
-
-//    AbsEtiqueta etiqueta1 = EtiquetaFactory.buildEtiqueta();
-//    etiqueta1.setNombreEtiqueta("Personal").setIdUsuario(1);
-//
-//    AbsEtiqueta etiqueta2 = EtiquetaFactory.buildEtiqueta();
-//    etiqueta2.setNombreEtiqueta("Club").setIdUsuario(1);
-//
-//    AbsEtiqueta etiqueta3 = EtiquetaFactory.buildEtiqueta();
-//    etiqueta3.setNombreEtiqueta("Universidad").setIdUsuario(2);
-//
-//    AbsEtiqueta etiqueta4 = EtiquetaFactory.buildEtiqueta();
-//    etiqueta1.setIdEtiqueta(1).setNombreEtiqueta("Hogar").setIdUsuario(1);
-
-//    EtiquetaDAO.addEtiqueta(etiqueta1);
-//    EtiquetaDAO.addEtiqueta(etiqueta2);
-//    EtiquetaDAO.addEtiqueta(etiqueta3);
-//    System.out.println();
-//    System.out.println(EtiquetaDAO.listarEtiquetasUsuario(etiqueta1.getIdUsuario()));
-//    System.out.println();
-//    EtiquetaDAO.updateEtiqueta(etiqueta4);
-//    System.out.println(EtiquetaDAO.getEtiqueta(6));
-//    System.out.println();
-//    EtiquetaDAO.deleteEtiqueta(5);
-
-    //USUARIO YA SE PROBO.
 
       UsuarioService usuarioService=new UsuarioService();
       CorreoService correoService=new CorreoService();
@@ -181,7 +98,7 @@ public class Main {
       System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////");
       System.out.println("EL USUARIO jvega420@iua.edu.ar CREA UNA ETIQUETA LLAMADA PrimeraEtiqueta");
       EtiquetaDTO etiquetaDTO= new EtiquetaDTO();
-      AbsEtiqueta absEtiqueta=EtiquetaFactory.buildEtiqueta();
+      AbsEtiqueta absEtiqueta= EtiquetaFactory.buildEtiqueta();
       etiquetaDTO.setIdUsuario(absUsuario.getIdUsuario());
       etiquetaDTO.setNombreEtiqueta("PrimeraEtiqueta");
       absEtiqueta=etiquetaService.crear(etiquetaDTO);
@@ -226,12 +143,6 @@ public class Main {
       correo.setIdCorreo(absCorreo.getIdCorreo());
       absCorreo=correoService.modificar(correo);
       correoService.enviar(absCorreo.getIdCorreo(),usuarioService.obtenerUno("gzaragoi782@iua.edu.ar").getIdUsuario());
-
-
-
-
-
-
 
   }
 

@@ -5,14 +5,14 @@ import java.time.LocalDate;
 
 public abstract class AbsUsuario implements Cloneable {
 
-  int idUsuario;
-  String nombre;
-  String apellido;
-  String correo;
-  String contrasenia;
-  String telefono;
-  String sexo;
-  LocalDate fechaNacimiento;
+  protected int idUsuario;
+  protected String nombre;
+  protected String apellido;
+  protected String correo;
+  protected String contrasenia;
+  protected String telefono;
+  protected String sexo;
+  protected LocalDate fechaNacimiento;
 
   public AbsUsuario() {
   }
@@ -70,6 +70,8 @@ public abstract class AbsUsuario implements Cloneable {
   public abstract int hashCode();
 
   @Override
-  public abstract Object clone() throws CloneNotSupportedException;
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
 
 }

@@ -7,7 +7,7 @@ import com.gmail.dto.EtiquetaDTO;
 import com.gmail.exception.SQLDBException;
 import com.gmail.exception.ValidationException;
 import com.gmail.model.AbsEtiqueta;
-import com.gmail.model.EtiquetaFactory;
+import com.gmail.model.impl.EtiquetaFactory;
 import java.util.List;
 
 public class EtiquetaService implements IEtiquetaService {

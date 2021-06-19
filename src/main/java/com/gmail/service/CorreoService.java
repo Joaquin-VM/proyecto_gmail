@@ -10,7 +10,7 @@ import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsCorreo;
 import com.gmail.model.AbsFiltro;
 import com.gmail.model.AbsUsuario;
-import com.gmail.model.CorreoFactory;
+import com.gmail.model.impl.CorreoFactory;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

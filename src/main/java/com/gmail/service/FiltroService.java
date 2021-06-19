@@ -7,7 +7,7 @@ import com.gmail.dto.FiltroDTO;
 import com.gmail.exception.FiltroException;
 import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsFiltro;
-import com.gmail.model.FiltroFactory;
+import com.gmail.model.impl.FiltroFactory;
 import java.util.List;
 
 public class FiltroService implements IFiltroService {

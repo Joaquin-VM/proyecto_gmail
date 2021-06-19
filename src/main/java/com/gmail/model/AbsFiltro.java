@@ -1,23 +1,22 @@
 package com.gmail.model;
 
 import com.gmail.dto.FiltroDTO;
-import java.util.Objects;
 
 public abstract class AbsFiltro implements Cloneable {
 
-  int idFiltro;
-  int idUsuario;
-  int idEmisor = 0;
-  int idReceptor = 0;
-  String asunto;
-  String contiene;
-  Boolean leido;
-  Boolean destacar;
-  Boolean importante;
-  Boolean eliminar;
-  Boolean spam = false;
-  int idEtiqueta = 0;
-  int idUsuarioReenviar = 0;
+  protected int idFiltro;
+  protected int idUsuario;
+  protected int idEmisor = 0;
+  protected int idReceptor = 0;
+  protected String asunto;
+  protected String contiene;
+  protected Boolean leido;
+  protected Boolean destacar;
+  protected Boolean importante;
+  protected Boolean eliminar;
+  protected Boolean spam = false;
+  protected int idEtiqueta = 0;
+  protected int idUsuarioReenviar = 0;
 
   public AbsFiltro() {
   }
@@ -91,49 +90,12 @@ public abstract class AbsFiltro implements Cloneable {
   public abstract AbsFiltro setIdUsuarioReenviar(int idUsuarioReenviar);
 
   @Override
-  public String toString() {
-    return "AbsFiltro{" +
-        "idFiltro=" + idFiltro +
-        ", idUsuario=" + idUsuario +
-        ", idEmisor=" + idEmisor +
-        ", idReceptor=" + idReceptor +
-        ", asunto='" + asunto + '\'' +
-        ", contiene='" + contiene + '\'' +
-        ", leido=" + leido +
-        ", destacar=" + destacar +
-        ", importante=" + importante +
-        ", eliminar=" + eliminar +
-        ", spam=" + spam +
-        ", idEtiqueta=" + idEtiqueta +
-        ", idUsuarioReenviar=" + idUsuarioReenviar +
-        '}';
-  }
+  public abstract String toString();
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof AbsFiltro)) {
-      return false;
-    }
-    AbsFiltro absFiltro = (AbsFiltro) o;
-    return idFiltro == absFiltro.idFiltro && idUsuario == absFiltro.idUsuario
-        && idEmisor == absFiltro.idEmisor && idReceptor == absFiltro.idReceptor
-        && idEtiqueta == absFiltro.idEtiqueta && idUsuarioReenviar == absFiltro.idUsuarioReenviar
-        && Objects.equals(asunto, absFiltro.asunto) && Objects
-        .equals(contiene, absFiltro.contiene) && Objects.equals(leido, absFiltro.leido)
-        && Objects.equals(destacar, absFiltro.destacar) && Objects
-        .equals(importante, absFiltro.importante) && Objects
-        .equals(eliminar, absFiltro.eliminar) && Objects.equals(spam, absFiltro.spam);
-  }
-
+  public abstract boolean equals(Object o);
   @Override
-  public int hashCode() {
-    return Objects
-        .hash(idFiltro, idUsuario, idEmisor, idReceptor, asunto, contiene, leido, destacar,
-            importante, eliminar, spam, idEtiqueta, idUsuarioReenviar);
-  }
+  public abstract int hashCode();
 
   @Override
   public Object clone() throws CloneNotSupportedException {

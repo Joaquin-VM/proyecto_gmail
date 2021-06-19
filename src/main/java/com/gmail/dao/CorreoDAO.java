@@ -3,7 +3,7 @@ package com.gmail.dao;
 import com.gmail.conf.DBCPDataSourceFactory;
 import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsCorreo;
-import com.gmail.model.CorreoFactory;
+import com.gmail.model.impl.CorreoFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

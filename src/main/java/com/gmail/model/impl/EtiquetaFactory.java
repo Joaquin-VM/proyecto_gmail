@@ -1,5 +1,7 @@
-package com.gmail.model;
+package com.gmail.model.impl;
 
+import com.gmail.model.AbsEtiqueta;
+import com.gmail.model.impl.Etiqueta;
 import com.gmail.dto.EtiquetaDTO;
 
 public class EtiquetaFactory {

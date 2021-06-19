@@ -1,5 +1,7 @@
-package com.gmail.model;
+package com.gmail.model.impl;
 
+import com.gmail.model.AbsFiltro;
+import com.gmail.model.impl.Filtro;
 import com.gmail.dto.FiltroDTO;
 
 public class FiltroFactory {
