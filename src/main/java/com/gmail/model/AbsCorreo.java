@@ -2,6 +2,7 @@ package com.gmail.model;
 
 import com.gmail.dto.CorreoDTO;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public abstract class AbsCorreo implements Cloneable {
 
@@ -15,6 +16,7 @@ public abstract class AbsCorreo implements Cloneable {
   protected Boolean leido;
   protected Boolean destacado;
   protected Boolean importante;
+  protected List<String> usuariosQueRecibieron;
 
   public AbsCorreo() {
   }
@@ -71,6 +73,10 @@ public abstract class AbsCorreo implements Cloneable {
   public abstract Boolean getImportante();
 
   public abstract AbsCorreo setImportante(Boolean importante);
+
+  public abstract List<String> getUsuariosQueRecibieron();
+
+  public abstract AbsCorreo setUsuariosQueRecibieron(List<String> usuariosQueRecibieron);
 
   @Override
   public abstract String toString();

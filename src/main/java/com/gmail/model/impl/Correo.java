@@ -3,6 +3,7 @@ package com.gmail.model.impl;
 import com.gmail.dto.CorreoDTO;
 import com.gmail.model.AbsCorreo;
 import java.time.LocalDateTime;
+import java.util.List;
 
 class Correo extends AbsCorreo {
 
@@ -121,6 +122,17 @@ class Correo extends AbsCorreo {
   @Override
   public AbsCorreo setImportante(Boolean importante) {
     this.importante = importante;
+    return this;
+  }
+
+  @Override
+  public List<String> getUsuariosQueRecibieron() {
+    return usuariosQueRecibieron;
+  }
+
+  @Override
+  public AbsCorreo setUsuariosQueRecibieron(List<String> usuariosQueRecibieron) {
+    this.usuariosQueRecibieron = usuariosQueRecibieron;
     return this;
   }
 

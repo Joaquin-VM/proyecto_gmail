@@ -207,7 +207,7 @@ public class Main {
     try {
       mostrarService
           .mostrarCorreos(correoService.obtenerEnviados(absUsuario.getIdUsuario(), false));
-    } catch (CorreoException | SQLDBException e) {
+    } catch (CorreoException | SQLDBException | NotFoundException e) {
       e.getMessage();
     }
 
@@ -238,7 +238,7 @@ public class Main {
     try {
       mostrarService
           .mostrarCorreos(correoService.obtenerRecibidos(absUsuario.getIdUsuario(), false));
-    } catch (CorreoException | SQLDBException e) {
+    } catch (CorreoException | SQLDBException | NotFoundException e) {
       e.getMessage();
     }
 
@@ -263,7 +263,7 @@ public class Main {
     try {
       mostrarService
           .abrirCorreo(correoService.leeCorreo(absCorreo.getIdCorreo(), absUsuario.getIdUsuario()));
-    } catch (CorreoException | SQLDBException e) {
+    } catch (CorreoException | SQLDBException | NotFoundException e) {
       e.getMessage();
     }
 

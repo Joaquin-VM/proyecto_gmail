@@ -379,4 +379,31 @@ public class CorreoDAO {
     return cantE;
   }
 
+  public List<String> correosQueRecibieron(int idCorreo) throws SQLDBException {
+
+    String QUERY = "SELECT u.correo FROM usuario u INNER JOIN"
+        + "recibidos r ON u.id_usuario = r.id_usuario_2 WHERE"
+        + "id_correo = ?;";
+
+    List<String> listaCorreos = new ArrayList<>();
+
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
+
+      preparedStatement.setInt(1, idCorreo);
+
+      ResultSet rs = preparedStatement.executeQuery();
+
+      while (rs.next()) {
+        listaCorreos.add(rs.getString("correo"));
+      }
+
+    } catch (SQLException e) {
+      throw new SQLDBException("El correo con id " + idCorreo + " no existe.");
+    }
+
+    return listaCorreos;
+
+  }
+
 }
