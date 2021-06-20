@@ -49,7 +49,7 @@ public class FiltroDAO {
 
       preparedStatement.setInt(12, filtro.getIdUsuarioReenviar());
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       preparedStatement.executeUpdate();
 
@@ -79,7 +79,7 @@ public class FiltroDAO {
 
       preparedStatement.setInt(1, idFiltro);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -115,6 +115,8 @@ public class FiltroDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idUsuario);
+
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -168,7 +170,7 @@ public class FiltroDAO {
       preparedStatement.setInt(12, filtro.getIdUsuarioReenviar());
       preparedStatement.setInt(13, filtro.getIdFiltro());
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
@@ -192,7 +194,7 @@ public class FiltroDAO {
 
       preparedStatement.setInt(1, idFiltro);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
