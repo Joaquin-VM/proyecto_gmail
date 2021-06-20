@@ -86,7 +86,7 @@ public class Main {
     AbsUsuario absUsuario = UsuarioFactory.buildUsuario();
 
     try {
-      absUsuario = usuarioService.obtenerUno("gzaragoi782@iua.edu.ar");
+      absUsuario = usuarioService.obtenerUno("gzaragosi782@iua.edu.ar");
     } catch (NotFoundException | SQLDBException e) {
       System.out.println(e.getMessage());
     }
@@ -101,7 +101,7 @@ public class Main {
 
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////////");
-    System.out.println("EL USUARIO gzaragoi782@iua.edu.ar CREA UN CORREO");
+    System.out.println("EL USUARIO gzaragosi782@iua.edu.ar CREA UN CORREO");
     CorreoDTO correo = new CorreoDTO();
     AbsCorreo absCorreo = CorreoFactory.buildCorreo();
     correo.setIdUsuario(absUsuario.getIdUsuario());
@@ -116,7 +116,7 @@ public class Main {
 
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////////");
-    System.out.println("EL USUARIO gzaragoi782@iua.edu.ar ENVIA EL CORREO A jvega420@iua.edu.ar");
+    System.out.println("EL USUARIO gzaragosi782@iua.edu.ar ENVIA EL CORREO A jvega420@iua.edu.ar");
 
     try {
       absUsuario = usuarioService.obtenerUno("jvega420@iua.edu.ar");
@@ -132,7 +132,7 @@ public class Main {
 
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////////");
-    System.out.println("EL USUARIO gzaragoi782@iua.edu.ar BORRA EL CORREO QUE ENVIO");
+    System.out.println("EL USUARIO gzaragosi782@iua.edu.ar BORRA EL CORREO QUE ENVIO");
 
     try {
       correoService.eliminarEnviado(absCorreo.getIdCorreo());
