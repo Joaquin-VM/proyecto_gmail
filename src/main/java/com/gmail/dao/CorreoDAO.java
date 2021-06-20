@@ -292,9 +292,9 @@ public class CorreoDAO {
 
 //      System.out.println(preparedStatement);
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException("Error al eliminar el correo con el id " + idCorreo + ".");
@@ -363,20 +363,17 @@ public class CorreoDAO {
 
   }
 
-  public int enviarCorreo(AbsCorreo correo, int[] id_receptores) throws SQLDBException {
-    int cantE = 0;
+  public boolean enviarCorreo(AbsCorreo correo, int[] id_receptores) throws SQLDBException {
+
     for (int i : id_receptores) {
 
       if (!(enviarCorreo(correo, i))) {
-        System.out.println("Fallo el envio, receptor: " + i);
-        continue;
+        throw new SQLDBException("Fallo el envio, receptor: " + id_receptores[i]);
       }
-
-      cantE++;
 
     }
 
-    return cantE;
+    return true;
   }
 
   public List<String> correosQueRecibieron(int idCorreo) throws SQLDBException {

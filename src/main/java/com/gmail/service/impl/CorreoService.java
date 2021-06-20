@@ -163,6 +163,14 @@ public class CorreoService implements ICorreoService {
 
     List<AbsCorreo> correosGuardados = dao.getCorreosEnviados(idUsuario, borrado);
 
+    int i = 0;
+
+    for (AbsCorreo correo : correosGuardados) {
+      correo.setUsuariosQueRecibieron(dao.correosQueRecibieron(correo.getIdCorreo()));
+      correosGuardados.set(i, correo);
+      ++i;
+    }
+
     return correosGuardados;
   }
 
@@ -327,13 +335,10 @@ public class CorreoService implements ICorreoService {
     correoGuardado.setFechaHora(LocalDateTime.now());
     correoGuardado.setConfirmado(true);
 
-    int x = dao.enviarCorreo(correoPorEnviar, idUsuario);
-    if (x == 0) {
+    if (dao.enviarCorreo(correoPorEnviar, idUsuario)) {
       if (!dao.updateCorreo(correoGuardado)) {
         throw new CorreoException(4);
       }
-    } else {
-      throw new CorreoException(7, x);
     }
 
     return correoGuardado;

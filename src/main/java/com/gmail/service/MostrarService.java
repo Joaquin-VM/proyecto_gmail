@@ -11,7 +11,8 @@ public class MostrarService {
 
   UsuarioService usuarioService = new UsuarioService();
 
-  public void mostrarCorreos(List<AbsCorreo> lista, boolean esEnviado$) throws SQLDBException, NotFoundException {
+  public void mostrarCorreos(List<AbsCorreo> lista, boolean esEnviado$)
+      throws SQLDBException, NotFoundException {
 
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////");
@@ -36,26 +37,29 @@ public class MostrarService {
         System.out.printf("%-2s", "");
       }
       System.out.printf("%-2s", "|");
-      String asunt = new String();
+      String asunt = new String("");
       String aux = new String();
       int ar;
-;      if(esEnviado$){
+      ;
+      if (esEnviado$) {
         for (int i = 0; i < c.getUsuariosQueRecibieron().size(); ++i) {
-          if(i==2)
+          if (i == 2) {
+            aux = aux + (c.getUsuariosQueRecibieron().size() - 2) + " mas...";
             break;
+          }
           aux = c.getUsuariosQueRecibieron().get(i);
           ar = aux.indexOf('@');
           aux = aux.substring(0, ar);
           if (i < c.getUsuariosQueRecibieron().size() - 1) {
-            aux.concat(", mas...");
+            aux = aux + " , ";
           }
-          asunt.concat(aux);
+          asunt = asunt + aux;
         }
-      }else{
-          asunt = usuarioService.obtenerUno(c.getIdUsuario()).getCorreo();
-          ar = asunt.indexOf('@');
-          asunt=asunt.substring(0,ar);
-        }
+      } else {
+        asunt = usuarioService.obtenerUno(c.getIdUsuario()).getCorreo();
+        ar = asunt.indexOf('@');
+        asunt = asunt.substring(0, ar);
+      }
 
       System.out.printf("%-15s", asunt);
       System.out.printf("%-5s", "|");
