@@ -242,9 +242,9 @@ public class CorreoDAO {
 
 //      System.out.println(preparedStatement);
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException(
@@ -268,9 +268,9 @@ public class CorreoDAO {
 
 //      System.out.println(preparedStatement);
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException("Error al eliminar el correo con el id " + idCorreo + ".");
@@ -350,9 +350,9 @@ public class CorreoDAO {
 
 //      System.out.println(preparedStatement);
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException("Error al actualizar el correo con el id " + correo.getIdCorreo()

@@ -53,7 +53,7 @@ public class UsuarioDAO {
   public AbsUsuario getUsuario(int idUsuario) throws SQLDBException {
 
     String QUERY = "SELECT id_usuario, nombre_usuario, apellido, correo, contrasenia, telefono," +
-        "fecha_nacimiento, sexo FROM usuario WHERE id_usuario = ?";
+        " fecha_nacimiento, sexo FROM usuario WHERE id_usuario = ?";
 
     AbsUsuario usuario = null;
 
@@ -96,7 +96,7 @@ public class UsuarioDAO {
 
       preparedStatement.setString(1, correo);
 
-//      System.out.println(preparedStatement);
+//    System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -142,9 +142,9 @@ public class UsuarioDAO {
         usuario.setIdUsuario(rs.getInt(1));
       }
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException(
@@ -166,9 +166,9 @@ public class UsuarioDAO {
 
 //      System.out.println(preparedStatement);
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException("Error al eliminar el usuario con id " + idUsuario + ".");

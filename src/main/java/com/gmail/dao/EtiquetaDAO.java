@@ -154,9 +154,9 @@ public class EtiquetaDAO {
 
 //      System.out.println(preparedStatement);
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException(
@@ -178,9 +178,9 @@ public class EtiquetaDAO {
 
 //      System.out.println(preparedStatement);
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException("Error al eliminar la etiqueta con id " + idEtiqueta + ".");
@@ -259,9 +259,9 @@ public class EtiquetaDAO {
 
 //      System.out.println(preparedStatement);
 
-      int filasAfectadas = preparedStatement.executeUpdate();
+//      int filasAfectadas = preparedStatement.executeUpdate();
 
-      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
       throw new SQLDBException(
