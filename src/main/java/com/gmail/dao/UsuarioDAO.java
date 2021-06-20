@@ -31,7 +31,7 @@ public class UsuarioDAO {
       preparedStatement.setDate(6, Date.valueOf(usuario.getFechaNacimiento()));
       preparedStatement.setString(7, usuario.getSexo());
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       preparedStatement.executeUpdate();
 
@@ -96,7 +96,7 @@ public class UsuarioDAO {
 
       preparedStatement.setString(1, correo);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -134,7 +134,7 @@ public class UsuarioDAO {
       preparedStatement.setString(5, usuario.getSexo());
       preparedStatement.setInt(6, usuario.getIdUsuario());
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.getGeneratedKeys();
 
@@ -164,7 +164,7 @@ public class UsuarioDAO {
 
       preparedStatement.setInt(1, idUsuario);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 

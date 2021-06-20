@@ -37,7 +37,7 @@ public class CorreoDAO {
       preparedStatement.setShort(8, (short) (correo.getDestacado() ? 1 : 0));
       preparedStatement.setShort(9, (short) (correo.getImportante() ? 1 : 0));
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       preparedStatement.executeUpdate();
 
@@ -68,7 +68,7 @@ public class CorreoDAO {
 
       preparedStatement.setInt(1, idCorreo);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -108,7 +108,7 @@ public class CorreoDAO {
       preparedStatement.setInt(1, idCorreo);
       preparedStatement.setInt(2, idUsuario);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -193,7 +193,7 @@ public class CorreoDAO {
       preparedStatement.setShort(1, (short) (borrado ? 1 : 0));
       preparedStatement.setInt(2, idUsuario);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -240,7 +240,7 @@ public class CorreoDAO {
       preparedStatement.setShort(9, (short) (correo.getImportante() ? 1 : 0));
       preparedStatement.setInt(10, correo.getIdCorreo());
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
@@ -266,7 +266,7 @@ public class CorreoDAO {
       preparedStatement.setInt(2, idUsuario);
       preparedStatement.setInt(3, idCorreo);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
@@ -290,7 +290,7 @@ public class CorreoDAO {
       preparedStatement.setShort(1, (short) 1);
       preparedStatement.setInt(2, idCorreo);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
@@ -321,7 +321,7 @@ public class CorreoDAO {
       preparedStatement.setShort(5, (short) (correo.getDestacado() ? 1 : 0));
       preparedStatement.setShort(6, (short) (correo.getImportante() ? 1 : 0));
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       preparedStatement.executeUpdate();
 
@@ -348,7 +348,7 @@ public class CorreoDAO {
       preparedStatement.setInt(5, correo.getIdCorreo());
       preparedStatement.setInt(6, idUsuario);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 

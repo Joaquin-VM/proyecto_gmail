@@ -26,7 +26,7 @@ public class EtiquetaDAO {
       preparedStatement.setString(1, etiqueta.getNombreEtiqueta());
       preparedStatement.setInt(2, etiqueta.getIdUsuario());
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       preparedStatement.executeUpdate();
 
@@ -55,7 +55,7 @@ public class EtiquetaDAO {
 
       preparedStatement.setInt(1, idEtiqueta);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -89,7 +89,7 @@ public class EtiquetaDAO {
       preparedStatement.setString(1, nombreEtiqueta);
       preparedStatement.setInt(2, idUsuario);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -122,6 +122,8 @@ public class EtiquetaDAO {
 
       preparedStatement.setInt(1, idUsuario);
 
+//      System.out.println(preparedStatement);
+
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
@@ -150,7 +152,7 @@ public class EtiquetaDAO {
       preparedStatement.setString(1, etiqueta.getNombreEtiqueta());
       preparedStatement.setInt(2, etiqueta.getIdEtiqueta());
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
@@ -174,7 +176,7 @@ public class EtiquetaDAO {
 
       preparedStatement.setInt(1, idEtiqueta);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
@@ -200,7 +202,7 @@ public class EtiquetaDAO {
       preparedStatement.setInt(1, idCorreo);
       preparedStatement.setInt(2, idEtiqueta);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       preparedStatement.executeUpdate();
 
@@ -224,7 +226,7 @@ public class EtiquetaDAO {
 
       preparedStatement.setInt(1, idCorreo);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -255,7 +257,7 @@ public class EtiquetaDAO {
       preparedStatement.setInt(1, idEtiqueta);
       preparedStatement.setInt(2, idCorreo);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
