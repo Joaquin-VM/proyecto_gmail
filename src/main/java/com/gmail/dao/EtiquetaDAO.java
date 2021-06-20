@@ -7,6 +7,7 @@ import com.gmail.model.impl.EtiquetaFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class EtiquetaDAO {
         etiqueta.setIdEtiqueta(rs.getInt(1));
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al agregar la etiqueta de nombre " + etiqueta.getNombreEtiqueta() + ".");
     }
@@ -66,7 +67,7 @@ public class EtiquetaDAO {
       }
 
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al obtener la etiqueta con el id " + idEtiqueta + ".");
     }
 
@@ -101,7 +102,7 @@ public class EtiquetaDAO {
       }
 
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al obtener la lista de etiquetas con el nombre " +
               nombreEtiqueta + ".");
@@ -131,7 +132,7 @@ public class EtiquetaDAO {
         listaEtiquetas.add(etiqueta);
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al obtener el listado de etiquetas del usuario con id " + idUsuario + ".");
     }
@@ -155,7 +156,7 @@ public class EtiquetaDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al modificar la etiqueta con id " + etiqueta.getIdEtiqueta() + ".");
     }
@@ -179,7 +180,7 @@ public class EtiquetaDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al eliminar la etiqueta con id " + idEtiqueta + ".");
     }
 
@@ -203,7 +204,7 @@ public class EtiquetaDAO {
 
       preparedStatement.executeUpdate();
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al agregar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta
               + ".");
@@ -235,7 +236,7 @@ public class EtiquetaDAO {
         listaCoincidentes.add(etiqueta);
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al obtener el listado de etiquetas del correo con id " + idCorreo + ".");
     }
@@ -260,7 +261,7 @@ public class EtiquetaDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al quitar al correo con id " + idCorreo + " la etiqueta con id " + idEtiqueta
               + ".");

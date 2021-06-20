@@ -1,12 +1,10 @@
 package com.gmail.exception;
 
-import java.sql.SQLException;
-
-public class SQLDBException extends SQLException {
+public class NotFoundException extends Exception {
 
   private String message;
 
-  public SQLDBException(String message) {
+  public NotFoundException(String message) {
     this.message = message;
   }
 

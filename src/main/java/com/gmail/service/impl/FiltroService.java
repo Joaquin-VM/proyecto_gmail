@@ -1,4 +1,4 @@
-package com.gmail.service;
+package com.gmail.service.impl;
 
 import com.gmail.dao.EtiquetaDAO;
 import com.gmail.dao.FiltroDAO;
@@ -8,6 +8,7 @@ import com.gmail.exception.FiltroException;
 import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsFiltro;
 import com.gmail.model.impl.FiltroFactory;
+import com.gmail.service.IFiltroService;
 import java.util.List;
 
 public class FiltroService implements IFiltroService {

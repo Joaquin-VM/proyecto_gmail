@@ -1,4 +1,4 @@
-package com.gmail.service;
+package com.gmail.service.impl;
 
 import com.gmail.dao.CorreoDAO;
 import com.gmail.dao.EtiquetaDAO;
@@ -11,6 +11,7 @@ import com.gmail.model.AbsCorreo;
 import com.gmail.model.AbsFiltro;
 import com.gmail.model.AbsUsuario;
 import com.gmail.model.impl.CorreoFactory;
+import com.gmail.service.ICorreoService;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

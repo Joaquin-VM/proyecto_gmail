@@ -7,6 +7,7 @@ import com.gmail.model.impl.CorreoFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -46,7 +47,7 @@ public class CorreoDAO {
         correo.setIdCorreo(rs.getInt(1));
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al agregar el correo.");
     }
 
@@ -83,7 +84,7 @@ public class CorreoDAO {
             .setImportante(rs.getShort("importante") == 1);
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al obtener el correo con el id " + idCorreo + ".");
     }
 
@@ -124,7 +125,7 @@ public class CorreoDAO {
       }
 
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al obtener el correo con el id " + idCorreo + " recibido por el usuario "
               + idUsuario + ".");
@@ -167,7 +168,7 @@ public class CorreoDAO {
       }
 
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al obtener la lista de correos recibidos por el usuario con el id " + idUsuario
               + ".");
@@ -192,7 +193,7 @@ public class CorreoDAO {
       preparedStatement.setShort(1, (short) (borrado ? 1 : 0));
       preparedStatement.setInt(2, idUsuario);
 
-//      System.out.println(preparedStatement);
+      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -210,7 +211,7 @@ public class CorreoDAO {
       }
 
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al obtener la lista de correos enviados por el usuario con el id " + idUsuario
               + ".");
@@ -245,7 +246,7 @@ public class CorreoDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al actualizar el correo con el id " + correo.getIdCorreo() + ".");
     }
@@ -271,7 +272,7 @@ public class CorreoDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al eliminar el correo con el id " + idCorreo + ".");
     }
 
@@ -295,7 +296,7 @@ public class CorreoDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al eliminar el correo con el id " + idCorreo + ".");
     }
 
@@ -324,7 +325,7 @@ public class CorreoDAO {
 
       preparedStatement.executeUpdate();
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al enviar el correo con el id " + correo.getIdCorreo() + " al usuario con el id "
               + id_receptor + ".");
@@ -353,7 +354,7 @@ public class CorreoDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al actualizar el correo con el id " + correo.getIdCorreo()
           + " recibido por el usuario con el id " + idUsuario + ".");
     }

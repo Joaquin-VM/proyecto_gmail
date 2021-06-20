@@ -5,7 +5,7 @@ import com.gmail.exception.SQLDBException;
 import com.gmail.model.AbsCorreo;
 import java.util.List;
 
-public class MostarService {
+public class MostrarService {
 
   UsuarioDAO usuarioDAO = new UsuarioDAO();
 

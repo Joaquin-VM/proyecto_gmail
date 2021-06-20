@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class UsuarioDAO {
@@ -40,7 +41,7 @@ public class UsuarioDAO {
         usuario.setIdUsuario(rs.getInt(1));
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al agregar el usuario de correo " + usuario.getCorreo() + ".");
     }
@@ -75,7 +76,7 @@ public class UsuarioDAO {
       }
 
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al obtener el usuario con el id " + idUsuario + ".");
     }
 
@@ -109,7 +110,7 @@ public class UsuarioDAO {
       }
 
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al obtener el usuario con el correo " + correo + ".");
     }
 
@@ -145,7 +146,7 @@ public class UsuarioDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al modificar el usuario con id " + usuario.getIdUsuario() + ".");
     }
@@ -169,7 +170,7 @@ public class UsuarioDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al eliminar el usuario con id " + idUsuario + ".");
     }
 

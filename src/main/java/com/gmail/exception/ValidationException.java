@@ -2,18 +2,19 @@ package com.gmail.exception;
 
 public class ValidationException extends Exception {
 
-  String mensaje;
+  private String message;
 
-  public ValidationException(String mensaje) {
-    this.mensaje = mensaje;
+  public ValidationException(String message) {
+    this.message = message;
   }
 
-  public String getMensaje() {
-    return mensaje;
+  @Override
+  public String getMessage() {
+    return message;
   }
 
-  public void setMensaje(String mensaje) {
-    this.mensaje = mensaje;
+  public void setMessage(String message) {
+    this.message = message;
   }
 
 }

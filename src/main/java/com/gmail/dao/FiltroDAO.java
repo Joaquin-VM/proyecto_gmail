@@ -7,6 +7,7 @@ import com.gmail.model.impl.FiltroFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class FiltroDAO {
         filtro.setIdFiltro(rs.getInt(1));
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al crear el filtro.");
     }
 
@@ -97,7 +98,7 @@ public class FiltroDAO {
             .setIdUsuarioReenviar(rs.getInt("id_usuario_reenviar"));
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al obtener el filtro con el id " + idFiltro + ".");
     }
 
@@ -133,7 +134,7 @@ public class FiltroDAO {
         listaFiltros.add(filtro);
       }
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al obtener el listado de filtros del usuario con id " + idUsuario + ".");
     }
@@ -173,7 +174,7 @@ public class FiltroDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException(
           "Error al actualizar el filtro con id " + filtro.getIdFiltro() + ".");
     }
@@ -197,7 +198,7 @@ public class FiltroDAO {
 
       System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-    } catch (java.sql.SQLException e) {
+    } catch (SQLException e) {
       throw new SQLDBException("Error al actualizar el filtro con id " + idFiltro + ".");
     }
 

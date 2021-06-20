@@ -6,9 +6,9 @@ import javax.sql.DataSource;
 
 public class DBCPDataSourceFactory {
 
-  private static final String usuario = "root";
-  private static final String clave = "myuser77pass";
-  private static final String host = "localhost";
+  private static final String usuario = "jvega420";
+  private static final String clave = "pwd420";
+  private static final String host = "bd1.mooo.com";
   private static final String puerto = "3306";
   private static final String baseDeDatos = "jvega420_3";
   private static final String cantidadConexionesMax = "max-connections=10";

@@ -2,6 +2,7 @@ package com.gmail.exception;
 
 public class CorreoException extends Exception {
 
+  private String message;
   private int error;
   private int id;
 
@@ -24,33 +25,39 @@ public class CorreoException extends Exception {
   @Override
   public String getMessage() {
 
-    String mensaje;
+    if (message != null && !message.isBlank()) {
+      return message;
+    }
 
     switch (error) {
       case 1:
-        mensaje = "Correo_Error 01: No existe correo con id = " + id;
+        message = "Correo_Error 01: No existe correo con id = " + id;
         break;
       case 2:
-        mensaje = "Correo_Error 02: El correo esta en papelera";
+        message = "Correo_Error 02: El correo esta en papelera";
         break;
       case 3:
-        mensaje = "Correo_Error 03: El correo esta enviado";
+        message = "Correo_Error 03: El correo esta enviado";
         break;
       case 4:
-        mensaje = "Correo_Error 04: No pudo modificarse";
+        message = "Correo_Error 04: No pudo modificarse";
       case 5:
-        mensaje = "Correo_Error 05: No pudo eliminarse";
+        message = "Correo_Error 05: No pudo eliminarse";
       case 6:
-        mensaje = "Correo_Error 06: No pudo enviar el correo al usuario id = " + id;
+        message = "Correo_Error 06: No pudo enviar el correo al usuario id = " + id;
       case 7:
-        mensaje = "Correo_Error 07: No pudo enviar el correo a " + id + " usuarios";
+        message = "Correo_Error 07: No pudo enviar el correo a " + id + " usuarios";
       default:
-        mensaje = "Correo_Error 00: No identificado";
+        message = "Correo_Error 00: No identificado";
         break;
     }
 
-    return mensaje;
+    return message;
 
+  }
+
+  public void setMessage(String message){
+    this.message = message;
   }
 
 }
