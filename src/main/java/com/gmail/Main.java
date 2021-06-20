@@ -48,7 +48,7 @@ public class Main {
     try {
       usuarioService.crear(usuario);
     } catch (ValidationException | NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     ////////////
@@ -63,7 +63,7 @@ public class Main {
     try {
       usuarioService.crear(usuario);
     } catch (ValidationException | NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     ////////////
@@ -78,7 +78,7 @@ public class Main {
     try {
       usuarioService.crear(usuario);
     } catch (ValidationException | NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -89,7 +89,7 @@ public class Main {
     try {
       absUsuario = usuarioService.obtenerUno("gzaragoi782@iua.edu.ar");
     } catch (NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(absUsuario.getIdUsuario());
@@ -97,7 +97,7 @@ public class Main {
     try {
       System.out.println(usuarioService.obtenerUno(1));
     } catch (NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -112,7 +112,7 @@ public class Main {
     try {
       absCorreo = correoService.crear(correo);
     } catch (CorreoException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -122,13 +122,13 @@ public class Main {
     try {
       absUsuario = usuarioService.obtenerUno("jvega420@iua.edu.ar");
     } catch (NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     try {
       correoService.enviar(absCorreo.getIdCorreo(), absUsuario.getIdUsuario());
     } catch (CloneNotSupportedException | CorreoException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -138,7 +138,7 @@ public class Main {
     try {
       correoService.eliminarEnviado(absCorreo.getIdCorreo());
     } catch (CorreoException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -153,7 +153,7 @@ public class Main {
     try {
       filtroService.crear(filtro);
     } catch (FiltroException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -165,14 +165,14 @@ public class Main {
     try {
       absUsuario2 = usuarioService.obtenerUno("mgonzales999@iua.edu.ar");
     } catch (NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     try {
       correoService.reeEnviar(absCorreo.getIdCorreo(), absUsuario.getIdUsuario(),
           absUsuario2.getIdUsuario());
     } catch (CloneNotSupportedException | CorreoException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -186,7 +186,7 @@ public class Main {
     try {
       absEtiqueta = etiquetaService.crear(etiquetaDTO);
     } catch (ValidationException | NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -197,7 +197,7 @@ public class Main {
     try {
       etiquetaService.agregarEtiquetaACorreo(absEtiqueta.getIdEtiqueta(), absCorreo.getIdCorreo());
     } catch (NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -208,7 +208,7 @@ public class Main {
       mostrarService
           .mostrarCorreos(correoService.obtenerEnviados(absUsuario.getIdUsuario(), false));
     } catch (CorreoException | SQLDBException | NotFoundException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -222,13 +222,13 @@ public class Main {
     try {
       absCorreo = correoService.crear(correo);
     } catch (CorreoException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     try {
       correoService.enviar(absCorreo.getIdCorreo(), absUsuario.getIdUsuario());
     } catch (CloneNotSupportedException | CorreoException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -239,7 +239,7 @@ public class Main {
       mostrarService
           .mostrarCorreos(correoService.obtenerRecibidos(absUsuario.getIdUsuario(), false));
     } catch (CorreoException | SQLDBException | NotFoundException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -252,7 +252,7 @@ public class Main {
         System.out.println(etiqueta);
       }
     } catch (NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -264,7 +264,7 @@ public class Main {
       mostrarService
           .abrirCorreo(correoService.leeCorreo(absCorreo.getIdCorreo(), absUsuario.getIdUsuario()));
     } catch (CorreoException | SQLDBException | NotFoundException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     System.out.println(
@@ -278,7 +278,7 @@ public class Main {
     try {
       absCorreo = correoService.crear(correo);
     } catch (CorreoException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     correo.setAsunto("Todo bien?");
@@ -287,14 +287,14 @@ public class Main {
     try {
       absCorreo = correoService.modificar(correo);
     } catch (CorreoException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
     try {
       correoService.enviar(absCorreo.getIdCorreo(),
           usuarioService.obtenerUno("gzaragoi782@iua.edu.ar").getIdUsuario());
     } catch (CloneNotSupportedException | CorreoException | NotFoundException | SQLDBException e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
 
   }
