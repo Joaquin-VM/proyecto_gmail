@@ -260,8 +260,8 @@ public class Main {
         "EL USUARIO jvega420@iua.edu.ar LEE EL CORREO QUE LE ENVIO mgonzales999@iua.edu.ar");
 
     try {
-      mostrarService
-          .abrirCorreo(correoService.leeCorreo(absCorreo.getIdCorreo(), absUsuario.getIdUsuario()));
+      mostrarService.abrirCorreo(correoService.leeCorreo(absCorreo.getIdCorreo(), absUsuario.getIdUsuario()));
+      System.out.println("hola");
     } catch (CorreoException | SQLDBException | NotFoundException e) {
       System.out.println(e.getMessage());
     }
