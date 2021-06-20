@@ -150,7 +150,7 @@ public class CorreoDAO {
       preparedStatement.setShort(1, (short) (borrado ? 1 : 0));
       preparedStatement.setInt(2, idUsuario);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -391,6 +391,8 @@ public class CorreoDAO {
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idCorreo);
+
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 

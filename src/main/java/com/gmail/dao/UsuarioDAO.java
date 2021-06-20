@@ -62,7 +62,7 @@ public class UsuarioDAO {
 
       preparedStatement.setInt(1, idUsuario);
 
-      System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
