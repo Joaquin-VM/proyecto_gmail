@@ -293,7 +293,7 @@ public class Main {
 
     try {
       correoService.enviar(absCorreo.getIdCorreo(),
-          usuarioService.obtenerUno("gzaragoi782@iua.edu.ar").getIdUsuario());
+          usuarioService.obtenerUno("gzaragosi782@iua.edu.ar").getIdUsuario());
     } catch (CloneNotSupportedException | CorreoException | NotFoundException | SQLDBException e) {
       System.out.println(e.getMessage());
     }
