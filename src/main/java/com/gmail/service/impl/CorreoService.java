@@ -487,6 +487,8 @@ public class CorreoService implements ICorreoService {
       throw new CorreoException(2);
     }
 
+    correoGuardado.setUsuariosQueRecibieron(dao.correosQueRecibieron(correoGuardado.getIdCorreo()));
+
     if (correoGuardado.getLeido()) {
       return correoGuardado;
     } else {
@@ -494,6 +496,7 @@ public class CorreoService implements ICorreoService {
       if (!dao.updateCorreoRecibido(correoGuardado, idUsuario)) {
         throw new CorreoException(4);
       }
+
       return correoGuardado;
     }
 

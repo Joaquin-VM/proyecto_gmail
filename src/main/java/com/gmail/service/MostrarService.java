@@ -79,15 +79,19 @@ public class MostrarService {
     System.out.println("----------------------------------");
     System.out.println("Enviado por: " + usuarioService.obtenerUno(c.getIdUsuario()).getCorreo());
     System.out.println(
-        "Enviado el: " + c.getFechaHora().getDayOfMonth() + " " + c.getFechaHora().getMonth() + " " + c
-            .getFechaHora().getYear() + " a las " + c.getFechaHora().getHour() + ":" + c.getFechaHora().getMinute());
+        "Enviado el: " + c.getFechaHora().getDayOfMonth() + " " + c.getFechaHora().getMonth() + " "
+            + c
+            .getFechaHora().getYear() + " a las " + c.getFechaHora().getHour() + ":" + ((c
+            .getFechaHora().getMinute()) < 10 ? ("0" + c.getFechaHora().getMinute())
+            : c.getFechaHora().getMinute()));
     System.out.print("Recibido por: ");
-    for(int i = 0; i < c.getUsuariosQueRecibieron().size(); ++i){
+    for (int i = 0; i < c.getUsuariosQueRecibieron().size(); ++i) {
       System.out.print(c.getUsuariosQueRecibieron().get(i));
-      if(i < c.getUsuariosQueRecibieron().size() - 1){
+      if (i < c.getUsuariosQueRecibieron().size() - 1) {
         System.out.println(", ");
       }
     }
+    System.out.println();
     System.out.println(c.getCuerpo());
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////");

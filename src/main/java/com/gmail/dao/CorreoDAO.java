@@ -381,8 +381,8 @@ public class CorreoDAO {
 
   public List<String> correosQueRecibieron(int idCorreo) throws SQLDBException {
 
-    String QUERY = "SELECT u.correo FROM usuario u INNER JOIN"
-        + "recibidos r ON u.id_usuario = r.id_usuario_2 WHERE"
+    String QUERY = "SELECT u.correo FROM usuario u INNER JOIN "
+        + "recibidos r ON u.id_usuario = r.id_usuario_2 WHERE "
         + "id_correo = ?;";
 
     List<String> listaCorreos = new ArrayList<>();
