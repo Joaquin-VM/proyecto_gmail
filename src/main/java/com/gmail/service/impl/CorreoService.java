@@ -161,7 +161,7 @@ public class CorreoService implements ICorreoService {
       throw new CorreoException("Error: No existe Usuario con id = " + idUsuario);
     }
 
-    List<AbsCorreo> correosGuardados = dao.getCorreosRecibidos(idUsuario, borrado);
+    List<AbsCorreo> correosGuardados = dao.getCorreosEnviados(idUsuario, borrado);
 
     return correosGuardados;
   }
@@ -343,8 +343,8 @@ public class CorreoService implements ICorreoService {
       throws CorreoException, SQLDBException, CloneNotSupportedException {
 
     AbsCorreo correoGuardado = obtenerRecibido(idCorreo, idUsuarioEmisor);
-    AbsUsuario emisor = usuarioDAO.getUsuario(correoGuardado.getIdUsuario());
-    AbsUsuario receptor = usuarioDAO.getUsuario(idUsuarioEmisor);
+    AbsUsuario creador = usuarioDAO.getUsuario(correoGuardado.getIdUsuario());
+    AbsUsuario reenviador = usuarioDAO.getUsuario(idUsuarioEmisor);
 
     correoGuardado.setBorrado(false);
     correoGuardado.setLeido(false);
@@ -353,7 +353,7 @@ public class CorreoService implements ICorreoService {
     correoGuardado.setIdUsuario(idUsuarioEmisor);
 
     correoGuardado.setCuerpo(
-        "\"Reenvio de correo\" \n De: " + emisor.getCorreo() + "-->Para: " + receptor.getCorreo()
+        "\"Reenvio de correo\" \n De: " + creador.getCorreo() + "-->Para: " + reenviador.getCorreo()
             + "\n" +
             "Enviado en la fecha: " + correoGuardado.getFechaHora() + "\n" + correoGuardado
             .getCuerpo());
