@@ -54,6 +54,7 @@ public class MostrarService {
 
 
   public void abrirCorreo(AbsCorreo c) throws SQLDBException {
+
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////");
     String asunt = c.getAsunto();
@@ -69,7 +70,6 @@ public class MostrarService {
     System.out.println(c.getCuerpo());
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////");
-
 
   }
 
