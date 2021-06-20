@@ -161,7 +161,7 @@ public class CorreoService implements ICorreoService {
       throw new CorreoException("Error: No existe Usuario con id = " + idUsuario);
     }
 
-    List<AbsCorreo> correosGuardados = dao.getCorreosRecibidos(idUsuario, borrado);
+    List<AbsCorreo> correosGuardados = dao.getCorreosEnviados(idUsuario, borrado);
 
     return correosGuardados;
   }
