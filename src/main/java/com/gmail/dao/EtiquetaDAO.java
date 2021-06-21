@@ -154,7 +154,7 @@ public class EtiquetaDAO {
 
 //      System.out.println(preparedStatement);
 
-//      int filasAfectadas = preparedStatement.executeUpdate();
+      int filasAfectadas = preparedStatement.executeUpdate();
 
 //      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
@@ -178,7 +178,7 @@ public class EtiquetaDAO {
 
 //      System.out.println(preparedStatement);
 
-//      int filasAfectadas = preparedStatement.executeUpdate();
+      int filasAfectadas = preparedStatement.executeUpdate();
 
 //      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
@@ -259,7 +259,7 @@ public class EtiquetaDAO {
 
 //      System.out.println(preparedStatement);
 
-//      int filasAfectadas = preparedStatement.executeUpdate();
+      int filasAfectadas = preparedStatement.executeUpdate();
 
 //      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 

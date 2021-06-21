@@ -142,7 +142,7 @@ public class UsuarioDAO {
         usuario.setIdUsuario(rs.getInt(1));
       }
 
-//      int filasAfectadas = preparedStatement.executeUpdate();
+      int filasAfectadas = preparedStatement.executeUpdate();
 
 //      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
@@ -166,7 +166,7 @@ public class UsuarioDAO {
 
 //      System.out.println(preparedStatement);
 
-//      int filasAfectadas = preparedStatement.executeUpdate();
+      int filasAfectadas = preparedStatement.executeUpdate();
 
 //      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
