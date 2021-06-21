@@ -201,8 +201,8 @@ public class CorreoService implements ICorreoService {
 
     List<AbsFiltro> filtroRecibido = filtroDAO.listarFiltrosUsuario(idUsuario);
     List<AbsFiltro> filtroEnvio = filtroDAO.listarFiltrosUsuario(correoGuardado.getIdUsuario());
-    List<AbsFiltro> filtroEnviadoCoincidente = new ArrayList<AbsFiltro>();
-    List<AbsFiltro> filtroRecibidoCoincidente = new ArrayList<AbsFiltro>();
+    List<AbsFiltro> filtroEnviadoCoincidente = new ArrayList<>();
+    List<AbsFiltro> filtroRecibidoCoincidente = new ArrayList<>();
 
     for (AbsFiltro filtro : filtroEnvio) {
 
