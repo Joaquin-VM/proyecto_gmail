@@ -16,6 +16,10 @@ public class CorreoDTO {
   Boolean destacado;
   Boolean importante;
 
+  public CorreoDTO() {
+
+  }
+
   public CorreoDTO(AbsCorreo correo) {
     this.idCorreo = correo.getIdCorreo();
     this.idUsuario = correo.getIdUsuario();
@@ -29,88 +33,94 @@ public class CorreoDTO {
     this.importante = correo.getImportante();
   }
 
-  public CorreoDTO() {
-  }
-
   public int getIdCorreo() {
     return idCorreo;
   }
 
-  public void setIdCorreo(int idCorreo) {
+  public CorreoDTO setIdCorreo(int idCorreo) {
     this.idCorreo = idCorreo;
+    return this;
   }
 
   public int getIdUsuario() {
     return idUsuario;
   }
 
-  public void setIdUsuario(int idUsuario) {
+  public CorreoDTO setIdUsuario(int idUsuario) {
     this.idUsuario = idUsuario;
+    return this;
   }
 
   public String getAsunto() {
     return asunto;
   }
 
-  public void setAsunto(String asunto) {
+  public CorreoDTO setAsunto(String asunto) {
     this.asunto = asunto;
+    return this;
   }
 
   public String getCuerpo() {
     return cuerpo;
   }
 
-  public void setCuerpo(String cuerpo) {
+  public CorreoDTO setCuerpo(String cuerpo) {
     this.cuerpo = cuerpo;
+    return this;
   }
 
   public LocalDateTime getFechaHora() {
     return fechaHora;
   }
 
-  public void setFechaHora(LocalDateTime fechaHora) {
+  public CorreoDTO setFechaHora(LocalDateTime fechaHora) {
     this.fechaHora = fechaHora;
+    return this;
   }
 
   public Boolean getConfirmado() {
     return confirmado;
   }
 
-  public void setConfirmado(Boolean confirmado) {
+  public CorreoDTO setConfirmado(Boolean confirmado) {
     this.confirmado = confirmado;
+    return this;
   }
 
   public Boolean getBorrado() {
     return borrado;
   }
 
-  public void setBorrado(Boolean borrado) {
+  public CorreoDTO setBorrado(Boolean borrado) {
     this.borrado = borrado;
+    return this;
   }
 
   public Boolean getLeido() {
     return leido;
   }
 
-  public void setLeido(Boolean leido) {
+  public CorreoDTO setLeido(Boolean leido) {
     this.leido = leido;
+    return this;
   }
 
   public Boolean getDestacado() {
     return destacado;
   }
 
-  public void setDestacado(Boolean destacado) {
+  public CorreoDTO setDestacado(Boolean destacado) {
     this.destacado = destacado;
+    return this;
   }
 
   public Boolean getImportante() {
     return importante;
   }
 
-  public void setImportante(Boolean importante) {
+  public CorreoDTO setImportante(Boolean importante) {
     this.importante = importante;
+    return this;
   }
-
 
 }

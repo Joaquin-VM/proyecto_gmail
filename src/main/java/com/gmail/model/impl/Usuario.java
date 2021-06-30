@@ -4,7 +4,7 @@ import com.gmail.dto.UsuarioDTO;
 import com.gmail.model.AbsUsuario;
 import java.time.LocalDate;
 
-class Usuario extends AbsUsuario {
+public class Usuario extends AbsUsuario {
 
   public Usuario() {
     super();

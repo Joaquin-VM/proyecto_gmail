@@ -69,7 +69,7 @@ public class UsuarioService implements IUsuarioService {
   }
 
   @Override
-  public boolean eliminar(int idUsuario) throws SQLDBException, NotFoundException {
+  public boolean eliminar(int idUsuario) throws NotFoundException, SQLDBException {
 
     if (!existeUsuario(idUsuario)) {
       throw new NotFoundException("El usuario a eliminar no existe.");

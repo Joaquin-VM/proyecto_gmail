@@ -1,5 +1,6 @@
 package com.gmail.dto;
 
+import com.gmail.model.AbsUsuario;
 import java.time.LocalDate;
 
 public class UsuarioDTO {
@@ -13,68 +14,91 @@ public class UsuarioDTO {
   String sexo;
   LocalDate fechaNacimiento;
 
+  public UsuarioDTO(){
+
+  }
+
+  public UsuarioDTO(AbsUsuario usuario) {
+    this.idUsuario = usuario.getIdUsuario();
+    this.nombre = usuario.getNombre();
+    this.apellido = usuario.getApellido();
+    this.correo = usuario.getCorreo();
+    this.contrasenia = usuario.getContrasenia();
+    this.telefono = usuario.getTelefono();
+    this.sexo = usuario.getSexo();
+    this.fechaNacimiento = usuario.getFechaNacimiento();
+  }
+
   public int getIdUsuario() {
     return idUsuario;
   }
 
-  public void setIdUsuario(int idUsuario) {
+  public UsuarioDTO setIdUsuario(int idUsuario) {
     this.idUsuario = idUsuario;
+    return this;
   }
 
   public String getNombre() {
     return nombre;
   }
 
-  public void setNombre(String nombre) {
+  public UsuarioDTO setNombre(String nombre) {
     this.nombre = nombre;
+    return this;
   }
 
   public String getApellido() {
     return apellido;
   }
 
-  public void setApellido(String apellido) {
+  public UsuarioDTO setApellido(String apellido) {
     this.apellido = apellido;
+    return this;
   }
 
   public String getCorreo() {
     return correo;
   }
 
-  public void setCorreo(String correo) {
+  public UsuarioDTO setCorreo(String correo) {
     this.correo = correo;
+    return this;
   }
 
   public String getContrasenia() {
     return contrasenia;
   }
 
-  public void setContrasenia(String contrasenia) {
+  public UsuarioDTO setContrasenia(String contrasenia) {
     this.contrasenia = contrasenia;
+    return this;
   }
 
   public String getTelefono() {
     return telefono;
   }
 
-  public void setTelefono(String telefono) {
+  public UsuarioDTO setTelefono(String telefono) {
     this.telefono = telefono;
+    return this;
   }
 
   public String getSexo() {
     return sexo;
   }
 
-  public void setSexo(String sexo) {
+  public UsuarioDTO setSexo(String sexo) {
     this.sexo = sexo;
+    return this;
   }
 
   public LocalDate getFechaNacimiento() {
     return fechaNacimiento;
   }
 
-  public void setFechaNacimiento(LocalDate fechaNacimiento) {
+  public UsuarioDTO setFechaNacimiento(LocalDate fechaNacimiento) {
     this.fechaNacimiento = fechaNacimiento;
+    return this;
   }
 
 }
