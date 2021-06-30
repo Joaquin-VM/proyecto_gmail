@@ -11,6 +11,8 @@ import com.gmail.dto.CorreoDTO;
 import com.gmail.dto.EtiquetaDTO;
 import com.gmail.dto.FiltroDTO;
 import com.gmail.dto.UsuarioDTO;
+import com.gmail.exception.NotFoundException;
+import com.gmail.exception.SQLDBException;
 import com.gmail.rest.controller.json.response.StandardResponse;
 import com.gmail.rest.controller.json.response.StatusResponse;
 import com.gmail.service.MostrarService;
@@ -134,83 +136,124 @@ public class RestApp {
           return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
-      });
+        //TODOS LOS GET DE CORREO.
+        path("/leer", () -> {
 
-      //TODOS LOS GET DE CORREO.
-      path("/leer", () -> {
+          //OBTENIDO.
+          //http://localhost:6584/api/correo/leer/id_correo/id_usuario
+          get("/:id_correo/:id_usuario", (req, res) -> {
+            res.type("application/json");
 
-        //ENVIADO.
-        get("/enviado/:id", (req, res) -> {
-          res.type("application/json");
+            try {
+              return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                  new Gson()
+                      .toJsonTree(
+                          correoService.leeCorreo(Integer.parseInt(req.params(":id_correo")),
+                              Integer.parseInt(req.params(":id_usuario"))))));
+            } catch (Exception e) {
+              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+            }
 
-          try {
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                new Gson()
-                    .toJsonTree(
-                        correoService.obtenerEnviado(Integer.parseInt(req.params(":id"))))));
-          } catch (Exception e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-          }
+          });
+
+          //ENVIADO.
+          //http://localhost:6584/api/correo/leer/enviado/id
+          get("/enviado/:id", (req, res) -> {
+            res.type("application/json");
+
+            try {
+              return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                  new Gson()
+                      .toJsonTree(
+                          correoService.obtenerEnviado(Integer.parseInt(req.params(":id"))))));
+            } catch (Exception e) {
+              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+            }
+
+          });
+
+          //ENVIADOS.
+          get("/enviados/:id_usuario/:borrado", (req, res) -> {
+            res.type("application/json");
+
+            try {
+              return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                  new Gson()
+                      .toJsonTree(
+                          correoService.obtenerEnviados(Integer.parseInt(req.params(":id_usuario")),
+                              Boolean.valueOf(req.params(":borrado"))))));
+            } catch (Exception e) {
+              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+            }
+
+          });
+
+          //RECIBIDOS.
+          get("/recibidos/:id_usuario/:borrado", (req, res) -> {
+            res.type("application/json");
+
+            try {
+              return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                  new Gson()
+                      .toJsonTree(
+                          correoService
+                              .obtenerRecibidos(Integer.parseInt(req.params(":id_usuario")),
+                                  Boolean.valueOf(":borrado")))));
+            } catch (Exception e) {
+              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+            }
+
+          });
 
         });
 
-        //RECIBIDO.
-        get("/recibido/:id_correo/:id_usuario", (req, res) -> {
-          res.type("application/json");
+        path("/enviar", () -> {
 
-          try {
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                new Gson()
-                    .toJsonTree(
-                        correoService.obtenerRecibido(Integer.parseInt(req.params(":id_correo")),
-                            Integer.parseInt(req.params(":id_usuario"))))));
-          } catch (Exception e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-          }
+          //ENVIAR A 1.
+          //http://localhost:6584/api/correo/enviar/id_correo/id_usuario
+          post("/:id_correo/:id_usuario", (req, res) -> {
+            res.type("application/json");
 
-        });
+            try {
+              correoService.enviar(Integer.parseInt(req.queryParams(":id_correo")),
+                  Integer.parseInt(req.queryParams(":id_usuario")));
+            } catch (Exception e) {
+              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+            }
 
-        //ENVIADOS.
-        get("/enviados/:id_usuario/:borrado", (req, res) -> {
-          res.type("application/json");
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+          });
 
-          try {
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                new Gson()
-                    .toJsonTree(
-                        correoService.obtenerEnviados(Integer.parseInt(req.params(":id_usuario")),
-                            Boolean.valueOf(req.params(":borrado"))))));
-          } catch (Exception e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-          }
+          //ENVIAR A MAS DE 1: ENVIAR A 2.
+          post("/:id_correo/:id_usuario_1/:id_usuario_2", (req, res) -> {
+            res.type("application/json");
 
-        });
+            CorreoDTO correoDTO = new Gson().fromJson(req.body(), CorreoDTO.class);
 
-        //RECIBIDOS.
-        get("/recibidos/:id_usuario/:borrado", (req, res) -> {
-          res.type("application/json");
+            try {
+              correoService.enviar(Integer.parseInt(req.queryParams(":id_correo")),
+                  new int[]{Integer.parseInt(req.queryParams(":id_usuario_1")),
+                      Integer.parseInt(req.queryParams(":id_usuario_2"))}
+              );
+            } catch (Exception e) {
+              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+            }
 
-          try {
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                new Gson()
-                    .toJsonTree(
-                        correoService.obtenerRecibidos(Integer.parseInt(req.params(":id_usuario")),
-                            Boolean.valueOf(":borrado")))));
-          } catch (Exception e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-          }
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+          });
 
         });
 
-        //ENVIAR.
-        post("/crear/:id_correo/:id_usuario", (req, res) -> {
+        //REENVIAR.
+        post("/reenviar/:id_correo/:id_usuario_emisor/:id_usuario_receptor", (req, res) -> {
           res.type("application/json");
 
           CorreoDTO correoDTO = new Gson().fromJson(req.body(), CorreoDTO.class);
 
           try {
-            correoService.enviar(Integer.parseInt(req.queryParams(":id_correo")),
-                Integer.parseInt(req.queryParams(":id_usuario")));
+            correoService.reeEnviar(Integer.parseInt(req.queryParams(":id_correo")),
+                Integer.parseInt(req.queryParams(":id_usuario_emisor")),
+                Integer.parseInt(req.queryParams(":id_usuario_receptor")));
           } catch (Exception e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
@@ -218,28 +261,9 @@ public class RestApp {
           return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
+        //FALTA GET, ELIMINAR Y MODIFICAR DE CORREO.
+
       });
-
-      //ENVIAR A MAS DE 1.
-
-      //REENVIAR.
-      post("/crear/:id_correo/:id_usuario_emisor/:id_usuario_receptor", (req, res) -> {
-        res.type("application/json");
-
-        CorreoDTO correoDTO = new Gson().fromJson(req.body(), CorreoDTO.class);
-
-        try {
-          correoService.reeEnviar(Integer.parseInt(req.queryParams(":id_correo")),
-              Integer.parseInt(req.queryParams(":id_usuario_emisor")),
-              Integer.parseInt(req.queryParams(":id_usuario_receptor")));
-        } catch (Exception e) {
-          return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-        }
-
-        return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
-      });
-
-      //FALTA GET, ELIMINAR Y MODIFICAR DE CORREO.
 
       //ETIQUETA.
       path("/etiqueta", () -> {
@@ -294,42 +318,42 @@ public class RestApp {
 
         });
 
-        //FILTRO. //Tiene que englobar.
+      });
 
-        path("/filtro", () -> {
+      //FILTRO. //Tiene que englobar.
 
-          //http://localhost:6584/api/filtro/crear
-          post("/crear", (req, res) -> {
-            res.type("application/json");
+      path("/filtro", () -> {
 
-            FiltroDTO filtroDTO = new Gson().fromJson(req.body(), FiltroDTO.class);
+        //http://localhost:6584/api/filtro/crear
+        post("/crear", (req, res) -> {
+          res.type("application/json");
 
-            try {
-              filtroService.crear(filtroDTO);
-            } catch (Exception e) {
-              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-            }
+          FiltroDTO filtroDTO = new Gson().fromJson(req.body(), FiltroDTO.class);
 
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
-          });
+          try {
+            filtroService.crear(filtroDTO);
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+          }
 
-          //http://localhost:6584/api/filtro/leer/id
-          get("/leer/:id", (req, res) -> {
-            res.type("application/json");
+          return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+        });
 
-            try {
-              return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                  new Gson()
-                      .toJsonTree(filtroService.obtenerUno(Integer.parseInt(req.params(":id"))))));
-            } catch (Exception e) {
-              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-            }
+        //http://localhost:6584/api/filtro/leer/id
+        get("/leer/:id", (req, res) -> {
+          res.type("application/json");
 
-          });
-
-          //FALTA MODIFICAR FILTRO. FILTRO NO LLEVA ELIMINAR.
+          try {
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                new Gson()
+                    .toJsonTree(filtroService.obtenerUno(Integer.parseInt(req.params(":id"))))));
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+          }
 
         });
+
+        //FALTA MODIFICAR FILTRO. FILTRO NO LLEVA ELIMINAR.
 
       });
 
@@ -338,3 +362,4 @@ public class RestApp {
   }
 
 }
+
