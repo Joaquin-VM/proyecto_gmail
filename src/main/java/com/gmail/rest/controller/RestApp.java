@@ -41,6 +41,7 @@ public class RestApp {
       });
 
       //USUARIO.
+      ////http://localhost:6584/api/usuario
       path("/usuario", () -> {
 
         //http://localhost:6584/api/usuario/crear
@@ -170,14 +171,14 @@ public class RestApp {
         });
 
         //ENVIADOS.
-        get("/enviados/:id/:borrado", (req, res) -> {
+        get("/enviados/:id_usuario/:borrado", (req, res) -> {
           res.type("application/json");
 
           try {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
                 new Gson()
                     .toJsonTree(
-                        correoService.obtenerEnviados(Integer.parseInt(req.params(":id")),
+                        correoService.obtenerEnviados(Integer.parseInt(req.params(":id_usuario")),
                             Boolean.valueOf(req.params(":borrado"))))));
           } catch (Exception e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
@@ -186,14 +187,14 @@ public class RestApp {
         });
 
         //RECIBIDOS.
-        get("/recibidos/:id/:borrado", (req, res) -> {
+        get("/recibidos/:id_usuario/:borrado", (req, res) -> {
           res.type("application/json");
 
           try {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
                 new Gson()
                     .toJsonTree(
-                        correoService.obtenerRecibidos(Integer.parseInt(req.params(":id")),
+                        correoService.obtenerRecibidos(Integer.parseInt(req.params(":id_usuario")),
                             Boolean.valueOf(":borrado")))));
           } catch (Exception e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
@@ -293,7 +294,7 @@ public class RestApp {
 
         });
 
-        //FILTRO.
+        //FILTRO. //Tiene que englobar.
 
         //http://localhost:6584/api/filtro/crear
         post("/crear", (req, res) -> {
