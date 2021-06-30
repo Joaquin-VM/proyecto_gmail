@@ -296,39 +296,42 @@ public class RestApp {
 
         //FILTRO. //Tiene que englobar.
 
-        //http://localhost:6584/api/filtro/crear
-        post("/crear", (req, res) -> {
-          res.type("application/json");
+        path("/filtro", () -> {
 
-          FiltroDTO filtroDTO = new Gson().fromJson(req.body(), FiltroDTO.class);
+          //http://localhost:6584/api/filtro/crear
+          post("/crear", (req, res) -> {
+            res.type("application/json");
 
-          try {
-            filtroService.crear(filtroDTO);
-          } catch (Exception e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-          }
+            FiltroDTO filtroDTO = new Gson().fromJson(req.body(), FiltroDTO.class);
 
-          return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+            try {
+              filtroService.crear(filtroDTO);
+            } catch (Exception e) {
+              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+            }
+
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+          });
+
+          //http://localhost:6584/api/filtro/leer/id
+          get("/leer/:id", (req, res) -> {
+            res.type("application/json");
+
+            try {
+              return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                  new Gson()
+                      .toJsonTree(filtroService.obtenerUno(Integer.parseInt(req.params(":id"))))));
+            } catch (Exception e) {
+              return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+            }
+
+          });
+
+          //FALTA MODIFICAR FILTRO. FILTRO NO LLEVA ELIMINAR.
+
         });
-
-        //http://localhost:6584/api/filtro/leer/id
-        get("/leer/:id", (req, res) -> {
-          res.type("application/json");
-
-          try {
-            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                new Gson()
-                    .toJsonTree(filtroService.obtenerUno(Integer.parseInt(req.params(":id"))))));
-          } catch (Exception e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
-          }
-
-        });
-
-        //FALTA MODIFICAR FILTRO. FILTRO NO LLEVA ELIMINAR.
 
       });
-
 
     });
 
