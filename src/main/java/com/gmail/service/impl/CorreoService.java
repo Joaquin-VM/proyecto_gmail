@@ -311,34 +311,9 @@ public class CorreoService implements ICorreoService {
       throws CorreoException, SQLDBException, CloneNotSupportedException {
 
     AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
-    AbsCorreo correoPorEnviar = (AbsCorreo) correoGuardado.clone();
-    correoPorEnviar.setDestacado(false);
-    correoPorEnviar.setImportante(false);
 
-    if (correoGuardado == null) {
-      throw new CorreoException(1, idCorreo);
-    }
-
-    if (correoGuardado.getConfirmado()) {
-      throw new CorreoException(3);
-    }
-
-    if (correoGuardado.getBorrado()) {
-      throw new CorreoException(2);
-    }
-    for (int id : idUsuario) {
-      if (usuarioDAO.getUsuario(id) == null) {
-        throw new CorreoException("Error: No existe Usuario con id = " + id);
-      }
-    }
-
-    correoGuardado.setFechaHora(LocalDateTime.now());
-    correoGuardado.setConfirmado(true);
-
-    if (dao.enviarCorreo(correoPorEnviar, idUsuario)) {
-      if (!dao.updateCorreo(correoGuardado)) {
-        throw new CorreoException(4);
-      }
+    for(int i : idUsuario){
+      this.enviar(idCorreo, i);
     }
 
     return correoGuardado;

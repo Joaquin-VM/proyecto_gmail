@@ -59,12 +59,12 @@ public class RestApp {
         get("/leer", (req, res) -> {
           res.type("application/json");
 
-          int id = Integer.parseInt(req.queryParams("id"));
+          int idUsuario = Integer.parseInt(req.queryParams("idUsuario"));
 
           try {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
                 new Gson()
-                    .toJsonTree(usuarioService.obtenerUno(id))));
+                    .toJsonTree(usuarioService.obtenerUno(idUsuario))));
           } catch (Exception e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
@@ -74,7 +74,7 @@ public class RestApp {
         delete("/eliminar", (req, res) -> {
           res.type("application/json");
 
-          int idUsuario = Integer.parseInt(req.params("idUsuario"));
+          int idUsuario = Integer.parseInt(req.queryParams("idUsuario"));
 
           try {
             usuarioService.eliminar(idUsuario);
@@ -133,12 +133,13 @@ public class RestApp {
         path("/leer", () -> {
 
           //OBTENIDO.
+          //http://localhost:6584/api/correo/leer/recibido y 2 parametros idCorreo e idUsuario.
 
-          get("", (req, res) -> {
+          get("/recibido", (req, res) -> {
             res.type("application/json");
 
-            int idCorreo = Integer.parseInt(req.params("idCorreo"));
-            int idUsuario = Integer.parseInt(req.params("idUsuario"));
+            int idCorreo = Integer.parseInt(req.queryParams("idCorreo"));
+            int idUsuario = Integer.parseInt(req.queryParams("idUsuario"));
 
             try {
               return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
@@ -156,7 +157,7 @@ public class RestApp {
           get("/enviado", (req, res) -> {
             res.type("application/json");
 
-            int idCorreo = Integer.parseInt(req.params("idCorreo"));
+            int idCorreo = Integer.parseInt(req.queryParams("idCorreo"));
 
             try {
               return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
@@ -173,8 +174,8 @@ public class RestApp {
           get("/enviados", (req, res) -> {
             res.type("application/json");
 
-            int idUsuario = Integer.parseInt(req.params("idUsuario"));
-            boolean estaBorrado = Boolean.valueOf(req.params("borrado"));
+            int idUsuario = Integer.parseInt(req.queryParams("idUsuario"));
+            boolean estaBorrado = Boolean.valueOf(req.queryParams("borrado"));
 
             try {
               return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
@@ -191,8 +192,8 @@ public class RestApp {
           get("/recibidos", (req, res) -> {
             res.type("application/json");
 
-            int idUsuario = Integer.parseInt(req.params("idUsuario"));
-            boolean estaBorrado = Boolean.valueOf(req.params("borrado"));
+            int idUsuario = Integer.parseInt(req.queryParams("idUsuario"));
+            boolean estaBorrado = Boolean.valueOf(req.queryParams("borrado"));
 
             try {
               return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
@@ -212,6 +213,7 @@ public class RestApp {
 
           //ENVIAR A 1.
 
+          //http://localhost:6584/api/correo/enviar/uno y 2 parametros idCorreo e idUsuario.
           post("/uno", (req, res) -> {
             res.type("application/json");
 
@@ -227,20 +229,25 @@ public class RestApp {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
           });
 
+          //http://localhost:6584/api/correo/enviar/muchos y 2 parametros idCorreo e N valores de id de usuario.
           //ENVIAR A 1 O MAS USUARIOS.
           post("/muchos", (req, res) -> {
             res.type("application/json");
 
             int idCorreo = Integer.parseInt(req.queryParams("idCorreo"));
-            String[] idUsuariosString = (String[]) req.params().values().toArray();
-            int[] idUsuariosInt = new int[idUsuariosString.length];
 
-            for (int i = 0; i < idUsuariosInt.length; ++i) {
-              idUsuariosInt[i] = Integer.parseInt(idUsuariosString[i]);
+            System.out.println(req.queryParams());
+
+            String[] parametros = req.queryParamsValues("idUsuario").clone();
+
+            int[] arregloIdUsuarios = new int[parametros.length];
+
+            for (int i = 0; i < arregloIdUsuarios.length; ++i) {
+              arregloIdUsuarios[i] = Integer.parseInt(parametros[i]);
             }
 
             try {
-              correoService.enviar(idCorreo, idUsuariosInt);
+              correoService.enviar(idCorreo, arregloIdUsuarios);
             } catch (Exception e) {
               return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
             }
@@ -291,7 +298,7 @@ public class RestApp {
         get("/leer", (req, res) -> {
           res.type("application/json");
 
-          int idEtiqueta = Integer.parseInt(req.params("idEtiqueta"));
+          int idEtiqueta = Integer.parseInt(req.queryParams("idEtiqueta"));
 
           try {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
@@ -306,7 +313,7 @@ public class RestApp {
         delete("/eliminar", (req, res) -> {
           res.type("application/json");
 
-          int idEtiqueta = Integer.parseInt(req.params("idEtiqueta"));
+          int idEtiqueta = Integer.parseInt(req.queryParams("idEtiqueta"));
 
           try {
             etiquetaService.eliminar(idEtiqueta);
@@ -346,7 +353,7 @@ public class RestApp {
         get("/leer", (req, res) -> {
           res.type("application/json");
 
-          int idFiltro = Integer.parseInt(req.params("idFiltro"));
+          int idFiltro = Integer.parseInt(req.queryParams("idFiltro"));
 
           try {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
