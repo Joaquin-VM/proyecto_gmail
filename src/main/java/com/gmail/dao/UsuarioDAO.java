@@ -120,6 +120,8 @@ public class UsuarioDAO {
 
   public AbsUsuario updateUsuario(AbsUsuario usuario) throws SQLDBException {
 
+    System.out.println(usuario);
+
     String UPDATE_USUARIO_SQL = "UPDATE usuario " +
         "SET nombre_usuario = ?, apellido = ?, contrasenia = ?, " +
         "telefono = ?, sexo = ? WHERE id_usuario = ?;";
@@ -135,12 +137,6 @@ public class UsuarioDAO {
       preparedStatement.setInt(6, usuario.getIdUsuario());
 
 //      System.out.println(preparedStatement);
-
-      ResultSet rs = preparedStatement.getGeneratedKeys();
-
-      if (rs.next()) {
-        usuario.setIdUsuario(rs.getInt(1));
-      }
 
       int filasAfectadas = preparedStatement.executeUpdate();
 

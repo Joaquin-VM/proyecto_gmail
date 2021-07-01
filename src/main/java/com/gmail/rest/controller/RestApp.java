@@ -5,6 +5,7 @@ import static spark.Spark.get;
 import static spark.Spark.path;
 import static spark.Spark.port;
 import static spark.Spark.post;
+import static spark.Spark.put;
 
 import com.gmail.dto.CorreoDTO;
 import com.gmail.dto.EtiquetaDTO;
@@ -56,6 +57,7 @@ public class RestApp {
           return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
+        //http://localhost:6584/api/usuario/leer y un parametro de id usuario.
         get("/leer", (req, res) -> {
           res.type("application/json");
 
@@ -90,25 +92,77 @@ public class RestApp {
         });
 
         //http://localhost:6584/api/usuario/modificar
-//        put("/modificar", (req, res) -> {
-//          res.type("application/json");
-//
-//          UsuarioDTO aModificar = new Gson().fromJson(req.body(), UsuarioDTO.class);
-//          UsuarioDTO usuarioModificado = new UsuarioDTO();
-//
-//          String mensajeExcepcion = new String();
-//
-//          try {
-//            usuarioModificado = new UsuarioDTO(usuarioService.modificar(usuarioModificado));
-//            return new Gson().toJson(
-//                new StandardResponse(StatusResponse.SUCCESS,
-//                    new Gson().toJsonTree(usuarioModificado)));
-//          } catch (Exception e) {
-//            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
-//                new Gson().toJson(e.getMessage())));
-//          }
-//
-//        });
+        put("/modificar", (req, res) -> {
+          res.type("application/json");
+
+          UsuarioDTO aModificar = new Gson().fromJson(req.body(), UsuarioDTO.class);
+
+          System.out.println(aModificar.getNombre());
+          System.out.println(aModificar.getIdUsuario());
+
+          UsuarioDTO usuarioGuardado = new UsuarioDTO();
+
+          try{
+            usuarioGuardado = new UsuarioDTO(
+                usuarioService.obtenerUno(aModificar.getIdUsuario()));
+          }catch(Exception e){
+            System.out.println(e.getMessage());
+          }
+
+          if (aModificar.getNombre() != null) {
+            usuarioGuardado.setNombre(aModificar.getNombre());
+          }
+
+          if (aModificar.getApellido() != null) {
+            usuarioGuardado.setApellido(aModificar.getApellido());
+          }
+
+          if (aModificar.getContrasenia() != null) {
+            usuarioGuardado.setContrasenia(aModificar.getContrasenia());
+          }
+
+          if (aModificar.getSexo() != null) {
+            usuarioGuardado.setSexo(aModificar.getSexo());
+          }
+
+          if (aModificar.getTelefono() != null) {
+            usuarioGuardado.setTelefono(aModificar.getTelefono());
+          }
+
+          try {
+            usuarioGuardado = new UsuarioDTO(usuarioService.modificar(usuarioGuardado));
+            return new Gson().toJson(
+                new StandardResponse(StatusResponse.SUCCESS,
+                    new Gson().toJsonTree(usuarioGuardado)));
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
+                new Gson().toJson(e.getMessage())));
+          }
+
+        });
+
+        //http://localhost:6584/api/usuario/modificar
+        put("/modificar", (req, res) -> {
+          res.type("application/json");
+
+          UsuarioDTO aModificar = new Gson().fromJson(req.body(), UsuarioDTO.class);
+          UsuarioDTO usuarioModificado = new UsuarioDTO();
+
+          usuarioModificado = new UsuarioDTO(usuarioService.obtenerUno(aModificar.getIdUsuario()));
+
+          String mensajeExcepcion = new String();
+
+          try {
+            usuarioModificado = new UsuarioDTO(usuarioService.modificar(usuarioModificado));
+            return new Gson().toJson(
+                new StandardResponse(StatusResponse.SUCCESS,
+                    new Gson().toJsonTree(usuarioModificado)));
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
+                new Gson().toJson(e.getMessage())));
+          }
+
+        });
 
       });
 
@@ -191,7 +245,8 @@ public class RestApp {
           });
 
           //RECIBIDOS.
-          http://localhost:6584/api/correo/leer/recibidos y recibe dos parametros idUsuario y borrado.
+          http:
+//localhost:6584/api/correo/leer/recibidos y recibe dos parametros idUsuario y borrado.
 
           get("/recibidos", (req, res) -> {
             res.type("application/json");

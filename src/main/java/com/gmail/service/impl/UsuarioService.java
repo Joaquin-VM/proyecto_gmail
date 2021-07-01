@@ -83,7 +83,7 @@ public class UsuarioService implements IUsuarioService {
   private boolean existeUsuario(int idUsuario) throws SQLDBException, NotFoundException {
 
     if (idUsuario <= 0) {
-      throw new NotFoundException("El usuario a eliminar no existe.");
+      throw new NotFoundException("El usuario no existe.");
     }
 
     return dao.getUsuario(idUsuario) != null;
@@ -93,7 +93,7 @@ public class UsuarioService implements IUsuarioService {
   private boolean existeUsuario(String correo) throws SQLDBException, NotFoundException {
 
     if (correo.isBlank()) {
-      throw new NotFoundException("El usuario a eliminar no existe.");
+      throw new NotFoundException("El usuario no existe.");
     }
 
     return dao.getUsuario(correo) != null;
