@@ -154,6 +154,7 @@ public class RestApp {
 
           //ENVIADO.
 
+          //http://localhost:6584/api/correo/leer/enviado y un parametro de id de correo.
           get("/enviado", (req, res) -> {
             res.type("application/json");
 
@@ -171,6 +172,7 @@ public class RestApp {
           });
 
           //ENVIADOS.
+          //http://localhost:6584/api/correo/leer/enviados y recibe dos parametros idUsuario y borrado.
           get("/enviados", (req, res) -> {
             res.type("application/json");
 
@@ -189,6 +191,8 @@ public class RestApp {
           });
 
           //RECIBIDOS.
+          http://localhost:6584/api/correo/leer/recibidos y recibe dos parametros idUsuario y borrado.
+
           get("/recibidos", (req, res) -> {
             res.type("application/json");
 

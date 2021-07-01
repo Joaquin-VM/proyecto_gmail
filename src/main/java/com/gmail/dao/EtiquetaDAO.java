@@ -63,7 +63,7 @@ public class EtiquetaDAO {
         etiqueta = EtiquetaFactory.buildEtiqueta();
         etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
         etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));
-        etiqueta.setIdEtiqueta(rs.getInt("id_usuario"));
+        etiqueta.setIdUsuario(rs.getInt("id_usuario"));
       }
 
 
