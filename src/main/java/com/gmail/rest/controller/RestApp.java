@@ -40,7 +40,7 @@ public class RestApp {
           .toJson(new StandardResponse(StatusResponse.SUCCESS, "¡Bienvenido al clon de gmail!")));
 
       //USUARIO.
-      ////http://localhost:6584/api/usuario
+      //http://localhost:6584/api/usuario
       path("/usuario", () -> {
 
         //http://localhost:6584/api/usuario/crear
