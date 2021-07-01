@@ -102,11 +102,12 @@ public class RestApp {
 
           UsuarioDTO usuarioGuardado = new UsuarioDTO();
 
-          try{
+          try {
             usuarioGuardado = new UsuarioDTO(
                 usuarioService.obtenerUno(aModificar.getIdUsuario()));
-          }catch(Exception e){
-            System.out.println(e.getMessage());
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
+                new Gson().toJson(e.getMessage())));
           }
 
           if (aModificar.getNombre() != null) {
