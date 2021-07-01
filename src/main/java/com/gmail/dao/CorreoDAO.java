@@ -315,7 +315,7 @@ public class CorreoDAO {
             .prepareStatement(INSERT_ENVIAR_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
       preparedStatement.setInt(1, id_receptor);
-      preparedStatement.setInt(2, correo.getIdUsuario());
+      preparedStatement.setInt(2, correo.getIdCorreo());
       preparedStatement.setShort(3, (short) (correo.getBorrado() ? 1 : 0));
       preparedStatement.setShort(4, (short) (correo.getLeido() ? 1 : 0));
       preparedStatement.setShort(5, (short) (correo.getDestacado() ? 1 : 0));

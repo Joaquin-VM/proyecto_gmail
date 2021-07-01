@@ -298,8 +298,8 @@ public class CorreoService implements ICorreoService {
     if (!dao.updateCorreo(correoGuardado)) {
       throw new CorreoException(4);
     }
-    if (dao.enviarCorreo(correoPorEnviar, idUsuario)) {
-    } else {
+
+    if (!dao.enviarCorreo(correoPorEnviar, idUsuario)) {
       throw new CorreoException(6, idUsuario);
     }
 
@@ -312,7 +312,7 @@ public class CorreoService implements ICorreoService {
 
     AbsCorreo correoGuardado = dao.getCorreo(idCorreo);
 
-    for(int i : idUsuario){
+    for (int i : idUsuario) {
       this.enviar(idCorreo, i);
     }
 

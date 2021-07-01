@@ -258,6 +258,7 @@ public class RestApp {
         });
 
         //REENVIAR.
+        //http://localhost:6584/api/correo/reenviar y 3 parametros idCorreo, idUsuarioEmisor e idUsuarioReceptor.
         post("/reenviar", (req, res) -> {
           res.type("application/json");
 
