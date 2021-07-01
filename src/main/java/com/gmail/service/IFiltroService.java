@@ -10,11 +10,9 @@ public interface IFiltroService {
 
   AbsFiltro crear(FiltroDTO filtro) throws FiltroException, SQLDBException;
 
-
   AbsFiltro modificar(FiltroDTO filtro) throws FiltroException, SQLDBException;
 
-
-  AbsFiltro eliminarEnviado(int idFiltro) throws FiltroException, SQLDBException;
+  AbsFiltro eliminarFiltro(int idFiltro) throws FiltroException, SQLDBException;
 
   AbsFiltro obtenerUno(int idFiltro) throws FiltroException, SQLDBException;
 

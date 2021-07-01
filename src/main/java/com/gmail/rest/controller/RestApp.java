@@ -280,8 +280,10 @@ public class RestApp {
       });
 
       //ETIQUETA.
+
       path("/etiqueta", () -> {
 
+        //http://localhost:6584/api/etiqueta/crear
         post("/crear", (req, res) -> {
           res.type("application/json");
 
@@ -296,6 +298,7 @@ public class RestApp {
           return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
+        //http://localhost:6584/api/etiqueta/leer y un parametro id de etiqueta.
         get("/leer", (req, res) -> {
           res.type("application/json");
 
@@ -311,6 +314,7 @@ public class RestApp {
 
         });
 
+        //http://localhost:6584/api/etiqueta/eliminar y un parametro id de etiqueta.
         delete("/eliminar", (req, res) -> {
           res.type("application/json");
 
@@ -321,7 +325,7 @@ public class RestApp {
             return new Gson()
                 .toJson(
                     new StandardResponse(StatusResponse.SUCCESS,
-                        "Etiqueta id " + idEtiqueta + " eliminado."));
+                        "Etiqueta id " + idEtiqueta + " eliminada."));
 
           } catch (Exception e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
@@ -337,6 +341,7 @@ public class RestApp {
 
       path("/filtro", () -> {
 
+        //http://localhost:6584/api/filtro/crear
         post("/crear", (req, res) -> {
           res.type("application/json");
 
@@ -351,6 +356,7 @@ public class RestApp {
           return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
+        //http://localhost:6584/api/filtro/leer y un parametro id de filtro.
         get("/leer", (req, res) -> {
           res.type("application/json");
 
@@ -366,7 +372,26 @@ public class RestApp {
 
         });
 
-        //FALTA MODIFICAR FILTRO. FILTRO NO LLEVA ELIMINAR.
+        //http://localhost:6584/api/filtro/eliminar con un parametro id de filtro.
+        delete("/eliminar", (req, res) -> {
+          res.type("application/json");
+
+          int idFiltro = Integer.parseInt(req.queryParams("idFiltro"));
+
+          try {
+            filtroService.eliminarFiltro(idFiltro);
+            return new Gson()
+                .toJson(
+                    new StandardResponse(StatusResponse.SUCCESS,
+                        "Filtro id " + idFiltro + " eliminado."));
+
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
+          }
+
+        });
+
+        //FALTA MODIFICAR FILTRO.
 
       });
 
