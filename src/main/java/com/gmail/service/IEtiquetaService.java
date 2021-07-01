@@ -26,7 +26,7 @@ public interface IEtiquetaService {
 
   List<AbsEtiqueta> listarEtiquetasDeCorreo(int idCorreo) throws SQLDBException, NotFoundException;
 
-  boolean modificar(int idEitqueta, EtiquetaDTO etiquetaModificada)
+  boolean modificar(EtiquetaDTO etiquetaModificada)
       throws ValidationException, SQLDBException, NotFoundException;
 
   boolean eliminar(int idEtiqueta) throws SQLDBException, ValidationException, NotFoundException;

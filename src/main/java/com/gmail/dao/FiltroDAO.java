@@ -79,7 +79,7 @@ public class FiltroDAO {
 
       preparedStatement.setInt(1, idFiltro);
 
-//      System.out.println(preparedStatement);
+      System.out.println("Viendo prepared " + preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -101,6 +101,8 @@ public class FiltroDAO {
     } catch (SQLException e) {
       throw new SQLDBException("Error al obtener el filtro con el id " + idFiltro + ".");
     }
+
+    System.out.println("Filtroooooooooooooooooooo -> " + filtro.getIdFiltro());
 
     return filtro;
 
@@ -146,8 +148,10 @@ public class FiltroDAO {
 
   public boolean updateFiltro(AbsFiltro filtro) throws SQLDBException {
 
+    System.out.println(filtro);
+
     String UPDATE_FILTRO_SQL = "UPDATE filtro " +
-        "SET id_usuario = ?," +
+        "SET" +
         " emisor = ?,   receptor = ?, asunto = ?," +
         " contiene = ?, leido = ?, destacar = ?, importante = ?, eliminar = ?,"
         + " spam = ?, id_etiqueta = ?, id_usuario_reenviar = ? " +
@@ -156,19 +160,43 @@ public class FiltroDAO {
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_FILTRO_SQL)) {
 
-      preparedStatement.setInt(1, filtro.getIdUsuario());
-      preparedStatement.setInt(2, filtro.getIdEmisor());
-      preparedStatement.setInt(3, filtro.getIdReceptor());
-      preparedStatement.setString(4, filtro.getAsunto());
-      preparedStatement.setString(5, filtro.getContiene());
-      preparedStatement.setShort(6, (short) (filtro.getLeido() ? 1 : 0));
-      preparedStatement.setShort(7, (short) (filtro.getDestacar() ? 1 : 0));
-      preparedStatement.setShort(8, (short) (filtro.getImportante() ? 1 : 0));
-      preparedStatement.setShort(9, (short) (filtro.getEliminar() ? 1 : 0));
-      preparedStatement.setShort(10, (short) (filtro.getSpam() ? 1 : 0));
-      preparedStatement.setInt(11, filtro.getIdEtiqueta());
-      preparedStatement.setInt(12, filtro.getIdUsuarioReenviar());
-      preparedStatement.setInt(13, filtro.getIdFiltro());
+      if (filtro.getIdEmisor() == 0) {
+        preparedStatement.setObject(1, null);
+      } else {
+        preparedStatement.setInt(1, filtro.getIdEmisor());
+      }
+
+      if (filtro.getIdReceptor() == 0) {
+        preparedStatement.setObject(2, null);
+      } else {
+        preparedStatement.setInt(2, filtro.getIdReceptor());
+      }
+
+      preparedStatement.setString(3, filtro.getAsunto());
+      preparedStatement.setString(4, filtro.getContiene());
+      preparedStatement.setShort(5, (short) (filtro.getLeido() ? 1 : 0));
+      preparedStatement.setShort(6, (short) (filtro.getDestacar() ? 1 : 0));
+      preparedStatement.setShort(7, (short) (filtro.getImportante() ? 1 : 0));
+      preparedStatement.setShort(8, (short) (filtro.getEliminar() ? 1 : 0));
+      preparedStatement.setShort(9, (short) (filtro.getSpam() ? 1 : 0));
+
+      if (filtro.getIdEtiqueta() == 0) {
+        preparedStatement.setObject(10, null);
+      } else {
+        preparedStatement.setInt(10, filtro.getIdEtiqueta());
+      }
+
+      if (filtro.getIdUsuarioReenviar() == 0) {
+        preparedStatement.setObject(11, null);
+      } else {
+        preparedStatement.setInt(11, filtro.getIdUsuarioReenviar());
+      }
+
+      if (filtro.getIdFiltro() == 0) {
+        preparedStatement.setObject(12, null);
+      } else {
+        preparedStatement.setInt(12, filtro.getIdFiltro());
+      }
 
 //      System.out.println(preparedStatement);
 

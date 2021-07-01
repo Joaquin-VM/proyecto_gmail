@@ -11,6 +11,7 @@ import com.gmail.dto.CorreoDTO;
 import com.gmail.dto.EtiquetaDTO;
 import com.gmail.dto.FiltroDTO;
 import com.gmail.dto.UsuarioDTO;
+import com.gmail.model.impl.FiltroFactory;
 import com.gmail.rest.controller.json.response.StandardResponse;
 import com.gmail.rest.controller.json.response.StatusResponse;
 import com.gmail.service.MostrarService;
@@ -97,9 +98,6 @@ public class RestApp {
 
           UsuarioDTO aModificar = new Gson().fromJson(req.body(), UsuarioDTO.class);
 
-          System.out.println(aModificar.getNombre());
-          System.out.println(aModificar.getIdUsuario());
-
           UsuarioDTO usuarioGuardado = new UsuarioDTO();
 
           try {
@@ -135,29 +133,6 @@ public class RestApp {
             return new Gson().toJson(
                 new StandardResponse(StatusResponse.SUCCESS,
                     new Gson().toJsonTree(usuarioGuardado)));
-          } catch (Exception e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
-                new Gson().toJson(e.getMessage())));
-          }
-
-        });
-
-        //http://localhost:6584/api/usuario/modificar
-        put("/modificar", (req, res) -> {
-          res.type("application/json");
-
-          UsuarioDTO aModificar = new Gson().fromJson(req.body(), UsuarioDTO.class);
-          UsuarioDTO usuarioModificado = new UsuarioDTO();
-
-          usuarioModificado = new UsuarioDTO(usuarioService.obtenerUno(aModificar.getIdUsuario()));
-
-          String mensajeExcepcion = new String();
-
-          try {
-            usuarioModificado = new UsuarioDTO(usuarioService.modificar(usuarioModificado));
-            return new Gson().toJson(
-                new StandardResponse(StatusResponse.SUCCESS,
-                    new Gson().toJsonTree(usuarioModificado)));
           } catch (Exception e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
                 new Gson().toJson(e.getMessage())));
@@ -246,8 +221,7 @@ public class RestApp {
           });
 
           //RECIBIDOS.
-          http:
-//localhost:6584/api/correo/leer/recibidos y recibe dos parametros idUsuario y borrado.
+          //http:localhost:6584/api/correo/leer/recibidos y recibe dos parametros idUsuario y borrado.
 
           get("/recibidos", (req, res) -> {
             res.type("application/json");
@@ -296,8 +270,6 @@ public class RestApp {
 
             int idCorreo = Integer.parseInt(req.queryParams("idCorreo"));
 
-            System.out.println(req.queryParams());
-
             String[] parametros = req.queryParamsValues("idUsuario").clone();
 
             int[] arregloIdUsuarios = new int[parametros.length];
@@ -335,7 +307,37 @@ public class RestApp {
           return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
-        //FALTA GET, ELIMINAR Y MODIFICAR DE CORREO.
+        //http://localhost:6584/api/correo/modificar
+        put("/modificar", (req, res) -> {
+          res.type("application/json");
+
+          CorreoDTO aModificar = new Gson().fromJson(req.body(), CorreoDTO.class);
+
+          CorreoDTO correoGuardado;
+
+          try {
+
+            correoGuardado = new CorreoDTO(
+                correoService.obtenerEnviado(aModificar.getIdCorreo()));
+
+            if (aModificar.getAsunto() != null) {
+              correoGuardado.setAsunto(aModificar.getAsunto());
+            }
+
+            if (aModificar.getCuerpo() != null) {
+              correoGuardado.setCuerpo(aModificar.getCuerpo());
+            }
+
+            correoGuardado = new CorreoDTO(correoService.modificar(correoGuardado));
+
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
+                new Gson().toJson(e.getMessage())));
+          }
+
+          return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+
+        });
 
       });
 
@@ -391,7 +393,32 @@ public class RestApp {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
 
-          //FALTA MODIFICAR ETIQUETA.
+        });
+
+        //http://localhost:6584/api/etiqueta/modificar
+        put("/modificar", (req, res) -> {
+          res.type("application/json");
+
+          EtiquetaDTO aModificar = new Gson().fromJson(req.body(), EtiquetaDTO.class);
+
+          EtiquetaDTO etiquetaGuardada;
+
+          try {
+            etiquetaGuardada = new EtiquetaDTO(
+                etiquetaService.obtenerUna(aModificar.getIdEtiqueta()));
+
+            if (aModificar.getNombreEtiqueta() != null) {
+              etiquetaGuardada.setNombreEtiqueta(aModificar.getNombreEtiqueta());
+            }
+
+            etiquetaService.modificar(etiquetaGuardada);
+
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
+                new Gson().toJson(e.getMessage())));
+          }
+
+          return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
 
         });
 
@@ -451,7 +478,74 @@ public class RestApp {
 
         });
 
-        //FALTA MODIFICAR FILTRO.
+        //http://localhost:6584/api/filtro/modificar
+        put("/modificar", (req, res) -> {
+          res.type("application/json");
+
+          FiltroDTO aModificar = new Gson().fromJson(req.body(), FiltroDTO.class);
+
+          FiltroDTO filtroGuardado;
+
+          System.out.println(FiltroFactory.buildFiltro(aModificar));
+
+          try {
+            filtroGuardado = new FiltroDTO(
+                filtroService.obtenerUno(aModificar.getIdFiltro()));
+
+            if (aModificar.getIdEmisor() != 0) {
+              filtroGuardado.setIdEmisor(aModificar.getIdEmisor());
+            }
+
+            if (aModificar.getIdReceptor() != 0) {
+              filtroGuardado.setIdReceptor(aModificar.getIdReceptor());
+            }
+
+            if (aModificar.getAsunto() != null) {
+              filtroGuardado.setAsunto(aModificar.getAsunto());
+            }
+
+            if (aModificar.getContiene() != null) {
+              filtroGuardado.setContiene(aModificar.getContiene());
+            }
+
+            if (aModificar.getLeido() != null) {
+              filtroGuardado.setLeido(aModificar.getLeido());
+            }
+
+            if (aModificar.getDestacar() != null) {
+              filtroGuardado.setDestacar(aModificar.getDestacar());
+            }
+
+            if (aModificar.getImportante() != null) {
+              filtroGuardado.setImportante(aModificar.getImportante());
+            }
+
+            if (aModificar.getEliminar() == null) {
+              filtroGuardado.setEliminar(aModificar.getEliminar());
+            }
+
+            if (aModificar.getSpam() != null) {
+              filtroGuardado.setSpam(aModificar.getSpam());
+            }
+
+            if (aModificar.getIdEtiqueta() != 0) {
+              filtroGuardado.setIdEtiqueta(aModificar.getIdEtiqueta());
+            }
+
+            if (aModificar.getIdUsuarioReenviar() != 0) {
+              filtroGuardado.setIdUsuarioReenviar(aModificar.getIdUsuarioReenviar());
+            }
+
+            filtroService.modificar(filtroGuardado);
+
+          } catch (Exception e) {
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
+                new Gson().toJson(e.getMessage())));
+          }
+
+          return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+
+        });
 
       });
 

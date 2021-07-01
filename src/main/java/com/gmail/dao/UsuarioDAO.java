@@ -120,8 +120,6 @@ public class UsuarioDAO {
 
   public AbsUsuario updateUsuario(AbsUsuario usuario) throws SQLDBException {
 
-    System.out.println(usuario);
-
     String UPDATE_USUARIO_SQL = "UPDATE usuario " +
         "SET nombre_usuario = ?, apellido = ?, contrasenia = ?, " +
         "telefono = ?, sexo = ? WHERE id_usuario = ?;";

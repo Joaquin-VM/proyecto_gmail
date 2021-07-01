@@ -68,10 +68,10 @@ public class EtiquetaService implements IEtiquetaService {
   }
 
   @Override
-  public boolean modificar(int idEtiqueta, EtiquetaDTO etiquetaModificada)
+  public boolean modificar(EtiquetaDTO etiquetaModificada)
       throws ValidationException, SQLDBException, NotFoundException {
 
-    if (!existeEtiqueta(idEtiqueta)) {
+    if (!existeEtiqueta(etiquetaModificada.getIdEtiqueta())) {
       throw new NotFoundException("La etiqueta a modificar no existe.");
     }
 

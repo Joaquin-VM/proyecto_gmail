@@ -22,22 +22,8 @@ public class FiltroService implements IFiltroService {
 
     filtro = cargarNulls(filtro);
 
-    if (usuarioDAO.getUsuario(filtro.getIdUsuario()) == null) {
-      throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdUsuario());
-    }
-    if (usuarioDAO.getUsuario(filtro.getIdEmisor()) == null && filtro.getIdEmisor() != 0) {
-      throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdEmisor());
-    }
-    if (usuarioDAO.getUsuario(filtro.getIdReceptor()) == null && filtro.getIdReceptor() != 0) {
-      throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdReceptor());
-    }
-    if (usuarioDAO.getUsuario(filtro.getIdUsuarioReenviar()) == null && !(
-        filtro.getIdUsuarioReenviar() == 0)) {
-      throw new FiltroException(
-          "Error: No existe Usuario con id = " + filtro.getIdUsuarioReenviar());
-    }
-    if (etiquetaDAO.getEtiqueta(filtro.getIdEtiqueta()) == null && !(filtro.getIdEtiqueta() == 0)) {
-      throw new FiltroException("Error: No existe etiqueta con id = " + filtro.getIdEtiqueta());
+    if(!validarDatos(filtro)){
+      throw new FiltroException("El filtro ingresado tiene datos invalidos");
     }
 
     return dao.addFiltro(FiltroFactory.buildFiltro(filtro));
@@ -45,6 +31,10 @@ public class FiltroService implements IFiltroService {
 
   @Override
   public AbsFiltro modificar(FiltroDTO filtro) throws FiltroException, SQLDBException {
+
+    if(!validarDatos(filtro)){
+      throw new FiltroException("El filtro ingresado tiene datos invalidos");
+    }
 
     filtro = cargarNulls(filtro);
 
@@ -91,6 +81,8 @@ public class FiltroService implements IFiltroService {
       throw new FiltroException(1, idFiltro);
     }
 
+    System.out.println("FILTRO DEL SERVICE ID: " + filtroGuardado.getIdFiltro());
+
     return filtroGuardado;
 
   }
@@ -123,6 +115,34 @@ public class FiltroService implements IFiltroService {
       filtro.setEliminar(false);
     }
     return filtro;
+
+  }
+
+  private boolean validarDatos(FiltroDTO filtro) throws FiltroException, SQLDBException {
+
+    if (usuarioDAO.getUsuario(filtro.getIdUsuario()) == null) {
+      throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdUsuario());
+    }
+
+    if (usuarioDAO.getUsuario(filtro.getIdEmisor()) == null && filtro.getIdEmisor() != 0) {
+      throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdEmisor());
+    }
+
+    if (usuarioDAO.getUsuario(filtro.getIdReceptor()) == null && filtro.getIdReceptor() != 0) {
+      throw new FiltroException("Error: No existe Usuario con id = " + filtro.getIdReceptor());
+    }
+
+    if (usuarioDAO.getUsuario(filtro.getIdUsuarioReenviar()) == null && !(
+        filtro.getIdUsuarioReenviar() == 0)) {
+      throw new FiltroException(
+          "Error: No existe Usuario con id = " + filtro.getIdUsuarioReenviar());
+
+    }
+    if (etiquetaDAO.getEtiqueta(filtro.getIdEtiqueta()) == null && !(filtro.getIdEtiqueta() == 0)) {
+      throw new FiltroException("Error: No existe etiqueta con id = " + filtro.getIdEtiqueta());
+    }
+
+    return true;
 
   }
 
