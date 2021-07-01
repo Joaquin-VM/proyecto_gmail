@@ -424,7 +424,7 @@ public class RestApp {
 
       });
 
-      //FILTRO. //Tiene que englobar.
+      //FILTRO.
 
       path("/filtro", () -> {
 
@@ -486,11 +486,13 @@ public class RestApp {
 
           FiltroDTO filtroGuardado;
 
-          System.out.println(FiltroFactory.buildFiltro(aModificar));
+          System.out.println("1 " + FiltroFactory.buildFiltro(aModificar));
 
           try {
             filtroGuardado = new FiltroDTO(
                 filtroService.obtenerUno(aModificar.getIdFiltro()));
+
+            System.out.println(FiltroFactory.buildFiltro(filtroGuardado));
 
             if (aModificar.getIdEmisor() != 0) {
               filtroGuardado.setIdEmisor(aModificar.getIdEmisor());

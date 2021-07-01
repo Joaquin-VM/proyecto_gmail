@@ -240,16 +240,18 @@ public class CorreoDAO {
       preparedStatement.setShort(9, (short) (correo.getImportante() ? 1 : 0));
       preparedStatement.setInt(10, correo.getIdCorreo());
 
-//    System.out.println(preparedStatement);
+//      System.out.println(preparedStatement);
 
       int filasAfectadas = preparedStatement.executeUpdate();
 
-//    System.out.println("Numero de filas afectadas: " + filasAfectadas);
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+
 
     } catch (SQLException e) {
       throw new SQLDBException(
           "Error al actualizar el correo con el id " + correo.getIdCorreo() + ".");
     }
+
 
     return true;
 

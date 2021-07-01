@@ -75,13 +75,13 @@ public class FiltroService implements IFiltroService {
   @Override
   public AbsFiltro obtenerUno(int idFiltro) throws FiltroException, SQLDBException {
 
+
     AbsFiltro filtroGuardado = dao.getFiltro(idFiltro);
 
     if (filtroGuardado == null) {
       throw new FiltroException(1, idFiltro);
     }
 
-    System.out.println("FILTRO DEL SERVICE ID: " + filtroGuardado.getIdFiltro());
 
     return filtroGuardado;
 

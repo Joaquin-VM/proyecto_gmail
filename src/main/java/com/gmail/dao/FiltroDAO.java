@@ -102,8 +102,6 @@ public class FiltroDAO {
       throw new SQLDBException("Error al obtener el filtro con el id " + idFiltro + ".");
     }
 
-    System.out.println("Filtroooooooooooooooooooo -> " + filtro.getIdFiltro());
-
     return filtro;
 
   }
