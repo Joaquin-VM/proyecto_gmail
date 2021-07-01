@@ -74,6 +74,7 @@ public class RestApp {
 
         });
 
+        //http://localhost:6584/api/usuario/eliminar
         delete("/eliminar", (req, res) -> {
           res.type("application/json");
 
@@ -475,77 +476,6 @@ public class RestApp {
           } catch (Exception e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
-
-        });
-
-        //http://localhost:6584/api/filtro/modificar
-        put("/modificar", (req, res) -> {
-          res.type("application/json");
-
-          FiltroDTO aModificar = new Gson().fromJson(req.body(), FiltroDTO.class);
-
-          FiltroDTO filtroGuardado;
-
-          System.out.println("1 " + FiltroFactory.buildFiltro(aModificar));
-
-          try {
-            filtroGuardado = new FiltroDTO(
-                filtroService.obtenerUno(aModificar.getIdFiltro()));
-
-            System.out.println(FiltroFactory.buildFiltro(filtroGuardado));
-
-            if (aModificar.getIdEmisor() != 0) {
-              filtroGuardado.setIdEmisor(aModificar.getIdEmisor());
-            }
-
-            if (aModificar.getIdReceptor() != 0) {
-              filtroGuardado.setIdReceptor(aModificar.getIdReceptor());
-            }
-
-            if (aModificar.getAsunto() != null) {
-              filtroGuardado.setAsunto(aModificar.getAsunto());
-            }
-
-            if (aModificar.getContiene() != null) {
-              filtroGuardado.setContiene(aModificar.getContiene());
-            }
-
-            if (aModificar.getLeido() != null) {
-              filtroGuardado.setLeido(aModificar.getLeido());
-            }
-
-            if (aModificar.getDestacar() != null) {
-              filtroGuardado.setDestacar(aModificar.getDestacar());
-            }
-
-            if (aModificar.getImportante() != null) {
-              filtroGuardado.setImportante(aModificar.getImportante());
-            }
-
-            if (aModificar.getEliminar() == null) {
-              filtroGuardado.setEliminar(aModificar.getEliminar());
-            }
-
-            if (aModificar.getSpam() != null) {
-              filtroGuardado.setSpam(aModificar.getSpam());
-            }
-
-            if (aModificar.getIdEtiqueta() != 0) {
-              filtroGuardado.setIdEtiqueta(aModificar.getIdEtiqueta());
-            }
-
-            if (aModificar.getIdUsuarioReenviar() != 0) {
-              filtroGuardado.setIdUsuarioReenviar(aModificar.getIdUsuarioReenviar());
-            }
-
-            filtroService.modificar(filtroGuardado);
-
-          } catch (Exception e) {
-            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
-                new Gson().toJson(e.getMessage())));
-          }
-
-          return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
 
         });
 
