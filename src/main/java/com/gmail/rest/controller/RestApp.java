@@ -11,7 +11,9 @@ import com.gmail.dto.CorreoDTO;
 import com.gmail.dto.EtiquetaDTO;
 import com.gmail.dto.FiltroDTO;
 import com.gmail.dto.UsuarioDTO;
-import com.gmail.model.impl.FiltroFactory;
+import com.gmail.exception.NotFoundException;
+import com.gmail.exception.SQLDBException;
+import com.gmail.exception.ValidationException;
 import com.gmail.rest.controller.json.response.StandardResponse;
 import com.gmail.rest.controller.json.response.StatusResponse;
 import com.gmail.service.MostrarService;
@@ -51,7 +53,7 @@ public class RestApp {
 
           try {
             usuarioService.crear(usuarioDTO);
-          } catch (Exception e) {
+          } catch (ValidationException | NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
 
@@ -68,7 +70,7 @@ public class RestApp {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
                 new Gson()
                     .toJsonTree(usuarioService.obtenerUno(idUsuario))));
-          } catch (Exception e) {
+          } catch (NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
 
@@ -87,7 +89,7 @@ public class RestApp {
                     new StandardResponse(StatusResponse.SUCCESS,
                         "Usuario id " + idUsuario + " eliminado."));
 
-          } catch (Exception e) {
+          } catch (NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
 
@@ -104,7 +106,7 @@ public class RestApp {
           try {
             usuarioGuardado = new UsuarioDTO(
                 usuarioService.obtenerUno(aModificar.getIdUsuario()));
-          } catch (Exception e) {
+          } catch (NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
                 new Gson().toJson(e.getMessage())));
           }
@@ -134,7 +136,7 @@ public class RestApp {
             return new Gson().toJson(
                 new StandardResponse(StatusResponse.SUCCESS,
                     new Gson().toJsonTree(usuarioGuardado)));
-          } catch (Exception e) {
+          } catch (ValidationException | NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
                 new Gson().toJson(e.getMessage())));
           }
@@ -354,7 +356,7 @@ public class RestApp {
 
           try {
             etiquetaService.crear(etiquetaDTO);
-          } catch (Exception e) {
+          } catch (ValidationException | NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
 
@@ -371,7 +373,7 @@ public class RestApp {
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
                 new Gson()
                     .toJsonTree(etiquetaService.obtenerUna(idEtiqueta))));
-          } catch (Exception e) {
+          } catch (NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
 
@@ -390,7 +392,7 @@ public class RestApp {
                     new StandardResponse(StatusResponse.SUCCESS,
                         "Etiqueta id " + idEtiqueta + " eliminada."));
 
-          } catch (Exception e) {
+          } catch (NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR, e.getMessage()));
           }
 
@@ -414,7 +416,7 @@ public class RestApp {
 
             etiquetaService.modificar(etiquetaGuardada);
 
-          } catch (Exception e) {
+          } catch (ValidationException | NotFoundException | SQLDBException e) {
             return new Gson().toJson(new StandardResponse(StatusResponse.ERROR,
                 new Gson().toJson(e.getMessage())));
           }
