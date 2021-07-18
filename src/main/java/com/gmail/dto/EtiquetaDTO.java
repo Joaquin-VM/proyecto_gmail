@@ -4,9 +4,9 @@ import com.gmail.model.AbsEtiqueta;
 
 public class EtiquetaDTO {
 
-  int idEtiqueta;
-  String nombreEtiqueta;
-  int idUsuario;
+  private int idEtiqueta;
+  private String nombreEtiqueta;
+  private int idUsuario;
 
   public EtiquetaDTO() {
 

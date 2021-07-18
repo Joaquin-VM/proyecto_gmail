@@ -2,6 +2,7 @@ package com.gmail.service;
 
 import com.gmail.dto.EtiquetaDTO;
 import com.gmail.exception.NotFoundException;
+import com.gmail.exception.OperationException;
 import com.gmail.exception.SQLDBException;
 import com.gmail.exception.ValidationException;
 import com.gmail.model.AbsEtiqueta;
@@ -9,27 +10,31 @@ import java.util.List;
 
 public interface IEtiquetaService {
 
-  AbsEtiqueta crear(EtiquetaDTO dto) throws ValidationException, SQLDBException, NotFoundException;
+  AbsEtiqueta crear(EtiquetaDTO dto)
+      throws ValidationException, SQLDBException, NotFoundException, OperationException;
 
-  AbsEtiqueta obtenerUna(int idEtiqueta) throws SQLDBException, NotFoundException;
+  AbsEtiqueta obtenerUna(int idEtiqueta)
+      throws SQLDBException, NotFoundException, OperationException;
 
   List<AbsEtiqueta> obtenerCoincidentes(String nombreEtiqueta, int idUsuario)
-      throws SQLDBException, ValidationException, NotFoundException;
+      throws SQLDBException, ValidationException, NotFoundException, OperationException;
 
-  List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario) throws SQLDBException, NotFoundException;
+  List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario)
+      throws SQLDBException, NotFoundException, OperationException;
 
-  boolean agregarEtiquetaACorreo(int idCorreo, int idEtiqueta)
-      throws SQLDBException, NotFoundException;
+  AbsEtiqueta modificar(EtiquetaDTO etiquetaModificada)
+      throws ValidationException, SQLDBException, NotFoundException, OperationException;
 
-  boolean quitarEtiquetaACorreo(int idCorreo, int idEtiqueta)
-      throws SQLDBException, NotFoundException;
+  AbsEtiqueta eliminar(int idEtiqueta)
+      throws SQLDBException, ValidationException, NotFoundException, OperationException;
 
-  List<AbsEtiqueta> listarEtiquetasDeCorreo(int idCorreo) throws SQLDBException, NotFoundException;
+  AbsEtiqueta agregarEtiquetaACorreo(int idCorreo, int idEtiqueta)
+      throws SQLDBException, NotFoundException, OperationException;
 
-  boolean modificar(EtiquetaDTO etiquetaModificada)
-      throws ValidationException, SQLDBException, NotFoundException;
+  AbsEtiqueta quitarEtiquetaACorreo(int idCorreo, int idEtiqueta, int idUsuario)
+      throws NotFoundException, OperationException;
 
-  boolean eliminar(int idEtiqueta) throws SQLDBException, ValidationException, NotFoundException;
-
+  List<AbsEtiqueta> listarEtiquetasDeCorreo(int idCorreo, int idUsuario)
+      throws NotFoundException, OperationException;
 
 }

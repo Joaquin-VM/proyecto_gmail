@@ -4,26 +4,26 @@ import com.gmail.model.AbsFiltro;
 
 public class FiltroDTO {
 
-  int idFiltro;
-  int idUsuario;
-  int idEmisor;
-  int idReceptor;
-  String asunto;
-  String contiene;
-  Boolean leido;
-  Boolean destacar;
-  Boolean importante;
-  Boolean eliminar;
-  Boolean spam;
-  int idEtiqueta;
-  int idUsuarioReenviar;
+  private int idFiltro;
+  private int idUsuario;
+  private int idEmisor;
+  private int idReceptor;
+  private String asunto;
+  private String contiene;
+  private Boolean leido;
+  private Boolean destacar;
+  private Boolean importante;
+  private Boolean eliminar;
+  private Boolean spam;
+  private int idEtiqueta;
+  private int idUsuarioReenviar;
 
   public FiltroDTO() {
 
   }
 
   public FiltroDTO(AbsFiltro filtro) {
-    this.idFiltro = filtro.getIdUsuario();
+    this.idFiltro = filtro.getIdFiltro();
     this.idUsuario = filtro.getIdUsuario();
     this.idEmisor = filtro.getIdEmisor();
     this.idReceptor = filtro.getIdReceptor();

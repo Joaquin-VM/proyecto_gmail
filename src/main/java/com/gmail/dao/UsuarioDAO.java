@@ -17,7 +17,7 @@ public class UsuarioDAO {
 
     String INSERT_USUARIO_SQL = "INSERT INTO usuario" +
         "(nombre_usuario, apellido, correo, contrasenia, telefono, fecha_nacimiento, sexo)" +
-        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        " VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USUARIO_SQL,
@@ -42,8 +42,10 @@ public class UsuarioDAO {
       }
 
     } catch (SQLException e) {
+
       throw new SQLDBException(
           "Error al agregar el usuario de correo " + usuario.getCorreo() + ".");
+
     }
 
     return usuario;
@@ -75,9 +77,10 @@ public class UsuarioDAO {
             .setSexo(rs.getString("sexo"));
       }
 
-
     } catch (SQLException e) {
+
       throw new SQLDBException("Error al obtener el usuario con el id " + idUsuario + ".");
+
     }
 
     return usuario;
@@ -111,7 +114,9 @@ public class UsuarioDAO {
 
 
     } catch (SQLException e) {
+
       throw new SQLDBException("Error al obtener el usuario con el correo " + correo + ".");
+
     }
 
     return usuario;
@@ -141,8 +146,10 @@ public class UsuarioDAO {
 //      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
+
       throw new SQLDBException(
           "Error al modificar el usuario con id " + usuario.getIdUsuario() + ".");
+
     }
 
     return usuario;
@@ -165,7 +172,34 @@ public class UsuarioDAO {
 //      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
     } catch (SQLException e) {
+
       throw new SQLDBException("Error al eliminar el usuario con id " + idUsuario + ".");
+
+    }
+
+    return true;
+
+  }
+
+  public boolean deleteUsuario(String correoUsuario) throws SQLDBException {
+
+    String DELETE_USUARIO_SQL = "DELETE FROM usuario WHERE correo = ?";
+
+    try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USUARIO_SQL)) {
+
+      preparedStatement.setString(1, correoUsuario);
+
+//      System.out.println(preparedStatement);
+
+      int filasAfectadas = preparedStatement.executeUpdate();
+
+//      System.out.println("Numero de filas afectadas: " + filasAfectadas);
+
+    } catch (SQLException e) {
+
+      throw new SQLDBException("Error al eliminar el usuario con el correo " + correoUsuario + ".");
+
     }
 
     return true;

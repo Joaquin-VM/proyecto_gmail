@@ -5,6 +5,7 @@ import com.gmail.dao.EtiquetaDAO;
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.EtiquetaDTO;
 import com.gmail.exception.NotFoundException;
+import com.gmail.exception.OperationException;
 import com.gmail.exception.SQLDBException;
 import com.gmail.exception.ValidationException;
 import com.gmail.model.AbsEtiqueta;
@@ -14,62 +15,95 @@ import java.util.List;
 
 public class EtiquetaService implements IEtiquetaService {
 
-  private EtiquetaDAO dao = new EtiquetaDAO();
+  private final EtiquetaDAO dao = new EtiquetaDAO();
 
   @Override
   public AbsEtiqueta crear(EtiquetaDTO dto)
-      throws ValidationException, SQLDBException, NotFoundException {
+      throws ValidationException, NotFoundException, OperationException {
 
     if (!validarDatos(dto)) {
       throw new ValidationException("Los datos ingresados de etiqueta son invalidos.");
     }
 
-    return dao.addEtiqueta(EtiquetaFactory.buildEtiqueta(dto));
+    try {
+
+      return dao.addEtiqueta(EtiquetaFactory.buildEtiqueta(dto));
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public AbsEtiqueta obtenerUna(int idEtiqueta) throws SQLDBException, NotFoundException {
+  public AbsEtiqueta obtenerUna(int idEtiqueta)
+      throws NotFoundException, OperationException {
 
     if (!existeEtiqueta(idEtiqueta)) {
       throw new NotFoundException("La etiqueta a obtener no existe.");
     }
 
-    return dao.getEtiqueta(idEtiqueta);
+    try {
+
+      return dao.getEtiqueta(idEtiqueta);
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public List<AbsEtiqueta> obtenerCoincidentes(String nombreEtiqueta, int idUsuario)
-      throws SQLDBException, ValidationException, NotFoundException {
+  public List<AbsEtiqueta> obtenerCoincidentes(String texto, int idUsuario)
+      throws ValidationException, NotFoundException, OperationException {
 
-    if (nombreEtiqueta.isBlank()) {
-      throw new ValidationException("El nombre de la etiqueta no puede estar vacio.");
+    if (texto.isBlank()) {
+      throw new ValidationException("El texto no puede estar vacio.");
     }
 
     if (!existeUsuario(idUsuario)) {
       throw new NotFoundException("No existe usuario con el id ingresado.");
     }
 
-    return dao.getEtiquetasCoincidentes(nombreEtiqueta, idUsuario);
+    try {
+
+      return dao.getEtiquetasCoincidentes(texto, idUsuario);
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
   public List<AbsEtiqueta> listarEtiquetasUsuario(int idUsuario)
-      throws SQLDBException, NotFoundException {
+      throws NotFoundException, OperationException {
 
     if (!existeUsuario(idUsuario)) {
       throw new NotFoundException("No existe usuario con el id ingresado.");
     }
 
-    return dao.listarEtiquetasUsuario(idUsuario);
+    try {
+
+      return dao.listarEtiquetasUsuario(idUsuario);
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public boolean modificar(EtiquetaDTO etiquetaModificada)
-      throws ValidationException, SQLDBException, NotFoundException {
+  public AbsEtiqueta modificar(EtiquetaDTO etiquetaModificada)
+      throws ValidationException, NotFoundException, OperationException {
 
     if (!existeEtiqueta(etiquetaModificada.getIdEtiqueta())) {
       throw new NotFoundException("La etiqueta a modificar no existe.");
@@ -79,25 +113,54 @@ public class EtiquetaService implements IEtiquetaService {
       throw new ValidationException("Los datos ingresados de etiqueta son invalidos.");
     }
 
-    return dao.updateEtiqueta(EtiquetaFactory.buildEtiqueta(etiquetaModificada));
+    try {
+
+      EtiquetaDTO etiquetaGuardada = new EtiquetaDTO(
+          obtenerUna(etiquetaModificada.getIdEtiqueta()));
+
+      if (etiquetaModificada.getNombreEtiqueta() != null) {
+        etiquetaGuardada.setNombreEtiqueta(etiquetaModificada.getNombreEtiqueta());
+      }
+
+      dao.updateEtiqueta(EtiquetaFactory.buildEtiqueta(etiquetaGuardada));
+
+      return EtiquetaFactory.buildEtiqueta(etiquetaGuardada);
+
+    } catch (NotFoundException | OperationException | SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public boolean eliminar(int idEtiqueta)
-      throws SQLDBException, NotFoundException {
+  public AbsEtiqueta eliminar(int idEtiqueta)
+      throws NotFoundException, OperationException {
 
     if (!existeEtiqueta(idEtiqueta)) {
       throw new NotFoundException("La etiqueta a eliminar no existe.");
     }
 
-    return dao.deleteEtiqueta(idEtiqueta);
+    try {
+
+      AbsEtiqueta etiquetaAEliminar = obtenerUna(idEtiqueta);
+
+      dao.deleteEtiqueta(idEtiqueta);
+
+      return etiquetaAEliminar;
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public boolean agregarEtiquetaACorreo(int idCorreo, int idEtiqueta)
-      throws NotFoundException, SQLDBException {
+  public AbsEtiqueta agregarEtiquetaACorreo(int idCorreo, int idEtiqueta)
+      throws NotFoundException, OperationException {
 
     if (!existeCorreo(idCorreo)) {
       throw new NotFoundException("No existe correo con el id ingresado.");
@@ -107,15 +170,25 @@ public class EtiquetaService implements IEtiquetaService {
       throw new NotFoundException("No existe etiqueta con el id ingresado.");
     }
 
-    return dao.agregarEtiquetaACorreo(idCorreo, idEtiqueta);
+    try {
+
+      dao.agregarEtiquetaACorreo(idCorreo, idEtiqueta);
+
+      return dao.getEtiqueta(idEtiqueta);
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public boolean quitarEtiquetaACorreo(int idCorreo, int idEtiqueta)
-      throws SQLDBException, NotFoundException {
+  public AbsEtiqueta quitarEtiquetaACorreo(int idCorreo, int idEtiqueta, int idUsuario)
+      throws NotFoundException, OperationException {
 
-    if (!existeEtiquetaEnCorreo(idCorreo, idEtiqueta)) {
+    if (!existeEtiquetaEnCorreo(idCorreo, idEtiqueta, idUsuario)) {
       throw new NotFoundException("No existe la etiqueta de id " + idEtiqueta +
           " en el correo con id " + idCorreo + ".");
     }
@@ -128,61 +201,114 @@ public class EtiquetaService implements IEtiquetaService {
       throw new NotFoundException("No existe etiqueta con el id ingresado.");
     }
 
-    return quitarEtiquetaACorreo(idCorreo, idEtiqueta);
+    try {
+
+      final EtiquetaDAO etiquetaDAO = new EtiquetaDAO();
+
+      etiquetaDAO.quitarEtiquetaACorreo(idCorreo, idEtiqueta);
+
+      return dao.getEtiqueta(idEtiqueta);
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public List<AbsEtiqueta> listarEtiquetasDeCorreo(int idCorreo)
-      throws SQLDBException, NotFoundException {
+  public List<AbsEtiqueta> listarEtiquetasDeCorreo(int idCorreo, int idUsuario)
+      throws NotFoundException, OperationException {
 
-    if (existeCorreo(idCorreo)) {
+    if (!existeCorreo(idCorreo)) {
       throw new NotFoundException("El correo con el id ingresado no existe.");
     }
 
-    return dao.obtenerEtiquetasDeCorreo(idCorreo);
+    try {
+
+      return dao.obtenerEtiquetasDeCorreo(idCorreo, idUsuario);
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
-  private boolean existeEtiqueta(int idEtiqueta) throws SQLDBException, NotFoundException {
+  private boolean existeEtiqueta(int idEtiqueta) throws NotFoundException {
 
     if (idEtiqueta <= 0) {
       throw new NotFoundException("No existe etiqueta con el id ingresado.");
     }
 
-    return dao.getEtiqueta(idEtiqueta) != null;
+    try {
+
+      return dao.getEtiqueta(idEtiqueta) != null;
+
+    } catch (SQLDBException e) {
+
+      throw new NotFoundException(e.getMessage());
+
+    }
+
   }
 
-  private boolean existeUsuario(int idUsuario) throws SQLDBException, NotFoundException {
-
-    UsuarioDAO usuarioDAO = new UsuarioDAO();
+  private boolean existeUsuario(int idUsuario) throws NotFoundException {
 
     if (idUsuario <= 0) {
       throw new NotFoundException("El usuario con el id ingresado no existe.");
     }
 
-    return usuarioDAO.getUsuario(idUsuario) != null;
+    try {
+
+      final UsuarioDAO usuarioDAO = new UsuarioDAO();
+
+      return usuarioDAO.getUsuario(idUsuario) != null;
+
+    } catch (SQLDBException e) {
+
+      throw new NotFoundException(e.getMessage());
+
+    }
 
   }
 
-  private boolean existeCorreo(int idCorreo) throws SQLDBException, NotFoundException {
-
-    CorreoDAO correoDAO = new CorreoDAO();
+  private boolean existeCorreo(int idCorreo) throws NotFoundException {
 
     if (idCorreo <= 0) {
       throw new NotFoundException("El correo con el id ingresado no existe.");
     }
 
-    return correoDAO.getCorreo(idCorreo) != null;
+    try {
+
+      final CorreoDAO correoDAO = new CorreoDAO();
+      return correoDAO.getCorreo(idCorreo) != null;
+
+    } catch (SQLDBException e) {
+
+      throw new NotFoundException(e.getMessage());
+
+    }
 
   }
 
-  private boolean existeEtiquetaEnCorreo(int idCorreo, int idEtiqueta) throws SQLDBException {
+  private boolean existeEtiquetaEnCorreo(int idCorreo, int idEtiqueta, int idUsuario)
+      throws OperationException {
 
-    for (AbsEtiqueta i : dao.obtenerEtiquetasDeCorreo(idCorreo)) {
-      if (idEtiqueta == i.getIdEtiqueta()) {
-        return true;
+    try {
+
+      for (AbsEtiqueta i : dao.obtenerEtiquetasDeCorreo(idCorreo, idUsuario)) {
+        if (i.getIdEtiqueta() == idEtiqueta) {
+          return true;
+        }
       }
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
     }
 
     return false;
@@ -190,7 +316,7 @@ public class EtiquetaService implements IEtiquetaService {
   }
 
   private boolean validarDatos(EtiquetaDTO dto)
-      throws SQLDBException, NotFoundException, ValidationException {
+      throws NotFoundException, ValidationException {
 
     if (dto.getNombreEtiqueta().isBlank()) {
       throw new ValidationException("El nombre de etiqueta ingresado es invalido.");

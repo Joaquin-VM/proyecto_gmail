@@ -30,14 +30,14 @@ public class FiltroException extends Exception {
 
     switch (error) {
       case 1:
-        message = "Filtro_Error 01: No existe Filtro con id = " + id;
+        message = "Filtro_Error 01: No existe Filtro con id = " + id + ".";
         break;
       case 4:
-        message = "Filtro_Error 04: No pudo modificarse";
+        message = "Filtro_Error 04: No pudo modificarse.";
       case 5:
-        message = "Filtro_Error 05: No pudo eliminarse";
+        message = "Filtro_Error 05: No pudo eliminarse.";
       default:
-        message = "Filtro_Error 00: No identificado";
+        message = "Filtro_Error 00: No identificado.";
         break;
     }
 

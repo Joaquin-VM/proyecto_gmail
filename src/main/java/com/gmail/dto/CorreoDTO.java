@@ -2,22 +2,26 @@ package com.gmail.dto;
 
 import com.gmail.model.AbsCorreo;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CorreoDTO {
 
-  int idCorreo;
-  int idUsuario;
-  String asunto;
-  String cuerpo;
-  LocalDateTime fechaHora;
-  Boolean confirmado;
-  Boolean borrado;
-  Boolean leido;
-  Boolean destacado;
-  Boolean importante;
+  private int idCorreo;
+  private int idUsuario;
+  private String asunto;
+  private String cuerpo;
+  private LocalDateTime fechaHora;
+  private boolean confirmado;
+  private boolean borrado;
+  private boolean leido;
+  private boolean destacado;
+  private boolean importante;
+  private boolean spam;
+  private List<String> dirCorreosReceptores;
 
   public CorreoDTO() {
-
+    this.dirCorreosReceptores = new ArrayList<>();
   }
 
   public CorreoDTO(AbsCorreo correo) {
@@ -31,6 +35,8 @@ public class CorreoDTO {
     this.leido = correo.getLeido();
     this.destacado = correo.getDestacado();
     this.importante = correo.getImportante();
+    this.spam = correo.getSpam();
+    this.dirCorreosReceptores = correo.getDirCorreosReceptores();
   }
 
   public int getIdCorreo() {
@@ -78,48 +84,66 @@ public class CorreoDTO {
     return this;
   }
 
-  public Boolean getConfirmado() {
+  public boolean getConfirmado() {
     return confirmado;
   }
 
-  public CorreoDTO setConfirmado(Boolean confirmado) {
+  public CorreoDTO setConfirmado(boolean confirmado) {
     this.confirmado = confirmado;
     return this;
   }
 
-  public Boolean getBorrado() {
+  public boolean getBorrado() {
     return borrado;
   }
 
-  public CorreoDTO setBorrado(Boolean borrado) {
+  public CorreoDTO setBorrado(boolean borrado) {
     this.borrado = borrado;
     return this;
   }
 
-  public Boolean getLeido() {
+  public boolean getLeido() {
     return leido;
   }
 
-  public CorreoDTO setLeido(Boolean leido) {
+  public CorreoDTO setLeido(boolean leido) {
     this.leido = leido;
     return this;
   }
 
-  public Boolean getDestacado() {
+  public boolean getDestacado() {
     return destacado;
   }
 
-  public CorreoDTO setDestacado(Boolean destacado) {
+  public CorreoDTO setDestacado(boolean destacado) {
     this.destacado = destacado;
     return this;
   }
 
-  public Boolean getImportante() {
+  public boolean getImportante() {
     return importante;
   }
 
-  public CorreoDTO setImportante(Boolean importante) {
+  public CorreoDTO setImportante(boolean importante) {
     this.importante = importante;
+    return this;
+  }
+
+  public boolean getSpam() {
+    return spam;
+  }
+
+  public CorreoDTO setSpam(boolean spam) {
+    this.spam = spam;
+    return this;
+  }
+
+  public List<String> getDirCorreosReceptores() {
+    return dirCorreosReceptores;
+  }
+
+  public CorreoDTO setDirCorreosReceptores(List<String> dirCorreosReceptores) {
+    this.dirCorreosReceptores = dirCorreosReceptores;
     return this;
   }
 

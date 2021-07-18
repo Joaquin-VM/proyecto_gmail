@@ -1,7 +1,7 @@
 package com.gmail.service;
 
 import com.gmail.exception.NotFoundException;
-import com.gmail.exception.SQLDBException;
+import com.gmail.exception.OperationException;
 import com.gmail.model.AbsCorreo;
 import com.gmail.service.impl.UsuarioService;
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ public class MostrarService {
   UsuarioService usuarioService = new UsuarioService();
 
   public void mostrarCorreos(List<AbsCorreo> lista, boolean esEnviado$)
-      throws SQLDBException, NotFoundException {
+      throws NotFoundException, OperationException {
 
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////");
@@ -42,15 +42,15 @@ public class MostrarService {
       int ar;
       ;
       if (esEnviado$) {
-        for (int i = 0; i < c.getUsuariosQueRecibieron().size(); ++i) {
+        for (int i = 0; i < c.getDirCorreosReceptores().size(); ++i) {
           if (i == 2) {
-            aux = aux + (c.getUsuariosQueRecibieron().size() - 2) + " mas...";
+            aux = aux + (c.getDirCorreosReceptores().size() - 2) + " mas...";
             break;
           }
-          aux = c.getUsuariosQueRecibieron().get(i);
+          aux = c.getDirCorreosReceptores().get(i);
           ar = aux.indexOf('@');
           aux = aux.substring(0, ar);
-          if (i < c.getUsuariosQueRecibieron().size() - 1) {
+          if (i < c.getDirCorreosReceptores().size() - 1) {
             aux = aux + " , ";
           }
           asunt = asunt + aux;
@@ -87,7 +87,7 @@ public class MostrarService {
   }
 
 
-  public void abrirCorreo(AbsCorreo c) throws SQLDBException, NotFoundException {
+  public void abrirCorreo(AbsCorreo c) throws NotFoundException, OperationException {
 
     System.out.println(
         "////////////////////////////////////////////////////////////////////////////////////////////");
@@ -108,9 +108,9 @@ public class MostrarService {
             .getFechaHora().getMinute()) < 10 ? ("0" + c.getFechaHora().getMinute())
             : c.getFechaHora().getMinute()));
     System.out.print("Recibido por: ");
-    for (int i = 0; i < c.getUsuariosQueRecibieron().size(); ++i) {
-      System.out.print(c.getUsuariosQueRecibieron().get(i));
-      if (i < c.getUsuariosQueRecibieron().size() - 1) {
+    for (int i = 0; i < c.getDirCorreosReceptores().size(); ++i) {
+      System.out.print(c.getDirCorreosReceptores().get(i));
+      if (i < c.getDirCorreosReceptores().size() - 1) {
         System.out.println(", ");
       }
     }

@@ -5,14 +5,14 @@ import java.time.LocalDate;
 
 public class UsuarioDTO {
 
-  int idUsuario;
-  String nombre;
-  String apellido;
-  String correo;
-  String contrasenia;
-  String telefono;
-  String sexo;
-  LocalDate fechaNacimiento;
+  private int idUsuario;
+  private String nombre;
+  private String apellido;
+  private String correo;
+  private String contrasenia;
+  private String telefono;
+  private String sexo;
+  private LocalDate fechaNacimiento;
 
   public UsuarioDTO(){
 

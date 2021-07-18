@@ -6,17 +6,17 @@ public abstract class AbsFiltro implements Cloneable {
 
   protected int idFiltro;
   protected int idUsuario;
-  protected int idEmisor = 0;
-  protected int idReceptor = 0;
+  protected int idEmisor;
+  protected int idReceptor;
   protected String asunto;
   protected String contiene;
   protected Boolean leido;
   protected Boolean destacar;
   protected Boolean importante;
   protected Boolean eliminar;
-  protected Boolean spam = false;
-  protected int idEtiqueta = 0;
-  protected int idUsuarioReenviar = 0;
+  protected Boolean spam;
+  protected int idEtiqueta;
+  protected int idUsuarioReenviar;
 
   public AbsFiltro() {
   }

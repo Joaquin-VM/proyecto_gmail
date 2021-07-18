@@ -2,6 +2,7 @@ package com.gmail.model;
 
 import com.gmail.dto.CorreoDTO;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbsCorreo implements Cloneable {
@@ -16,9 +17,11 @@ public abstract class AbsCorreo implements Cloneable {
   protected Boolean leido;
   protected Boolean destacado;
   protected Boolean importante;
-  protected List<String> usuariosQueRecibieron;
+  protected Boolean spam;
+  protected List<String> dirCorreosReceptores;
 
   public AbsCorreo() {
+    this.dirCorreosReceptores = new ArrayList<>();
   }
 
   public AbsCorreo(CorreoDTO dto) {
@@ -32,6 +35,8 @@ public abstract class AbsCorreo implements Cloneable {
     this.leido = dto.getLeido();
     this.destacado = dto.getDestacado();
     this.importante = dto.getImportante();
+    this.spam = dto.getSpam();
+    this.dirCorreosReceptores = dto.getDirCorreosReceptores();
   }
 
   public abstract int getIdCorreo();
@@ -74,9 +79,13 @@ public abstract class AbsCorreo implements Cloneable {
 
   public abstract AbsCorreo setImportante(Boolean importante);
 
-  public abstract List<String> getUsuariosQueRecibieron();
+  public abstract Boolean getSpam();
 
-  public abstract AbsCorreo setUsuariosQueRecibieron(List<String> usuariosQueRecibieron);
+  public abstract AbsCorreo setSpam(Boolean spam);
+
+  public abstract List<String> getDirCorreosReceptores();
+
+  public abstract AbsCorreo setDirCorreosReceptores(List<String> usuariosQueRecibieron);
 
   @Override
   public abstract String toString();
@@ -88,8 +97,6 @@ public abstract class AbsCorreo implements Cloneable {
   public abstract int hashCode();
 
   @Override
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
+  public abstract Object clone();
 
 }

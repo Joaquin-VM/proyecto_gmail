@@ -3,6 +3,7 @@ package com.gmail.service.impl;
 import com.gmail.dao.UsuarioDAO;
 import com.gmail.dto.UsuarioDTO;
 import com.gmail.exception.NotFoundException;
+import com.gmail.exception.OperationException;
 import com.gmail.exception.SQLDBException;
 import com.gmail.exception.ValidationException;
 import com.gmail.model.AbsUsuario;
@@ -11,11 +12,11 @@ import com.gmail.service.IUsuarioService;
 
 public class UsuarioService implements IUsuarioService {
 
-  private UsuarioDAO dao = new UsuarioDAO();
+  private final UsuarioDAO dao = new UsuarioDAO();
 
   @Override
   public AbsUsuario crear(UsuarioDTO dto)
-      throws ValidationException, SQLDBException, NotFoundException {
+      throws ValidationException, NotFoundException, OperationException {
 
     if (!validarDatos(dto)) {
       throw new ValidationException("Los datos ingresados de usuario son invalidos.");
@@ -26,77 +27,179 @@ public class UsuarioService implements IUsuarioService {
           "El usuario a agregar tiene un correo que ya ha sido elegido por otro usuario.");
     }
 
-    return dao.addUsuario(UsuarioFactory.buildUsuario(dto));
+    try {
+
+      return dao.addUsuario(UsuarioFactory.buildUsuario(dto));
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public AbsUsuario obtenerUno(int idUsuario) throws SQLDBException, NotFoundException {
+  public AbsUsuario obtenerUno(int idUsuario) throws NotFoundException, OperationException {
 
     if (!existeUsuario(idUsuario)) {
       throw new NotFoundException("El usuario a obtener no existe.");
     }
 
-    return dao.getUsuario(idUsuario);
+    try {
+
+      return dao.getUsuario(idUsuario);
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
-  public AbsUsuario obtenerUno(String correo) throws SQLDBException, NotFoundException {
+  public AbsUsuario obtenerUno(String correo)
+      throws NotFoundException, OperationException {
 
     if (!existeUsuario(correo)) {
       throw new NotFoundException("El usuario a obtener no existe.");
     }
 
-    return dao.getUsuario(correo);
+    try {
+
+      return dao.getUsuario(correo);
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
   @Override
   public AbsUsuario modificar(UsuarioDTO usuarioModificado)
-      throws ValidationException, SQLDBException, NotFoundException {
+      throws OperationException {
 
-    if (!existeUsuario(usuarioModificado.getIdUsuario())) {
-      throw new NotFoundException("El usuario a modificar no existe.");
+    try {
+
+      UsuarioDTO usuarioGuardado = new UsuarioDTO(dao.getUsuario(usuarioModificado.getIdUsuario()));
+
+      if (usuarioModificado.getNombre() != null) {
+        usuarioGuardado.setNombre(usuarioModificado.getNombre());
+      }
+
+      if (usuarioModificado.getApellido() != null) {
+        usuarioGuardado.setApellido(usuarioModificado.getApellido());
+      }
+
+      if (usuarioModificado.getContrasenia() != null) {
+        usuarioGuardado.setContrasenia(usuarioModificado.getContrasenia());
+      }
+
+      if (usuarioModificado.getSexo() != null) {
+        usuarioGuardado.setSexo(usuarioModificado.getSexo());
+      }
+
+      if (usuarioModificado.getTelefono() != null) {
+        usuarioGuardado.setTelefono(usuarioModificado.getTelefono());
+      }
+
+      if (!validarDatos(usuarioGuardado)) {
+        throw new ValidationException("Los datos ingresados de usuario son invalidos.");
+      }
+
+      return dao.updateUsuario(UsuarioFactory.buildUsuario(usuarioGuardado));
+
+    } catch (ValidationException | SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
     }
-
-    if (!validarDatos(usuarioModificado)) {
-      throw new ValidationException("Los datos ingresados de usuario son invalidos.");
-    }
-
-    return dao.updateUsuario(UsuarioFactory.buildUsuario(usuarioModificado));
 
   }
 
   @Override
-  public boolean eliminar(int idUsuario) throws NotFoundException, SQLDBException {
+  public AbsUsuario eliminar(int idUsuario) throws NotFoundException, OperationException {
 
     if (!existeUsuario(idUsuario)) {
       throw new NotFoundException("El usuario a eliminar no existe.");
     }
 
-    return dao.deleteUsuario(idUsuario);
+    try {
+
+      AbsUsuario usuario = dao.getUsuario(idUsuario);
+
+      dao.deleteUsuario(idUsuario);
+
+      return usuario;
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
 
   }
 
+  @Override
+  public AbsUsuario eliminar(String correoUsuario) throws NotFoundException, OperationException {
 
-  private boolean existeUsuario(int idUsuario) throws SQLDBException, NotFoundException {
+    if (!existeUsuario(correoUsuario)) {
+      throw new NotFoundException("El usuario a eliminar no existe.");
+    }
+
+    try {
+
+      AbsUsuario usuario = dao.getUsuario(correoUsuario);
+
+      dao.deleteUsuario(correoUsuario);
+
+      return usuario;
+
+    } catch (SQLDBException e) {
+
+      throw new OperationException(e.getMessage());
+
+    }
+
+  }
+
+  private boolean existeUsuario(int idUsuario) throws NotFoundException {
 
     if (idUsuario <= 0) {
-      throw new NotFoundException("El usuario no existe.");
+      throw new NotFoundException("El usuario con id " + idUsuario + " no existe.");
     }
 
-    return dao.getUsuario(idUsuario) != null;
+    try {
+
+      return dao.getUsuario(idUsuario) != null;
+
+    } catch (SQLDBException e) {
+
+      throw new NotFoundException(e.getMessage());
+
+    }
 
   }
 
-  private boolean existeUsuario(String correo) throws SQLDBException, NotFoundException {
+  private boolean existeUsuario(String correo) throws NotFoundException {
 
     if (correo.isBlank()) {
-      throw new NotFoundException("El usuario no existe.");
+      throw new NotFoundException("El correo ingresado esta vacio.");
     }
 
-    return dao.getUsuario(correo) != null;
+    try {
+
+      return dao.getUsuario(correo) != null;
+
+    } catch (SQLDBException e) {
+
+      throw new NotFoundException(e.getMessage());
+
+    }
+
 
   }
 

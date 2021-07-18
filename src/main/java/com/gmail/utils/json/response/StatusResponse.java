@@ -1,4 +1,4 @@
-package com.gmail.rest.controller.json.response;
+package com.gmail.utils.json.response;
 
 public enum StatusResponse {
     SUCCESS("Success"), ERROR("Error");

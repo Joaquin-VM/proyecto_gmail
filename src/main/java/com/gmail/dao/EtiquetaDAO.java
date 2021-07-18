@@ -75,18 +75,18 @@ public class EtiquetaDAO {
 
   }
 
-  public List<AbsEtiqueta> getEtiquetasCoincidentes(String nombreEtiqueta, int idUsuario)
+  public List<AbsEtiqueta> getEtiquetasCoincidentes(String texto, int idUsuario)
       throws SQLDBException {
 
     String QUERY = "SELECT id_etiqueta, nombre_etiqueta, id_usuario FROM etiqueta "
-        + "WHERE nombre_etiqueta LIKE '%?%' AND id_usuario = ?";
+        + "WHERE nombre_etiqueta LIKE ? AND id_usuario = ?;";
 
     List<AbsEtiqueta> listaCoincidentes = new ArrayList<>();
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
-      preparedStatement.setString(1, nombreEtiqueta);
+      preparedStatement.setString(1, "%" + texto + "%");
       preparedStatement.setInt(2, idUsuario);
 
 //      System.out.println(preparedStatement);
@@ -104,8 +104,8 @@ public class EtiquetaDAO {
 
     } catch (SQLException e) {
       throw new SQLDBException(
-          "Error al obtener la lista de etiquetas con el nombre " +
-              nombreEtiqueta + ".");
+          "Error al obtener la lista de etiquetas con el texto " +
+              texto + ".");
     }
 
     return listaCoincidentes;
@@ -128,7 +128,7 @@ public class EtiquetaDAO {
 
       while (rs.next()) {
         AbsEtiqueta etiqueta = EtiquetaFactory.buildEtiqueta();
-        etiqueta = etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"))
+        etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"))
             .setNombreEtiqueta(rs.getString("nombre_etiqueta"))
             .setIdUsuario(rs.getInt("id_usuario"));
         listaEtiquetas.add(etiqueta);
@@ -215,26 +215,30 @@ public class EtiquetaDAO {
     return true;
   }
 
-  public List<AbsEtiqueta> obtenerEtiquetasDeCorreo(int idCorreo) throws SQLDBException {
+  public List<AbsEtiqueta> obtenerEtiquetasDeCorreo(int idCorreo, int idUsuario) throws SQLDBException {
 
-    String QUERY = "SELECT id_etiqueta FROM clasificar WHERE id_correo = ? ORDER BY id_etiqueta";
-    AbsEtiqueta etiqueta = null;
-    List<AbsEtiqueta> listaCoincidentes = null;
+    String QUERY =
+        "SELECT etiq.id_etiqueta, nombre_etiqueta, id_usuario FROM clasificar clas INNER JOIN "
+            + "etiqueta etiq ON etiq.id_etiqueta = clas.id_etiqueta "
+            + "WHERE id_correo = ? AND id_usuario = ? ORDER BY id_etiqueta;";
+
+    List<AbsEtiqueta> listaCoincidentes = new ArrayList<>();
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(QUERY)) {
 
       preparedStatement.setInt(1, idCorreo);
+      preparedStatement.setInt(2, idUsuario);
 
 //      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
       while (rs.next()) {
-        etiqueta = EtiquetaFactory.buildEtiqueta();
-        etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"));
-        etiqueta.setNombreEtiqueta(rs.getString("nombre_etiqueta"));
-        etiqueta.setIdEtiqueta(rs.getInt("id_usuario"));
+        AbsEtiqueta etiqueta = EtiquetaFactory.buildEtiqueta();
+        etiqueta.setIdEtiqueta(rs.getInt("id_etiqueta"))
+            .setNombreEtiqueta(rs.getString("nombre_etiqueta"))
+            .setIdUsuario(rs.getInt("id_usuario"));
         listaCoincidentes.add(etiqueta);
       }
 

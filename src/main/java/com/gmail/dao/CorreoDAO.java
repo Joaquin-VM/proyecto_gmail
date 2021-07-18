@@ -19,9 +19,9 @@ public class CorreoDAO {
   public AbsCorreo addCorreo(AbsCorreo correo) throws SQLDBException {
 
     String INSERT_CORREO_SQL = "INSERT INTO correo" +
-        "(id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante)"
+        "(id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante, spam)"
         +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?)";
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?, ?)";
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CORREO_SQL,
@@ -36,6 +36,7 @@ public class CorreoDAO {
       preparedStatement.setShort(7, (short) (correo.getLeido() ? 1 : 0));
       preparedStatement.setShort(8, (short) (correo.getDestacado() ? 1 : 0));
       preparedStatement.setShort(9, (short) (correo.getImportante() ? 1 : 0));
+      preparedStatement.setShort(10, (short) (correo.getSpam() ? 1 : 0));
 
 //      System.out.println(preparedStatement);
 
@@ -57,7 +58,7 @@ public class CorreoDAO {
   public AbsCorreo getCorreo(int idCorreo) throws SQLDBException {
 
     String QUERY =
-        "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
+        "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante, spam"
             +
             " FROM correo WHERE id_correo = ?";
 
@@ -81,7 +82,8 @@ public class CorreoDAO {
             .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
             .setConfirmado(rs.getShort("confirmado") == 1).setBorrado(rs.getShort("borrado") == 1)
             .setLeido(rs.getShort("leido") == 1).setDestacado(rs.getShort("destacado") == 1)
-            .setImportante(rs.getShort("importante") == 1);
+            .setImportante(rs.getShort("importante") == 1)
+            .setSpam(rs.getShort("spam") == 1);
       }
 
     } catch (SQLException e) {
@@ -95,9 +97,10 @@ public class CorreoDAO {
   public AbsCorreo getCorreoRecibido(int idCorreo, int idUsuario) throws SQLDBException {
 
     String QUERY =
-        "SELECT c.id_correo, c.id_usuario, c.asunto, c.cuerpo, c.fecha_hora, r.borrado, r.leido, r.destacado, r.importante"
+        "SELECT c.id_correo, c.id_usuario, c.asunto, c.cuerpo, c.fecha_hora, r.borrado, "
+            + "r.leido, r.destacado, r.importante, r.spam"
             + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo " +
-            "WHERE c.id_correo = ? AND r.id_usuario_2 =  ? ";
+            "WHERE c.id_correo = ? AND r.id_usuario_2 = ?;";
 
     AbsCorreo correo = null;
 
@@ -121,7 +124,8 @@ public class CorreoDAO {
             .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
             .setBorrado(rs.getShort("borrado") == 1)
             .setLeido(rs.getShort("leido") == 1).setDestacado(rs.getShort("destacado") == 1)
-            .setImportante(rs.getShort("importante") == 1);
+            .setImportante(rs.getShort("importante") == 1)
+            .setSpam(rs.getShort("spam") == 1);
       }
 
 
@@ -138,9 +142,10 @@ public class CorreoDAO {
   public List<AbsCorreo> getCorreosRecibidos(int idUsuario, boolean borrado) throws SQLDBException {
 
     String QUERY =
-        "SELECT c.id_correo, c.id_usuario, c.asunto, c.cuerpo, c.fecha_hora, c.confirmado, r.borrado, r.leido, r.destacado, r.importante"
+        "SELECT c.id_correo, c.id_usuario, c.asunto, c.cuerpo, c.fecha_hora, c.confirmado, r.borrado, "
+            + "r.leido, r.destacado, r.importante, r.spam"
             + " FROM correo c INNER JOIN recibidos r ON c.id_correo = r.id_correo " +
-            " WHERE r.borrado = ? AND r.id_usuario_2 =  ? ";
+            " WHERE r.borrado = ? AND r.id_usuario_2 =  ?";
 
     List<AbsCorreo> correos = new ArrayList<>();
 
@@ -163,7 +168,8 @@ public class CorreoDAO {
             .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
             .setConfirmado(rs.getShort("confirmado") == 1).setBorrado(rs.getShort("borrado") == 1)
             .setLeido(rs.getShort("leido") == 1).setDestacado(rs.getShort("destacado") == 1)
-            .setImportante(rs.getShort("importante") == 1);
+            .setImportante(rs.getShort("importante") == 1)
+            .setSpam(rs.getShort("spam") == 1);
         correos.add(correo);
       }
 
@@ -178,11 +184,11 @@ public class CorreoDAO {
 
   }
 
-  public List<AbsCorreo> getCorreosEnviados(int idUsuario, boolean borrado) throws SQLDBException {
+  public List<AbsCorreo> getCorreosCreados(int idUsuario, boolean borrado) throws SQLDBException {
 
     String QUERY =
-        "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante"
-            + " FROM correo c WHERE c.borrado = ? AND c.id_usuario =  ? ";
+        "SELECT id_correo, id_usuario, asunto, cuerpo, fecha_hora, confirmado, borrado, leido, destacado, importante, spam"
+            + " FROM correo c WHERE c.borrado = ? AND c.id_usuario = ?";
 
     List<AbsCorreo> correos = new ArrayList<>();
 
@@ -206,7 +212,8 @@ public class CorreoDAO {
             .setFechaHora(rs.getTimestamp("fecha_hora").toLocalDateTime())
             .setConfirmado(rs.getShort("confirmado") == 1).setBorrado(rs.getShort("borrado") == 1)
             .setLeido(rs.getShort("leido") == 1).setDestacado(rs.getShort("destacado") == 1)
-            .setImportante(rs.getShort("importante") == 1);
+            .setImportante(rs.getShort("importante") == 1)
+            .setSpam(rs.getShort("spam") == 1);
         correos.add(correo);
       }
 
@@ -224,7 +231,7 @@ public class CorreoDAO {
   public boolean updateCorreo(AbsCorreo correo) throws SQLDBException {
     String UPDATE_CORREO_SQL = "UPDATE correo " +
         "SET id_usuario = ?, asunto = ?,  cuerpo = ?,  fecha_hora = ?,  confirmado = ?,  borrado = ?,"
-        + " leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ?;";
+        + " leido = ?,  destacado = ?,  importante  = ? WHERE id_correo = ?;";
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
@@ -246,12 +253,10 @@ public class CorreoDAO {
 
 //      System.out.println("Numero de filas afectadas: " + filasAfectadas);
 
-
     } catch (SQLException e) {
       throw new SQLDBException(
           "Error al actualizar el correo con el id " + correo.getIdCorreo() + ".");
     }
-
 
     return true;
 
@@ -284,13 +289,12 @@ public class CorreoDAO {
 
   public boolean deleteCorreo(int idCorreo) throws SQLDBException {
 
-    String UPDATE_CORREO_SQL = "UPDATE correo SET borrado = ? WHERE id_correo = ?;";
+    String UPDATE_CORREO_SQL = "UPDATE correo SET borrado = 1 WHERE id_correo = ?;";
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
 
-      preparedStatement.setShort(1, (short) 1);
-      preparedStatement.setInt(2, idCorreo);
+      preparedStatement.setInt(1, idCorreo);
 
 //      System.out.println(preparedStatement);
 
@@ -306,17 +310,17 @@ public class CorreoDAO {
 
   }
 
-  public boolean enviarCorreo(AbsCorreo correo, int id_receptor) throws SQLDBException {
+  public boolean enviarCorreo(AbsCorreo correo, int idReceptor) throws SQLDBException {
 
     String INSERT_ENVIAR_SQL = "INSERT INTO recibidos" +
-        "(id_usuario_2, id_correo, borrado, leido, destacado, importante)" +
-        "VALUES (?, ?, ?, ?, ?, ?)";
+        "(id_usuario_2, id_correo, borrado, leido, destacado, importante) " +
+        "VALUES (?, ?, ?, ?, ?, ?);";
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection
             .prepareStatement(INSERT_ENVIAR_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
-      preparedStatement.setInt(1, id_receptor);
+      preparedStatement.setInt(1, idReceptor);
       preparedStatement.setInt(2, correo.getIdCorreo());
       preparedStatement.setShort(3, (short) (correo.getBorrado() ? 1 : 0));
       preparedStatement.setShort(4, (short) (correo.getLeido() ? 1 : 0));
@@ -330,7 +334,7 @@ public class CorreoDAO {
     } catch (SQLException e) {
       throw new SQLDBException(
           "Error al enviar el correo con el id " + correo.getIdCorreo() + " al usuario con el id "
-              + id_receptor + ".");
+              + idReceptor + ".");
     }
 
     return true;
@@ -338,7 +342,7 @@ public class CorreoDAO {
 
   public boolean updateCorreoRecibido(AbsCorreo correo, int idUsuario) throws SQLDBException {
     String UPDATE_CORREO_SQL = "UPDATE recibidos " +
-        "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?  WHERE id_correo = ? AND id_usuario_2 = ?;";
+        "SET borrado = ?, leido = ?,  destacado = ?,  importante  = ?, spam = ?  WHERE id_correo = ? AND id_usuario_2 = ?;";
 
     try (Connection connection = DBCPDataSourceFactory.getMySQLDataSource().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CORREO_SQL)) {
@@ -347,8 +351,9 @@ public class CorreoDAO {
       preparedStatement.setShort(2, (short) (correo.getLeido() ? 1 : 0));
       preparedStatement.setShort(3, (short) (correo.getDestacado() ? 1 : 0));
       preparedStatement.setShort(4, (short) (correo.getImportante() ? 1 : 0));
-      preparedStatement.setInt(5, correo.getIdCorreo());
-      preparedStatement.setInt(6, idUsuario);
+      preparedStatement.setShort(5, (short) (correo.getSpam() ? 1 : 0));
+      preparedStatement.setInt(6, correo.getIdCorreo());
+      preparedStatement.setInt(7, idUsuario);
 
 //      System.out.println(preparedStatement);
 
@@ -378,7 +383,7 @@ public class CorreoDAO {
     return true;
   }
 
-  public List<String> correosQueRecibieron(int idCorreo) throws SQLDBException {
+  public List<String> dirCorreosReceptores(int idCorreo) throws SQLDBException {
 
     String QUERY = "SELECT u.correo FROM usuario u INNER JOIN "
         + "recibidos r ON u.id_usuario = r.id_usuario_2 WHERE "

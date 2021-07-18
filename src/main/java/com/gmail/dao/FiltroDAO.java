@@ -38,7 +38,7 @@ public class FiltroDAO {
       if (filtro.getSpam() == null) {
         preparedStatement.setShort(10, (short) 0);
       } else {
-        preparedStatement.setInt(10, filtro.getSpam() ? 1 : 0);
+        preparedStatement.setShort(10, (short) (filtro.getSpam() ? 1 : 0));
       }
 
       if (filtro.getIdEtiqueta() != 0) {
@@ -47,7 +47,11 @@ public class FiltroDAO {
         preparedStatement.setObject(11, null);
       }
 
-      preparedStatement.setInt(12, filtro.getIdUsuarioReenviar());
+      if (filtro.getIdUsuarioReenviar() != 0) {
+        preparedStatement.setInt(12, filtro.getIdUsuarioReenviar());
+      } else {
+        preparedStatement.setObject(12, null);
+      }
 
 //      System.out.println(preparedStatement);
 
@@ -79,7 +83,7 @@ public class FiltroDAO {
 
       preparedStatement.setInt(1, idFiltro);
 
-      System.out.println("Viendo prepared " + preparedStatement);
+//      System.out.println(preparedStatement);
 
       ResultSet rs = preparedStatement.executeQuery();
 
@@ -145,8 +149,6 @@ public class FiltroDAO {
   }
 
   public boolean updateFiltro(AbsFiltro filtro) throws SQLDBException {
-
-    System.out.println(filtro);
 
     String UPDATE_FILTRO_SQL = "UPDATE filtro " +
         "SET" +

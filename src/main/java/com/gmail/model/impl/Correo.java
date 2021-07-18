@@ -3,6 +3,7 @@ package com.gmail.model.impl;
 import com.gmail.dto.CorreoDTO;
 import com.gmail.model.AbsCorreo;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 class Correo extends AbsCorreo {
@@ -126,29 +127,42 @@ class Correo extends AbsCorreo {
   }
 
   @Override
-  public List<String> getUsuariosQueRecibieron() {
-    return usuariosQueRecibieron;
+  public Boolean getSpam() {
+    return this.spam;
   }
 
   @Override
-  public AbsCorreo setUsuariosQueRecibieron(List<String> usuariosQueRecibieron) {
-    this.usuariosQueRecibieron = usuariosQueRecibieron;
+  public AbsCorreo setSpam(Boolean spam) {
+    this.spam = spam;
+    return this;
+  }
+
+  @Override
+  public List<String> getDirCorreosReceptores() {
+    return dirCorreosReceptores;
+  }
+
+  @Override
+  public AbsCorreo setDirCorreosReceptores(List<String> dirCorreosReceptores) {
+    this.dirCorreosReceptores = dirCorreosReceptores;
     return this;
   }
 
   @Override
   public String toString() {
-    return "Correo{" +
-        "idCorreo=" + idCorreo +
-        ", idUsuario=" + idUsuario +
-        ", asunto='" + asunto + '\'' +
-        ", cuerpo='" + cuerpo + '\'' +
-        ", fechaHora=" + fechaHora +
-        ", confirmado=" + confirmado +
-        ", borrado=" + borrado +
-        ", leido=" + leido +
-        ", destacado=" + destacado +
-        ", importante=" + importante +
+    return "AbsCorreo{" +
+        "idCorreo=" + this.idCorreo +
+        ", idUsuario=" + this.idUsuario +
+        ", asunto='" + this.asunto + '\'' +
+        ", cuerpo='" + this.cuerpo + '\'' +
+        ", fechaHora=" + this.fechaHora +
+        ", confirmado=" + this.confirmado +
+        ", borrado=" + this.borrado +
+        ", leido=" + this.leido +
+        ", destacado=" + this.destacado +
+        ", importante=" + this.importante +
+        ", spam=" + this.spam +
+        ", dirCorreosReceptores=" + this.dirCorreosReceptores +
         '}';
   }
 
@@ -169,7 +183,8 @@ class Correo extends AbsCorreo {
 
     AbsCorreo correo = (AbsCorreo) o;
 
-    return this.idCorreo == correo.getIdCorreo();
+    return this.idCorreo == correo.getIdCorreo() && this.dirCorreosReceptores
+        .equals(correo.getDirCorreosReceptores());
   }
 
   @Override
@@ -181,7 +196,25 @@ class Correo extends AbsCorreo {
         this.fechaHora.getMinute() + this.fechaHora.getSecond() +
         (this.confirmado ? 1 : 0) + (this.borrado ? 1 : 0) +
         (this.leido ? 1 : 0) + (this.destacado ? 1 : 0) +
-        (this.importante ? 1 : 0);
+        (this.importante ? 1 : 0) + (this.spam ? 1 : 0) +
+        this.dirCorreosReceptores.size();
+  }
+
+  @Override
+  public Object clone() {
+
+    List<String> dirCorreosCopia = new ArrayList<>();
+
+    for(int i = 0; i < this.dirCorreosReceptores.size(); ++i){
+      dirCorreosCopia.add(this.dirCorreosReceptores.get(i));
+    }
+
+    return new Correo().setIdCorreo(this.idCorreo).setIdUsuario(this.idUsuario)
+        .setAsunto(this.asunto).setCuerpo(this.cuerpo).setFechaHora(this.fechaHora)
+        .setConfirmado(this.confirmado).setBorrado(this.borrado).setLeido(this.leido)
+        .setDestacado(this.destacado).setImportante(this.importante).setSpam(this.spam)
+        .setDirCorreosReceptores(dirCorreosCopia);
+
   }
 
 }
