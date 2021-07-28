@@ -115,11 +115,11 @@ public class UsuarioController {
   public static Route eliminarUsuarioPorCorreo = (req, res) -> {
     res.type("application/json");
 
-    String correoUsuario = req.queryParams("correo-usuario");
+    String dirCorreoUsuario = req.queryParams("dir-correo");
 
     try {
 
-      UsuarioDTO usuarioEliminado = new UsuarioDTO(usuarioService.eliminar(correoUsuario));
+      UsuarioDTO usuarioEliminado = new UsuarioDTO(usuarioService.eliminar(dirCorreoUsuario));
       return new Gson()
           .toJson(
               new StandardResponse(StatusResponse.SUCCESS,
@@ -132,6 +132,5 @@ public class UsuarioController {
     }
 
   };
-
 
 }

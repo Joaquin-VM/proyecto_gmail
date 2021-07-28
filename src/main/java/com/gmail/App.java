@@ -59,7 +59,7 @@ public class App {
           delete("/id", UsuarioController.eliminarUsuarioPorId);
 
           //ELIMINAR UN USUARIO POR DIRECCION DE CORREO.
-          //http://localhost:6584/api/usuario/eliminar/correo -> 1 parametro: correo-usuario.
+          //http://localhost:6584/api/usuario/eliminar/correo -> 1 parametro: dir-correo.
           delete("/correo", UsuarioController.eliminarUsuarioPorCorreo);
 
         });
